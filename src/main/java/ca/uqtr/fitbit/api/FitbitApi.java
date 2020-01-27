@@ -2,6 +2,7 @@ package ca.uqtr.fitbit.api;
 
 
 import ca.uqtr.fitbit.api.data.activities.Activities;
+import ca.uqtr.fitbit.api.data.calories.Calories;
 import ca.uqtr.fitbit.api.data.steps.Steps;
 import ca.uqtr.fitbit.entity.fitbit.Auth;
 
@@ -18,4 +19,6 @@ public interface FitbitApi {
     Activities getActivities();
 
     Steps getSteps();
+
+    Calories getCalories();
 }

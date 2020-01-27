@@ -13,8 +13,8 @@ import java.sql.Date;
 @Getter
 @Setter
 @ToString
-//@Entity
-//@Table(name = "activities_calories", schema = "public")
+@Entity
+@Table(name = "activities_calories", schema = "public")
 @TypeDef(
         name = "jsonb",
         typeClass = JsonBinaryType.class
@@ -29,14 +29,21 @@ public class ActivitiesCalories {
 
     @Column(name = "date")
     private Date dateTime;
-    @Column(name = "steps")
-    private int steps;
+    @Column(name = "calories")
+    private double calories;
     @Type(type = "jsonb")
     @Column(name = "dataset", columnDefinition = "jsonb")
     private String dataset;
     @Column(name = "dataset_interval")
     private int datasetInterval;
 
+    public ActivitiesCalories() {
+    }
 
-
+    public ActivitiesCalories(Date dateTime, double calories, String dataset, int datasetInterval) {
+        this.dateTime = dateTime;
+        this.calories = calories;
+        this.dataset = dataset;
+        this.datasetInterval = datasetInterval;
+    }
 }
