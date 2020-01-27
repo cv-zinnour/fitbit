@@ -1,0 +1,11 @@
+package ca.uqtr.fitbit.api.data.calories;
+
+import ca.uqtr.fitbit.entity.fitbit.ActivitiesCalories;
+import ca.uqtr.fitbit.entity.fitbit.ActivitiesSteps;
+
+import java.io.IOException;
+
+public interface Calories {
+    ActivitiesCalories getCaloriesOfDayPerMinute(String date, String accessToken) throws IOException;
+
+}
