@@ -1,7 +1,7 @@
 package ca.uqtr.fitbit.service.auth;
 
 
-import ca.uqtr.fitbit.entity.Auth;
+import ca.uqtr.fitbit.entity.fitbit.Auth;
 
 import java.io.IOException;
 
@@ -17,8 +17,8 @@ public interface AuthService {
 
     int deleteByAccessToken(String accessToken);
 
-    Auth save(Auth auth);
-
     long count();
+
+    Auth authorizationCode2AccessAndRefreshToken(String authorizationCode);
 
 }

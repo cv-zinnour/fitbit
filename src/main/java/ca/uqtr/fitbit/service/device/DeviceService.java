@@ -1,4 +1,4 @@
-package ca.uqtr.fitbit.service;
+package ca.uqtr.fitbit.service.device;
 
 import ca.uqtr.fitbit.entity.Device;
 

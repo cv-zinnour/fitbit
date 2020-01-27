@@ -39,6 +39,8 @@ public class PatientDevice implements Serializable {
     private Date returnDate;
     @Column(name = "expert_id", nullable = false)
     private UUID expertId;
+    @Column(name = "patient_id", nullable = false)
+    private UUID patientId;
     @OneToMany
     @JoinColumn(name = "device_id")
     private List<Device> devices = new ArrayList<>();

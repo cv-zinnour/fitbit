@@ -1,7 +1,7 @@
 package ca.uqtr.fitbit.repository;
 
 
-import ca.uqtr.fitbit.entity.Activity;
+import ca.uqtr.fitbit.entity.fitbit.Activity;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

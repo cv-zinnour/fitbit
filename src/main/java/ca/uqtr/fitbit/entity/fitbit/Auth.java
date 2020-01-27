@@ -1,5 +1,6 @@
-package ca.uqtr.fitbit.entity;
+package ca.uqtr.fitbit.entity.fitbit;
 
+import ca.uqtr.fitbit.entity.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -10,7 +11,14 @@ import javax.persistence.*;
 @Data
 @Entity
 @Table(name = "Auth", schema = "public")
-public class Auth extends BaseEntity {
+public class Auth {
+    @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    private int id;
+
+    @Version
+    @Column(name = "version", nullable = false)
+    private int version;
 
     @Column(name = "authorization_code")
     private String authorizationCode;
@@ -48,4 +56,6 @@ public class Auth extends BaseEntity {
         this.refreshToken = refreshToken;
     }
 
+    public Auth() {
+    }
 }

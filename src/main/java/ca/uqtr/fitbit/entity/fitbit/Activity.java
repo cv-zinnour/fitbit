@@ -1,5 +1,6 @@
-package ca.uqtr.fitbit.entity;
+package ca.uqtr.fitbit.entity.fitbit;
 
+import ca.uqtr.fitbit.entity.BaseEntity;
 import lombok.*;
 
 import javax.persistence.*;
