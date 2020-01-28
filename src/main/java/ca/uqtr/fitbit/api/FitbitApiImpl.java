@@ -1,5 +1,7 @@
 package ca.uqtr.fitbit.api;
 
+import ca.uqtr.fitbit.api.data.ActivitiesTypeData;
+import ca.uqtr.fitbit.api.data.ActivitiesTypeDataImpl;
 import ca.uqtr.fitbit.api.data.activities.Activities;
 import ca.uqtr.fitbit.api.data.calories.Calories;
 import ca.uqtr.fitbit.api.data.steps.Steps;
@@ -25,12 +27,14 @@ public class FitbitApiImpl implements FitbitApi {
     private Activities activities;
     private Steps steps;
     private Calories calories;
+    private final ActivitiesTypeData activitiesTypeData;
 
     @Autowired
-    public FitbitApiImpl(OkHttpClient okHttpClient, Activities activities, Steps steps) {
+    public FitbitApiImpl(OkHttpClient okHttpClient, Activities activities, Steps steps, ActivitiesTypeData activitiesTypeData) {
         this.okHttpClient = okHttpClient;
         this.activities = activities;
         this.steps = steps;
+        this.activitiesTypeData = activitiesTypeData;
     }
 
     @Override
@@ -126,5 +130,10 @@ public class FitbitApiImpl implements FitbitApi {
     @Override
     public Calories getCalories() {
         return ca;
+    }
+
+    @Override
+    public ActivitiesTypeData getActivitiesTypeData() {
+        return activitiesTypeData;
     }
 }
