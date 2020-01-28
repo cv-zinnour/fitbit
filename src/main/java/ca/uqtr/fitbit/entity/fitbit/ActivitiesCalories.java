@@ -19,7 +19,7 @@ import java.sql.Date;
         name = "jsonb",
         typeClass = JsonBinaryType.class
 )
-public class ActivitiesCalories {
+public class ActivitiesCalories extends Activities{
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private int id;
@@ -37,13 +37,14 @@ public class ActivitiesCalories {
     @Column(name = "dataset_interval")
     private int datasetInterval;
 
-    public ActivitiesCalories() {
-    }
+
 
     public ActivitiesCalories(Date dateTime, double calories, String dataset, int datasetInterval) {
         this.dateTime = dateTime;
         this.calories = calories;
         this.dataset = dataset;
         this.datasetInterval = datasetInterval;
+    }
+    public ActivitiesCalories() {
     }
 }

@@ -18,7 +18,7 @@ import java.sql.Date;
         name = "jsonb",
         typeClass = JsonBinaryType.class
 )
-public class ActivitiesSteps {
+public class ActivitiesSteps extends Activities {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private int id;
