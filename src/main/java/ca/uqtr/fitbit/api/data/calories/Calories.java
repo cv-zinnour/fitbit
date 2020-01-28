@@ -7,5 +7,6 @@ import java.io.IOException;
 
 public interface Calories {
     ActivitiesCalories getCaloriesOfDayPerMinute(String date, String accessToken) throws IOException;
+    ActivitiesCalories getCaloriesOfDayBetweenTwoTimePerMinute(String date, String startTime, String endTime, String accessToken) throws IOException;
 
 }

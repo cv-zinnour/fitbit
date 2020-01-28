@@ -1,6 +1,7 @@
 package ca.uqtr.fitbit.service.activity;
 
 
+import ca.uqtr.fitbit.entity.fitbit.ActivitiesCalories;
 import ca.uqtr.fitbit.entity.fitbit.ActivitiesSteps;
 import ca.uqtr.fitbit.entity.fitbit.Activity;
 
@@ -20,4 +21,11 @@ public interface ActivityService{
     ActivitiesSteps getStepsOfDayBetweenTwoTimePerMinute(String date, String startTime, String endTime) throws IOException;
 
     void saveStepsOfDayPerMinute(ActivitiesSteps activitiesSteps);
+
+    ActivitiesCalories getCaloriesOfDayPerMinute(String date) throws IOException, ParseException;
+
+    void saveCaloriesOfDayPerMinute(ActivitiesCalories activitiesCalories);
+
+    ActivitiesCalories getCaloriesOfDayBetweenTwoTimePerMinute(String date, String startTime, String endTime) throws IOException;
+
 }

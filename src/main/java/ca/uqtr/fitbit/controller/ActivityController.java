@@ -1,5 +1,6 @@
 package ca.uqtr.fitbit.controller;
 
+import ca.uqtr.fitbit.entity.fitbit.ActivitiesCalories;
 import ca.uqtr.fitbit.entity.fitbit.ActivitiesSteps;
 import ca.uqtr.fitbit.entity.fitbit.Activity;
 import ca.uqtr.fitbit.service.activity.ActivityService;
@@ -31,19 +32,36 @@ public class ActivityController {
         return new ResponseEntity<>(activities, HttpStatus.OK);
     }
 
-    @GetMapping(value = "/steps/day/{date}/time/minute/15")
+    @GetMapping(value = "/steps/day/{date}/time/minute/1")
     @ResponseBody
     public ResponseEntity<ActivitiesSteps> getStepsOfDayPerMinute(@PathVariable String date) throws IOException, ParseException {
         ActivitiesSteps activitiesSteps = activityService.getStepsOfDayPerMinute(date);
         return new ResponseEntity<>(activitiesSteps, HttpStatus.OK);
     }
 
-    @GetMapping(value = "/day/{date}/time/{startTime}/{endTime}/minute/1")
+    @GetMapping(value = "/steps/day/{date}/time/{startTime}/{endTime}/minute/1")
     @ResponseBody
     public ResponseEntity<ActivitiesSteps> getStepsOfDayBetweenTwoTimePerMinute(@PathVariable String date,
                                                                                 @PathVariable String startTime,
-                                                                                @PathVariable String endTime) throws IOException, ParseException {
+                                                                                @PathVariable String endTime) throws IOException {
         ActivitiesSteps activitiesSteps = activityService.getStepsOfDayBetweenTwoTimePerMinute(date, startTime, endTime);
         return new ResponseEntity<>(activitiesSteps, HttpStatus.OK);
     }
+
+    @GetMapping(value = "/calories/day/{date}/time/minute/1")
+    @ResponseBody
+    public ResponseEntity<ActivitiesSteps> getCaloriesOfDayPerMinute(@PathVariable String date) throws IOException, ParseException {
+        ActivitiesSteps activitiesSteps = activityService.getStepsOfDayPerMinute(date);
+        return new ResponseEntity<>(activitiesSteps, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/calories/day/{date}/time/{startTime}/{endTime}/minute/1")
+    @ResponseBody
+    public ResponseEntity<ActivitiesCalories> getCaloriesOfDayBetweenTwoTimePerMinute(@PathVariable String date,
+                                                                                   @PathVariable String startTime,
+                                                                                   @PathVariable String endTime) throws IOException {
+        ActivitiesCalories activitiesCalories = activityService.getCaloriesOfDayBetweenTwoTimePerMinute(date, startTime, endTime);
+        return new ResponseEntity<>(activitiesCalories, HttpStatus.OK);
+    }
+
 }

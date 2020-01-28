@@ -2,8 +2,10 @@ package ca.uqtr.fitbit.service.activity;
 
 
 import ca.uqtr.fitbit.api.FitbitApi;
+import ca.uqtr.fitbit.entity.fitbit.ActivitiesCalories;
 import ca.uqtr.fitbit.entity.fitbit.ActivitiesSteps;
 import ca.uqtr.fitbit.entity.fitbit.Activity;
+import ca.uqtr.fitbit.repository.ActivitiesCaloriesRepository;
 import ca.uqtr.fitbit.repository.ActivitiesStepsRepository;
 import ca.uqtr.fitbit.repository.ActivityRepository;
 import ca.uqtr.fitbit.service.auth.AuthService;
@@ -22,13 +24,15 @@ public class ActivityServiceImpl implements ActivityService {
     private FitbitApi api;
     private ActivityRepository activityRepository;
     private final ActivitiesStepsRepository activitiesStepsRepository;
+    private final ActivitiesCaloriesRepository activitiesCaloriesRepository;
 
     @Autowired
-    public ActivityServiceImpl(AuthService authService, FitbitApi api, ActivityRepository activityRepository, ActivitiesStepsRepository activitiesStepsRepository) {
+    public ActivityServiceImpl(AuthService authService, FitbitApi api, ActivityRepository activityRepository, ActivitiesStepsRepository activitiesStepsRepository, ActivitiesCaloriesRepository activitiesCaloriesRepository) {
         this.authService = authService;
         this.api = api;
         this.activityRepository = activityRepository;
         this.activitiesStepsRepository = activitiesStepsRepository;
+        this.activitiesCaloriesRepository = activitiesCaloriesRepository;
     }
 
     @Override
@@ -61,6 +65,26 @@ public class ActivityServiceImpl implements ActivityService {
     @Override
     public void saveStepsOfDayPerMinute(ActivitiesSteps activitiesSteps) {
         activitiesStepsRepository.save(activitiesSteps);
+    }
+
+    @Override
+    public void saveCaloriesOfDayPerMinute(ActivitiesCalories activitiesCalories) {
+        activitiesCaloriesRepository.save(activitiesCalories);
+    }
+
+    @Override
+    public ActivitiesCalories getCaloriesOfDayBetweenTwoTimePerMinute(String date, String startTime, String endTime) throws IOException {
+        ActivitiesCalories activitiesCalories = api.getCalories().getCaloriesOfDayBetweenTwoTimePerMinute(date, startTime, endTime, authService.getAccessToken());
+        this.saveCaloriesOfDayPerMinute(activitiesCalories);
+        return activitiesCalories;
+
+    }
+
+    @Override
+    public ActivitiesCalories getCaloriesOfDayPerMinute(String date) throws IOException {
+        ActivitiesCalories activitiesCalories = api.getCalories().getCaloriesOfDayPerMinute(date, authService.getAccessToken());
+        this.saveCaloriesOfDayPerMinute(activitiesCalories);
+        return activitiesCalories;
     }
 
 }

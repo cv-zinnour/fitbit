@@ -41,6 +41,7 @@ public class AuthServiceImpl  implements AuthService {
     @Override
     public String getAccessToken() throws IOException {
         Auth auth = authRepository.findTopByOrderByIdDesc();
+
         boolean isExpired = fitbitApi.isTokenExpired(auth.getAccessToken());
         System.out.println("is token expired : "+isExpired);
         if (isExpired){

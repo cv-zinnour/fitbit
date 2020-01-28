@@ -1,6 +1,7 @@
 package ca.uqtr.fitbit.api;
 
 import ca.uqtr.fitbit.api.data.activities.Activities;
+import ca.uqtr.fitbit.api.data.calories.Calories;
 import ca.uqtr.fitbit.api.data.steps.Steps;
 import ca.uqtr.fitbit.entity.fitbit.Auth;
 import okhttp3.*;
@@ -23,6 +24,7 @@ public class FitbitApiImpl implements FitbitApi {
     private OkHttpClient okHttpClient;
     private Activities activities;
     private Steps steps;
+    private Calories calories;
 
     @Autowired
     public FitbitApiImpl(OkHttpClient okHttpClient, Activities activities, Steps steps) {
@@ -119,5 +121,10 @@ public class FitbitApiImpl implements FitbitApi {
     @Override
     public Steps getSteps() {
         return steps;
+    }
+
+    @Override
+    public Calories getCalories() {
+        return ca;
     }
 }
