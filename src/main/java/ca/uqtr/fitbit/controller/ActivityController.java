@@ -31,7 +31,7 @@ public class ActivityController {
         return new ResponseEntity<>(activities, HttpStatus.OK);
     }
 
-    @GetMapping(value = "/day/{date}/time/minute/1")
+    @GetMapping(value = "/steps/day/{date}/time/minute/15")
     @ResponseBody
     public ResponseEntity<ActivitiesSteps> getStepsOfDayPerMinute(@PathVariable String date) throws IOException, ParseException {
         ActivitiesSteps activitiesSteps = activityService.getStepsOfDayPerMinute(date);
