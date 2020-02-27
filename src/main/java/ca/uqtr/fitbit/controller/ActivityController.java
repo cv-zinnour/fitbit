@@ -77,7 +77,9 @@ public class ActivityController {
 
     @GetMapping("/notifications")
     public ResponseEntity<HttpStatus> getFitBitNotification(@RequestParam("verify") String verify) {
+        System.out.println("----------------------------------- " + fitbitVerificationCode);
         System.out.println("----------------------------------- " + verify);
+        System.out.println("----------------------------------- " + verify.equals(fitbitVerificationCode));
         if(verify.equals(fitbitVerificationCode)) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
