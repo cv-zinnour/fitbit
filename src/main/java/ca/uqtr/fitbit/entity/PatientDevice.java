@@ -1,12 +1,11 @@
 package ca.uqtr.fitbit.entity;
 
 
+import ca.uqtr.fitbit.entity.fitbit.ActivitiesCalories;
+import ca.uqtr.fitbit.entity.fitbit.ActivitiesSteps;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import javax.persistence.Version;
@@ -26,8 +25,8 @@ public class PatientDevice implements Serializable {
     static final long serialVersionUID = 1L;
 
     @Id
-    @Column(name = "id", updatable = false, nullable = false)
-    UUID id;
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    private int id;
     @Version
     @Column(name = "version", nullable = false)
     private int version;
@@ -39,9 +38,12 @@ public class PatientDevice implements Serializable {
     private Date returnDate;
     @Column(name = "expert_id", nullable = false)
     private UUID expertId;
-    @Column(name = "patient_id", nullable = false)
-    private UUID patientId;
+    @Column(name = "medical_file_id", nullable = false)
+    private UUID medicalFileId;
     @OneToMany
-    @JoinColumn(name = "device_id")
-    private List<Device> devices = new ArrayList<>();
+    @JoinColumn(name = "id")
+    private List<ActivitiesCalories> activitiesCalories = new ArrayList<>();
+    @OneToMany
+    @JoinColumn(name = "id")
+    private List<ActivitiesSteps> activitiesSteps = new ArrayList<>();
 }

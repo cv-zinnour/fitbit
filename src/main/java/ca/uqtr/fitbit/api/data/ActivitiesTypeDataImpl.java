@@ -21,7 +21,6 @@ public class ActivitiesTypeDataImpl implements ActivitiesTypeData<ActivitesT> {
 
     private OkHttpClient okHttpClient;
     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-    private String json = Json.getContent();
 
 
 
@@ -44,7 +43,6 @@ public class ActivitiesTypeDataImpl implements ActivitiesTypeData<ActivitesT> {
             //System.out.println(response.body().string());
             json = response.body().string();
         }
-        json = this.json;
 
         //System.out.println(json);
         Serialization data = this.deserialization(json, activityType);

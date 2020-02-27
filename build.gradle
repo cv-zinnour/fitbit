@@ -39,6 +39,7 @@ dependencies {
     runtimeOnly 'org.postgresql:postgresql'
     //compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-config', version: '2.2.1.RELEASE'
     compile group: 'com.vladmihalcea', name: 'hibernate-types-52', version: '2.9.2'
+    compile group: 'org.modelmapper', name: 'modelmapper', version: '2.3.5'
 
 
 }

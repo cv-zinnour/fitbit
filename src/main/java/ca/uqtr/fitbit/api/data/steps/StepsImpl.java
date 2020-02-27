@@ -19,7 +19,7 @@ import java.text.SimpleDateFormat;
 public class StepsImpl implements Steps {
     private OkHttpClient okHttpClient;
     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-    private String json = Json.getContent();
+    //private String json = Json.getContent();
 
 
 
@@ -30,7 +30,7 @@ public class StepsImpl implements Steps {
 
     @SneakyThrows
     @Override
-    public ActivitiesSteps getStepsOfDayPerMinute(String date, String accessToken) throws IOException {
+    public ActivitiesSteps getStepsOfDayPerMinuteFromApi(String date, String accessToken)  {
         String json;
         //https://api.fitbit.com/1/user/-/activities/steps/date/2020-01-20/1d/15min.json
         Request request = new Request.Builder()
@@ -43,7 +43,7 @@ public class StepsImpl implements Steps {
             //System.out.println(response.body().string());
             json = response.body().string();
         }
-        json = this.json;
+        //json = this.json;
 
         //System.out.println(json);
         JSONObject jsonObject = new JSONObject(json);
@@ -69,7 +69,7 @@ public class StepsImpl implements Steps {
 
     @SneakyThrows
     @Override
-    public ActivitiesSteps getStepsOfDayBetweenTwoTimePerMinute(String date, String startTime, String endTime, String accessToken) throws IOException {
+    public ActivitiesSteps getStepsOfDayBetweenTwoTimePerMinuteFromApi(String date, String startTime, String endTime, String accessToken)  {
         String json;
         //https://api.fitbit.com/1/user/-/activities/steps/date/2020-01-20/1d/1min/time/08%3A00/12%3A00.json
         Request request = new Request.Builder()

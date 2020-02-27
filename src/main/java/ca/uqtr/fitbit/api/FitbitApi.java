@@ -6,6 +6,7 @@ import ca.uqtr.fitbit.api.data.ActivitiesTypeDataImpl;
 import ca.uqtr.fitbit.api.data.activities.Activities;
 import ca.uqtr.fitbit.api.data.calories.Calories;
 import ca.uqtr.fitbit.api.data.steps.Steps;
+import ca.uqtr.fitbit.entity.FitbitSubscription;
 import ca.uqtr.fitbit.entity.fitbit.Auth;
 
 import java.io.IOException;
@@ -18,6 +19,10 @@ public interface FitbitApi {
 
     Auth refreshToken(String refreshToken, Auth auth) throws IOException ;
 
+    ca.uqtr.fitbit.dto.Response addSubscription(FitbitSubscription fitbitSubscription, String accessToken, String collectionPath) throws IOException;
+
+    ca.uqtr.fitbit.dto.Response removeSubscription(FitbitSubscription fitbitSubscription, String accessToken, String collectionPath) throws IOException;
+
     Activities getActivities();
 
     Steps getSteps();
@@ -25,4 +30,7 @@ public interface FitbitApi {
     Calories getCalories();
 
     ActivitiesTypeData getActivitiesTypeData();
+
+
+
 }

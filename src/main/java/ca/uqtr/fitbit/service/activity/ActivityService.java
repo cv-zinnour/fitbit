@@ -1,31 +1,36 @@
 package ca.uqtr.fitbit.service.activity;
 
 
+import ca.uqtr.fitbit.dto.DeviceDto;
+import ca.uqtr.fitbit.dto.Response;
 import ca.uqtr.fitbit.entity.fitbit.ActivitiesCalories;
 import ca.uqtr.fitbit.entity.fitbit.ActivitiesSteps;
 import ca.uqtr.fitbit.entity.fitbit.Activity;
 
 import java.io.IOException;
-import java.sql.Date;
 import java.text.ParseException;
 import java.util.List;
 
 public interface ActivityService{
 
-    List<Activity> getActivitiesBetween2Dates(String twoDates) throws IOException, ParseException;
+    Response getStepsOfDayPerMinuteFromApi(String date, DeviceDto deviceDto) throws IOException;
+    void saveStepsOfDayPerMinuteFromApiInDB(ActivitiesSteps activitiesSteps, DeviceDto deviceDto);
+    Response getCaloriesOfDayPerMinuteFromApi(String date, DeviceDto deviceDto) throws IOException, ParseException;
+    void saveCaloriesOfDayPerMinuteFromApiInDB(ActivitiesCalories activitiesCalories, DeviceDto deviceDto);
 
-    void saveActivitiesBetween2Dates(List<Activity> activities);
 
-    ActivitiesSteps getStepsOfDayPerMinute(String date) throws IOException, ParseException;
+    Response getStepsOfDayBetweenTwoTimesPerMinuteFromApi(String date, String startTime, String endTime, DeviceDto deviceDto) throws IOException;
+    Response getCaloriesOfDayBetweenTwoTimesPerMinuteFromApi(String date, String startTime, String endTime, DeviceDto deviceDto) throws IOException;
+    Response getActivitiesBetween2DatesFromApi(String date1, String date2, DeviceDto deviceDto) throws IOException, ParseException;
+    Iterable<Activity> saveActivitiesBetween2DatesFromApiInDB(List<Activity> activities, DeviceDto deviceDto);
 
-    ActivitiesSteps getStepsOfDayBetweenTwoTimePerMinute(String date, String startTime, String endTime) throws IOException;
 
-    void saveStepsOfDayPerMinute(ActivitiesSteps activitiesSteps);
+    Response getStepsOfDayPerMinuteFromDB(String date, DeviceDto deviceDto) throws IOException;
+    Response getCaloriesOfDayPerMinuteFromDB(String date, DeviceDto deviceDto) throws IOException, ParseException;
 
-    ActivitiesCalories getCaloriesOfDayPerMinute(String date) throws IOException, ParseException;
-
-    void saveCaloriesOfDayPerMinute(ActivitiesCalories activitiesCalories);
-
-    ActivitiesCalories getCaloriesOfDayBetweenTwoTimePerMinute(String date, String startTime, String endTime) throws IOException;
+    Response getStepsOfDayBetweenTwoTimesPerMinuteFromDB(String date, String startTime, String endTime, DeviceDto deviceDto) throws IOException;
+    Response getCaloriesOfDayBetweenTwoTimesPerMinuteFromDB(String date, String startTime, String endTime, DeviceDto deviceDto) throws IOException;
+    Response getActivitiesBetween2DatesFromDB(String date1, String date2, DeviceDto deviceDto) throws IOException, ParseException;
 
 }
+

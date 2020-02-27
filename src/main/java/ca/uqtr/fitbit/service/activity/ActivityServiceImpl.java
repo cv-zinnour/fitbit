@@ -2,89 +2,172 @@ package ca.uqtr.fitbit.service.activity;
 
 
 import ca.uqtr.fitbit.api.FitbitApi;
+import ca.uqtr.fitbit.dto.ActivityDto;
+import ca.uqtr.fitbit.dto.DeviceDto;
+import ca.uqtr.fitbit.dto.Error;
+import ca.uqtr.fitbit.dto.Response;
+import ca.uqtr.fitbit.entity.Device;
 import ca.uqtr.fitbit.entity.fitbit.ActivitiesCalories;
 import ca.uqtr.fitbit.entity.fitbit.ActivitiesSteps;
 import ca.uqtr.fitbit.entity.fitbit.Activity;
 import ca.uqtr.fitbit.repository.ActivitiesCaloriesRepository;
 import ca.uqtr.fitbit.repository.ActivitiesStepsRepository;
 import ca.uqtr.fitbit.repository.ActivityRepository;
+import ca.uqtr.fitbit.repository.DeviceRepository;
 import ca.uqtr.fitbit.service.auth.AuthService;
-import org.json.JSONObject;
+import javassist.bytecode.stackmap.TypeData;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.text.ParseException;
 import java.util.List;
+import java.util.Locale;
+import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Service
 public class ActivityServiceImpl implements ActivityService {
+    private static final Logger LOGGER = Logger.getLogger( TypeData.ClassName.class.getName() );
 
     private AuthService authService;
     private FitbitApi api;
     private ActivityRepository activityRepository;
     private final ActivitiesStepsRepository activitiesStepsRepository;
     private final ActivitiesCaloriesRepository activitiesCaloriesRepository;
+    private ModelMapper modelMapper;
+    private MessageSource messageSource;
+    private DeviceRepository deviceRepository;
 
     @Autowired
-    public ActivityServiceImpl(AuthService authService, FitbitApi api, ActivityRepository activityRepository, ActivitiesStepsRepository activitiesStepsRepository, ActivitiesCaloriesRepository activitiesCaloriesRepository) {
+    public ActivityServiceImpl(AuthService authService, FitbitApi api, ActivityRepository activityRepository, ActivitiesStepsRepository activitiesStepsRepository, ActivitiesCaloriesRepository activitiesCaloriesRepository, ModelMapper modelMapper, MessageSource messageSource, DeviceRepository deviceRepository) {
         this.authService = authService;
         this.api = api;
         this.activityRepository = activityRepository;
         this.activitiesStepsRepository = activitiesStepsRepository;
         this.activitiesCaloriesRepository = activitiesCaloriesRepository;
+        this.modelMapper = modelMapper;
+        this.messageSource = messageSource;
+        this.deviceRepository = deviceRepository;
+    }
+    //----------------  1day 1min
+    @Override//----------------------------- steps
+    public Response getStepsOfDayPerMinuteFromApi(String date, DeviceDto deviceDto) throws IOException {
+        try {
+            ActivitiesSteps activitiesSteps = api.getSteps().getStepsOfDayPerMinuteFromApi(date, authService.getAccessToken(deviceDto.dtoToObj(modelMapper)));
+            this.saveStepsOfDayPerMinuteFromApiInDB(activitiesSteps, deviceDto);
+            return new Response(activitiesSteps, null);
+        } catch (Exception ex) {
+            LOGGER.log(Level.WARNING, ex.getMessage());
+            return new Response(null,
+                    new Error(Integer.parseInt(messageSource.getMessage("error.null.id", null, Locale.US)),
+                            messageSource.getMessage("error.null.message", null, Locale.US)));
+        }
     }
 
     @Override
-    public List<Activity> getActivitiesBetween2Dates(String twoDates) throws IOException, ParseException {
-        JSONObject jsonObj = new JSONObject(twoDates);
-        List<Activity> activities = api.getActivities().getActivities(jsonObj.getString("dateStart"), jsonObj.getString("dateEnd"), authService.getAccessToken());
-        this.saveActivitiesBetween2Dates(activities);
-        return activities;
+    public void saveStepsOfDayPerMinuteFromApiInDB(ActivitiesSteps activitiesSteps, DeviceDto deviceDto) {
+        Device device = deviceRepository.getDeviceWith_LastPatientDevice_FetchTypeEAGER(UUID.fromString(deviceDto.getId()));
+        device.getPatientDevices().get(0).getActivitiesSteps().add(activitiesSteps);
+        deviceRepository.save(device);
+        //activitiesStepsRepository.save(activitiesSteps);
+    }
+
+    @Override//----------------------------- calories
+    public Response getCaloriesOfDayPerMinuteFromApi(String date, DeviceDto deviceDto) throws IOException {
+        try {
+            ActivitiesCalories activitiesCalories = api.getCalories().getCaloriesOfDayPerMinute(date, authService.getAccessToken(deviceDto.dtoToObj(modelMapper)));
+            this.saveCaloriesOfDayPerMinuteFromApiInDB(activitiesCalories, deviceDto);
+            return new Response(activitiesCalories, null);
+        } catch (Exception ex) {
+            LOGGER.log(Level.WARNING, ex.getMessage());
+            return new Response(null,
+                    new Error(Integer.parseInt(messageSource.getMessage("error.null.id", null, Locale.US)),
+                            messageSource.getMessage("error.null.message", null, Locale.US)));
+        }
+    }
+    @Override
+    public void saveCaloriesOfDayPerMinuteFromApiInDB(ActivitiesCalories activitiesCalories, DeviceDto deviceDto) {
+        Device device = deviceRepository.getDeviceWith_LastPatientDevice_FetchTypeEAGER(UUID.fromString(deviceDto.getId()));
+        device.getPatientDevices().get(0).getActivitiesCalories().add(activitiesCalories);
+        deviceRepository.save(device);
+        //activitiesCaloriesRepository.save(activitiesCalories);
+    }
+
+//*------------------------------------------------------------------------ 1day 2times
+    @Override
+    public Response getStepsOfDayBetweenTwoTimesPerMinuteFromApi(String date, String startTime, String endTime, DeviceDto deviceDto) throws IOException {
+        try {
+            ActivitiesSteps activitiesSteps = api.getSteps().getStepsOfDayBetweenTwoTimePerMinuteFromApi(date, startTime, endTime, authService.getAccessToken(deviceDto.dtoToObj(modelMapper)));
+            this.saveStepsOfDayPerMinuteFromApiInDB(activitiesSteps, deviceDto);
+            return new Response(activitiesSteps, null);
+        } catch (Exception ex) {
+            LOGGER.log(Level.WARNING, ex.getMessage());
+            return new Response(null,
+                    new Error(Integer.parseInt(messageSource.getMessage("error.null.id", null, Locale.US)),
+                            messageSource.getMessage("error.null.message", null, Locale.US)));
+        }
+    }
+    @Override
+    public Response getCaloriesOfDayBetweenTwoTimesPerMinuteFromApi(String date, String startTime, String endTime, DeviceDto deviceDto) throws IOException {
+        try {
+            ActivitiesCalories activitiesCalories = api.getCalories().getCaloriesOfDayBetweenTwoTimePerMinute(date, startTime, endTime, authService.getAccessToken(deviceDto.dtoToObj(modelMapper)));
+            this.saveCaloriesOfDayPerMinuteFromApiInDB(activitiesCalories, deviceDto);
+            return new Response(activitiesCalories, null);
+        } catch (Exception ex) {
+            LOGGER.log(Level.WARNING, ex.getMessage());
+            return new Response(null,
+                    new Error(Integer.parseInt(messageSource.getMessage("error.null.id", null, Locale.US)),
+                            messageSource.getMessage("error.null.message", null, Locale.US)));
+        }
+    }
+//---------------------------------------------------------- not intraday data (!1min)
+    @Override
+    public Response getActivitiesBetween2DatesFromApi(String date1, String date2, DeviceDto deviceDto) throws IOException, ParseException {
+        try {
+            List<Activity> activities = api.getActivities().getActivities(date1, date2, authService.getAccessToken(deviceDto.dtoToObj(modelMapper)));
+            Type activitiesDto = new TypeToken<List<ActivityDto>>() {}.getType();
+            return new Response(modelMapper.map(saveActivitiesBetween2DatesFromApiInDB(activities, deviceDto), activitiesDto), null);
+        } catch (Exception ex) {
+            LOGGER.log(Level.WARNING, ex.getMessage());
+            return new Response(null,
+                    new Error(Integer.parseInt(messageSource.getMessage("error.null.id", null, Locale.US)),
+                            messageSource.getMessage("error.null.message", null, Locale.US)));
+        }
+    }
+    @Override
+    public Iterable<Activity> saveActivitiesBetween2DatesFromApiInDB(List<Activity> activities, DeviceDto deviceDto) {
+        return activityRepository.saveAll(activities);
     }
 
     @Override
-    public void saveActivitiesBetween2Dates(List<Activity> activities) {
-        activityRepository.saveAll(activities);
+    public Response getStepsOfDayPerMinuteFromDB(String date, DeviceDto deviceDto) throws IOException {
+        return null;
     }
 
     @Override
-    public ActivitiesSteps getStepsOfDayPerMinute(String date) throws IOException, ParseException {
-        ActivitiesSteps activitiesSteps = api.getSteps().getStepsOfDayPerMinute(date, authService.getAccessToken());
-        this.saveStepsOfDayPerMinute(activitiesSteps);
-        return activitiesSteps;
+    public Response getCaloriesOfDayPerMinuteFromDB(String date, DeviceDto deviceDto) throws IOException, ParseException {
+        return null;
     }
 
     @Override
-    public ActivitiesSteps getStepsOfDayBetweenTwoTimePerMinute(String date, String startTime, String endTime) throws IOException {
-        ActivitiesSteps activitiesSteps = api.getSteps().getStepsOfDayBetweenTwoTimePerMinute(date, startTime, endTime, authService.getAccessToken());
-        this.saveStepsOfDayPerMinute(activitiesSteps);
-        return activitiesSteps;
+    public Response getStepsOfDayBetweenTwoTimesPerMinuteFromDB(String date, String startTime, String endTime, DeviceDto deviceDto) throws IOException {
+        return null;
     }
 
     @Override
-    public void saveStepsOfDayPerMinute(ActivitiesSteps activitiesSteps) {
-        activitiesStepsRepository.save(activitiesSteps);
+    public Response getCaloriesOfDayBetweenTwoTimesPerMinuteFromDB(String date, String startTime, String endTime, DeviceDto deviceDto) throws IOException {
+        return null;
     }
 
     @Override
-    public void saveCaloriesOfDayPerMinute(ActivitiesCalories activitiesCalories) {
-        activitiesCaloriesRepository.save(activitiesCalories);
-    }
-
-    @Override
-    public ActivitiesCalories getCaloriesOfDayBetweenTwoTimePerMinute(String date, String startTime, String endTime) throws IOException {
-        ActivitiesCalories activitiesCalories = api.getCalories().getCaloriesOfDayBetweenTwoTimePerMinute(date, startTime, endTime, authService.getAccessToken());
-        this.saveCaloriesOfDayPerMinute(activitiesCalories);
-        return activitiesCalories;
-
-    }
-
-    @Override
-    public ActivitiesCalories getCaloriesOfDayPerMinute(String date) throws IOException {
-        ActivitiesCalories activitiesCalories = api.getCalories().getCaloriesOfDayPerMinute(date, authService.getAccessToken());
-        this.saveCaloriesOfDayPerMinute(activitiesCalories);
-        return activitiesCalories;
+    public Response getActivitiesBetween2DatesFromDB(String date1, String date2, DeviceDto deviceDto) throws IOException, ParseException {
+        return null;
     }
 
 }

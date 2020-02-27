@@ -21,6 +21,8 @@ public interface AuthRepository extends CrudRepository<Auth, UUID> {
 
     Auth findTopByOrderByIdDesc();
 
+    Auth getById(UUID id);
+
     @Transactional
     @Modifying
     @Query("delete from Auth a where a.accessToken = :accessToken")

@@ -1,25 +1,24 @@
 package ca.uqtr.fitbit.api.data.calories;
 
-import ca.uqtr.fitbit.api.data.steps.Json;
 import ca.uqtr.fitbit.entity.fitbit.ActivitiesCalories;
-import ca.uqtr.fitbit.entity.fitbit.ActivitiesSteps;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 
+@Component
 public class CaloriesImpl implements Calories {
 
     private OkHttpClient okHttpClient;
     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-    private String json = Json.getContent();
 
 
 
@@ -31,6 +30,7 @@ public class CaloriesImpl implements Calories {
 
     @Override
     public ActivitiesCalories getCaloriesOfDayPerMinute(String date, String accessToken) throws IOException {
+        System.out.println(accessToken);
         String json;
         //https://api.fitbit.com/1/user/-/activities/steps/date/2020-01-20/1d/15min.json
         Request request = new Request.Builder()
@@ -43,12 +43,12 @@ public class CaloriesImpl implements Calories {
             //System.out.println(response.body().string());
             json = response.body().string();
         }
-        json = this.json;
+        //json = this.json;
 
         //System.out.println(json);
         JSONObject jsonObject = new JSONObject(json);
         JSONArray activities_calories = jsonObject.getJSONArray("activities-calories");
-        Date dateTime = Date.valueOf(activities_calories.getJSONObject(0).getString("dateTime"));;
+        Date dateTime = Date.valueOf(activities_calories.getJSONObject(0).getString("dateTime"));
         double caloriesValue = activities_calories.getJSONObject(0).getDouble("value");
         JSONObject activities_calories_intraday = jsonObject.getJSONObject("activities-calories-intraday");
         int datasetInterval = activities_calories_intraday.getInt("datasetInterval");

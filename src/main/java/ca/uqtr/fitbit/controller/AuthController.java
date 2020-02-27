@@ -1,7 +1,6 @@
 package ca.uqtr.fitbit.controller;
 
 
-import ca.uqtr.fitbit.api.FitbitApi;
 import ca.uqtr.fitbit.service.auth.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +21,7 @@ public class AuthController {
     @CrossOrigin(exposedHeaders="Access-Control-Allow-Origin")
     @GetMapping(value = "/authorization")
     public void getAuthorizationCode(@RequestParam String code) throws IOException {
-        this.authService.authorizationCode2AccessAndRefreshToken(code);
+        authService.authorizationCode2AccessAndRefreshToken(code, null);
 
     }
 

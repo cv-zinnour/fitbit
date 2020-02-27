@@ -1,25 +1,31 @@
 package ca.uqtr.fitbit.service.auth;
 
 import ca.uqtr.fitbit.api.FitbitApi;
+import ca.uqtr.fitbit.dto.DeviceDto;
+import ca.uqtr.fitbit.entity.Device;
 import ca.uqtr.fitbit.entity.fitbit.Auth;
 import ca.uqtr.fitbit.repository.AuthRepository;
 import lombok.SneakyThrows;
 import org.json.JSONObject;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.UUID;
 
 @Service
 public class AuthServiceImpl  implements AuthService {
 
     private AuthRepository authRepository;
     private FitbitApi fitbitApi;
+    private ModelMapper modelMapper;
 
     @Autowired
-    public AuthServiceImpl(AuthRepository authRepository, FitbitApi fitbitApi) {
+    public AuthServiceImpl(AuthRepository authRepository, FitbitApi fitbitApi, ModelMapper modelMapper) {
         this.authRepository = authRepository;
         this.fitbitApi = fitbitApi;
+        this.modelMapper = modelMapper;
     }
 
     @Override
@@ -33,15 +39,14 @@ public class AuthServiceImpl  implements AuthService {
     }
 
     @Override
-    public String getAuthorizationCode() {
-        return authRepository.findTopByOrderByIdDesc().getAuthorizationCode();
+    public String getAuthorizationCode(Device device) {
+        return device.getAuth().getAuthorizationCode();
     }
 
     //TODO: authRepository.findTopByOrderByIdDesc() == null
     @Override
-    public String getAccessToken() throws IOException {
-        Auth auth = authRepository.findTopByOrderByIdDesc();
-
+    public String getAccessToken(Device device) throws IOException {
+        Auth auth = authRepository.getById(device.getId());
         boolean isExpired = fitbitApi.isTokenExpired(auth.getAccessToken());
         System.out.println("is token expired : "+isExpired);
         if (isExpired){
@@ -53,7 +58,6 @@ public class AuthServiceImpl  implements AuthService {
             System.out.println("db Access token : "+auth.getAccessToken());
             return auth.getAccessToken();
         }
-
     }
 
     @Override
@@ -62,22 +66,30 @@ public class AuthServiceImpl  implements AuthService {
     }
 
     @Override
+    public void deleteById(UUID id) {
+        authRepository.deleteById(id);
+    }
+
+
+    @Override
     public long count() {
         return authRepository.count();
     }
 
     @SneakyThrows
     @Override
-    public Auth authorizationCode2AccessAndRefreshToken(String authorizationCode) {
+    public Auth authorizationCode2AccessAndRefreshToken(String authorizationCode, Device device) {
         JSONObject jsonObj = new JSONObject(this.fitbitApi.getAccessTokenRefreshToken(authorizationCode));
         System.out.println(jsonObj.toString());
-        return authRepository.save(new Auth(authorizationCode,
+        Auth auth = new Auth(authorizationCode,
                 jsonObj.getString("access_token"),
                 jsonObj.getString("refresh_token"),
                 false,
                 jsonObj.getInt("expires_in"),
                 jsonObj.getString("scope"),
-                jsonObj.getString("token_type")));
+                jsonObj.getString("token_type"));
+        auth.setDevice(device);
+        return authRepository.save(auth);
     }
 
 

@@ -1,6 +1,7 @@
 package ca.uqtr.fitbit.entity.fitbit;
 
 import ca.uqtr.fitbit.entity.BaseEntity;
+import ca.uqtr.fitbit.entity.Device;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -11,14 +12,7 @@ import javax.persistence.*;
 @Data
 @Entity
 @Table(name = "Auth", schema = "public")
-public class Auth {
-    @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
-    private int id;
-
-    @Version
-    @Column(name = "version", nullable = false)
-    private int version;
+public class Auth extends BaseEntity {
 
     @Column(name = "authorization_code")
     private String authorizationCode;
@@ -40,6 +34,11 @@ public class Auth {
 
     @Column(name = "token_type")
     private String tokenType;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @MapsId
+    @JoinColumn(name = "id")
+    private Device device;
 
     public Auth(String authorizationCode, String accessToken, String refreshToken, boolean expiredToken, int expiresIn, String scope, String tokenType) {
         this.authorizationCode = authorizationCode;

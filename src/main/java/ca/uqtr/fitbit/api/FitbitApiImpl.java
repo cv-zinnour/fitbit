@@ -1,24 +1,30 @@
 package ca.uqtr.fitbit.api;
 
 import ca.uqtr.fitbit.api.data.ActivitiesTypeData;
-import ca.uqtr.fitbit.api.data.ActivitiesTypeDataImpl;
 import ca.uqtr.fitbit.api.data.activities.Activities;
 import ca.uqtr.fitbit.api.data.calories.Calories;
 import ca.uqtr.fitbit.api.data.steps.Steps;
+import ca.uqtr.fitbit.dto.Error;
+import ca.uqtr.fitbit.entity.FitbitSubscription;
 import ca.uqtr.fitbit.entity.fitbit.Auth;
+import javassist.bytecode.stackmap.TypeData;
 import okhttp3.*;
 import okio.Buffer;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.Base64;
+import java.util.Calendar;
+import java.util.Locale;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Component
 public class FitbitApiImpl implements FitbitApi {
-
-
+    private static final Logger LOGGER = Logger.getLogger( TypeData.ClassName.class.getName() );
 
     private static final String clientId = "22DBSJ";
     private static final String secretId = "f5c5a80085a01ef93a7711d199a2cfbc";
@@ -26,15 +32,18 @@ public class FitbitApiImpl implements FitbitApi {
     private OkHttpClient okHttpClient;
     private Activities activities;
     private Steps steps;
-    private Calories calories;
+    private final Calories calories;
     private final ActivitiesTypeData activitiesTypeData;
+    private MessageSource messageSource;
 
     @Autowired
-    public FitbitApiImpl(OkHttpClient okHttpClient, Activities activities, Steps steps, ActivitiesTypeData activitiesTypeData) {
+    public FitbitApiImpl(OkHttpClient okHttpClient, Activities activities, Steps steps, ActivitiesTypeData activitiesTypeData, Calories calories, MessageSource messageSource) {
         this.okHttpClient = okHttpClient;
         this.activities = activities;
         this.steps = steps;
         this.activitiesTypeData = activitiesTypeData;
+        this.calories = calories;
+        this.messageSource = messageSource;
     }
 
     @Override
@@ -118,6 +127,59 @@ public class FitbitApiImpl implements FitbitApi {
     }
 
     @Override
+    public ca.uqtr.fitbit.dto.Response addSubscription(FitbitSubscription fitbitSubscription, String accessToken, String collectionPath) throws IOException {
+        FitbitSubscription fitbitSubscriptionObj = new FitbitSubscription();
+        RequestBody body = RequestBody.create(MediaType.get("application/json; charset=utf-8"), "");
+        Request request = new Request.Builder()
+                .url("https://api.fitbit.com/1/user/-/"+collectionPath+"/apiSubscriptions/"+fitbitSubscription.getSubscriptionId()+".json")
+                .post(body)
+                .header("Authorization", "Bearer "+accessToken)
+                .build();
+        try (Response response = okHttpClient.newCall(request).execute()) {
+            //System.out.println("---------------  "+response.body().string());
+            if (response.body() == null)
+                return new ca.uqtr.fitbit.dto.Response(null,
+                        new Error(Integer.parseInt(messageSource.getMessage("error.null.id", null, Locale.US)),
+                                messageSource.getMessage("error.null.message", null, Locale.US)));
+            final JSONObject jsonObject = new JSONObject(response.body().string());
+            fitbitSubscriptionObj.setCollectionType(jsonObject.getString("collectionType"));
+            fitbitSubscriptionObj.setOwnerId(jsonObject.getString("ownerId"));
+            fitbitSubscriptionObj.setOwnerType(jsonObject.getString("ownerType"));
+            fitbitSubscriptionObj.setSubscriberId(jsonObject.getString("subscriberId"));
+            fitbitSubscriptionObj.setSubscriptionId(jsonObject.getString("subscriptionId"));
+            fitbitSubscriptionObj.setDate(new java.sql.Date(Calendar.getInstance().getTime().getTime()));
+            return new ca.uqtr.fitbit.dto.Response(fitbitSubscriptionObj, null);
+        } catch (Exception ex){
+            LOGGER.log( Level.WARNING, ex.getMessage());
+            return new ca.uqtr.fitbit.dto.Response(null,
+                    new Error(Integer.parseInt(messageSource.getMessage("error.subscription.add.id", null, Locale.US)),
+                            messageSource.getMessage("error.subscription.add.message", null, Locale.US)));
+
+        }
+    }
+
+    @Override
+    public ca.uqtr.fitbit.dto.Response removeSubscription(FitbitSubscription fitbitSubscription, String accessToken, String collectionPath) throws IOException {
+        FitbitSubscription fitbitSubscriptionObj = new FitbitSubscription();
+        Request request = new Request.Builder()
+                .url("https://api.fitbit.com/1/user/-/"+collectionPath+"/apiSubscriptions/"+fitbitSubscription.getSubscriptionId()+".json")
+                .delete()
+                .header("Authorization", "Bearer "+accessToken)
+                .build();
+        try (Response response = okHttpClient.newCall(request).execute()) {
+            int statusCode = response.code();
+            return new ca.uqtr.fitbit.dto.Response(statusCode, null);
+        } catch (Exception ex){
+            LOGGER.log( Level.WARNING, ex.getMessage());
+            return new ca.uqtr.fitbit.dto.Response(null,
+                    new Error(Integer.parseInt(messageSource.getMessage("error.subscription.remove.id", null, Locale.US)),
+                            messageSource.getMessage("error.subscription.remove.message", null, Locale.US)));
+
+        }
+    }
+
+
+    @Override
     public Activities getActivities() {
         return activities;
     }
@@ -129,7 +191,7 @@ public class FitbitApiImpl implements FitbitApi {
 
     @Override
     public Calories getCalories() {
-        return ca;
+        return calories;
     }
 
     @Override
