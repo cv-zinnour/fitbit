@@ -71,7 +71,7 @@ public class CaloriesImpl implements Calories {
         String json;
         //https://api.fitbit.com/1/user/-/activities/steps/date/2020-01-20/1d/1min/time/08%3A00/12%3A00.json
         Request request = new Request.Builder()
-                .url("https://api.fitbit.com/1/user/-/activities/calories/date/"+date+"/1d/1min/time/"+java.net.URLEncoder.encode(startTime, StandardCharsets.UTF_8)+"/"+java.net.URLEncoder.encode(endTime, StandardCharsets.UTF_8)+".json")
+                .url("https://api.fitbit.com/1/user/-/activities/calories/date/"+date+"/1d/1min/time/"+startTime+"/"+endTime+".json")
                 .get()
                 .header("Authorization", "Bearer "+accessToken)
                 .build();

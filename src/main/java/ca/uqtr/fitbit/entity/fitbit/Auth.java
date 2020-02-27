@@ -2,14 +2,12 @@ package ca.uqtr.fitbit.entity.fitbit;
 
 import ca.uqtr.fitbit.entity.BaseEntity;
 import ca.uqtr.fitbit.entity.Device;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Data
+@EqualsAndHashCode(callSuper = false)
 @Entity
 @Table(name = "Auth", schema = "public")
 public class Auth extends BaseEntity {
