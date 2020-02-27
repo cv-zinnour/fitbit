@@ -76,21 +76,21 @@ public class ActivityController {
     }
 
     @GetMapping("/notifications")
-    public ResponseEntity getFitBitNotification(@PathParam("version") String version, @RequestParam("verify") String verify) {
-
+    public ResponseEntity<HttpStatus> getFitBitNotification(@RequestParam("verify") String verify) {
+        System.out.println("----------------------------------- " + verify);
         if(verify.equals(fitbitVerificationCode)) {
-            return new ResponseEntity(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
     }
 
     @PostMapping("/subscription/notifications")
-    public ResponseEntity getFitBitNotificationData(@PathParam("version") String version,List notificationList) {
+    public ResponseEntity<HttpStatus> getFitBitNotificationData(@PathParam("version") String version,List notificationList) {
         ExecutorService executor = Executors.newFixedThreadPool(2);
         //Runnable taskOne = new FitbitDataThread(notificationList);
         //executor.execute(taskOne);
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 }
