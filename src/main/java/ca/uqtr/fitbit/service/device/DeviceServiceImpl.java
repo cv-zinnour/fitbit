@@ -92,15 +92,8 @@ public class DeviceServiceImpl implements DeviceService {
     @Override
     public Response readDevices(DeviceDto device) {
         System.out.println(device.toString());
-        try{
-            Type deviceDtoList = new TypeToken<List<DeviceDto>>() {}.getType();
-            return new Response(modelMapper.map(deviceRepository.findAllByAdminId(UUID.fromString(device.getId())), deviceDtoList), null);
-        } catch (Exception ex){
-            LOGGER.log( Level.WARNING, ex.getMessage());
-            return new Response(null,
-                    new Error(Integer.parseInt(messageSource.getMessage("error.null.id", null, Locale.US)),
-                            messageSource.getMessage("error.null.message", null, Locale.US)));
-        }
+        Type deviceDtoList = new TypeToken<List<DeviceDto>>() {}.getType();
+        return new Response(modelMapper.map(deviceRepository.findAllByAdminId(UUID.fromString(device.getId())), deviceDtoList), null);
     }
 
     @Override
