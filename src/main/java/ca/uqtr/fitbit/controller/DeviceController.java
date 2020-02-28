@@ -40,6 +40,8 @@ public class DeviceController {
     @ResponseBody
     public Response createDevice(@RequestBody Request request, HttpServletRequest HttpRequest){
         String token = HttpRequest.getHeader("Authorization").replace("bearer ","");
+        System.out.println(request.toString());
+        System.out.println(request.getObject().toString());
         DeviceDto deviceDto = (DeviceDto) request.getObject();
         deviceDto.setAdminId(JwtTokenUtil.getId(token));
         deviceDto.setInstitutionCode(JwtTokenUtil.getInstitutionCode(token));
