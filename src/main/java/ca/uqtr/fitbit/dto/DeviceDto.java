@@ -33,4 +33,18 @@ public class DeviceDto {
         return modelMapper.map(this, Device.class);
     }
 
+    public UUID getInstitutionCode() {
+        if (this.institutionCode != null)
+            return UUID.fromString(this.institutionCode);
+        else
+            return null;
+    }
+
+    public UUID getAdminId() {
+        if (this.adminId != null)
+            return UUID.fromString(this.adminId);
+        else
+            return null;
+    }
+
 }
