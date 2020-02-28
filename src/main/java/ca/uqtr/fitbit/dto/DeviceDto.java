@@ -18,7 +18,7 @@ import java.util.UUID;
 public class DeviceDto {
 
     private String id;
-    private String deviceId;
+    private String deviceCode;
     private String deviceVersion;
     private String type;
     private Date lastSyncDate;

@@ -17,6 +17,9 @@ import java.util.UUID;
 @Table(name = "device", schema = "public")
 public class Device extends BaseEntity {
 
+
+    @Column(name = "device_code", nullable = false)
+    private String deviceCode;
     @Column(name = "device_version", nullable = false)
     private String deviceVersion;
     @Column(name = "type", nullable = false)

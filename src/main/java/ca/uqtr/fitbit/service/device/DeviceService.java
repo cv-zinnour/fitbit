@@ -3,7 +3,7 @@ package ca.uqtr.fitbit.service.device;
 import ca.uqtr.fitbit.dto.DeviceDto;
 import ca.uqtr.fitbit.dto.Response;
 
-import java.util.List;
+import java.io.IOException;
 
 public interface DeviceService {
 
@@ -20,4 +20,6 @@ public interface DeviceService {
     Response readAvailableDevicesByInstitutionCode(DeviceDto device);
     Response assignDevice(DeviceDto device);
     Response getBackDevice(DeviceDto device);
+
+    Response addSubscription(DeviceDto deviceDto) throws IOException;
 }

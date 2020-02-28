@@ -1,14 +1,15 @@
 package ca.uqtr.fitbit.service.device;
 
+import ca.uqtr.fitbit.api.FitbitApi;
 import ca.uqtr.fitbit.dto.DeviceDto;
 import ca.uqtr.fitbit.dto.Error;
 import ca.uqtr.fitbit.dto.Response;
 import ca.uqtr.fitbit.entity.Device;
+import ca.uqtr.fitbit.entity.FitbitSubscription;
 import ca.uqtr.fitbit.entity.PatientDevice;
 import ca.uqtr.fitbit.entity.fitbit.Auth;
 import ca.uqtr.fitbit.repository.DeviceRepository;
 import ca.uqtr.fitbit.service.auth.AuthService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import javassist.bytecode.stackmap.TypeData;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -16,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.*;
 import java.util.logging.Level;
@@ -24,18 +26,21 @@ import java.util.logging.Logger;
 @Service
 public class DeviceServiceImpl implements DeviceService {
     private static final Logger LOGGER = Logger.getLogger( TypeData.ClassName.class.getName() );
+    private final static String COLLECTION_PATH = "activities";
 
     private DeviceRepository deviceRepository;
     private ModelMapper modelMapper;
     private MessageSource messageSource;
     private AuthService authService;
+    private FitbitApi fitbitApi;
 
     @Autowired
-    public DeviceServiceImpl(DeviceRepository deviceRepository, ModelMapper modelMapper, MessageSource messageSource, AuthService authService) {
+    public DeviceServiceImpl(DeviceRepository deviceRepository, ModelMapper modelMapper, MessageSource messageSource, AuthService authService, FitbitApi fitbitApi) {
         this.deviceRepository = deviceRepository;
         this.modelMapper = modelMapper;
         this.messageSource = messageSource;
         this.authService = authService;
+        this.fitbitApi = fitbitApi;
     }
 
     @Override
@@ -181,7 +186,6 @@ public class DeviceServiceImpl implements DeviceService {
             return new Response(null,
                     new Error(Integer.parseInt(messageSource.getMessage("error.null.id", null, Locale.US)),
                             messageSource.getMessage("error.null.message", null, Locale.US)));
-
         }
     }
 
@@ -200,7 +204,11 @@ public class DeviceServiceImpl implements DeviceService {
             return new Response(null,
                     new Error(Integer.parseInt(messageSource.getMessage("error.null.id", null, Locale.US)),
                             messageSource.getMessage("error.null.message", null, Locale.US)));
-
         }
+    }
+
+    @Override
+    public Response addSubscription(DeviceDto deviceDto) throws IOException {
+        return fitbitApi.addSubscription(new FitbitSubscription(deviceDto.getId()), authService.getAccessToken(deviceDto.dtoToObj(modelMapper)), COLLECTION_PATH);
     }
 }

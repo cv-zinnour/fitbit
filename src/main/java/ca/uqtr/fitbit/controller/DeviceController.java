@@ -4,6 +4,7 @@ import ca.uqtr.fitbit.dto.DeviceDto;
 import ca.uqtr.fitbit.dto.Error;
 import ca.uqtr.fitbit.dto.Request;
 import ca.uqtr.fitbit.dto.Response;
+import ca.uqtr.fitbit.entity.FitbitSubscription;
 import ca.uqtr.fitbit.entity.fitbit.Auth;
 import ca.uqtr.fitbit.service.auth.AuthService;
 import ca.uqtr.fitbit.service.device.DeviceService;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.websocket.server.PathParam;
+import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
@@ -77,14 +79,29 @@ public class DeviceController {
         return deviceService.readDevices(deviceDto);
     }
 
-    @CrossOrigin(exposedHeaders="Access-Control-Allow-Origin")
+    //@CrossOrigin(exposedHeaders="Access-Control-Allow-Origin")
     @GetMapping(value = "/device/authorization")
-    public Response authorizeDevice(@RequestParam String code, @RequestBody Request request, HttpServletRequest HttpRequest){
+    @ResponseBody
+    public Response authorizeDevice(@RequestParam String code, @RequestBody Request request, HttpServletRequest HttpRequest) throws IOException {
         String token = HttpRequest.getHeader("Authorization").replace("bearer ","");
         DeviceDto deviceDto = (DeviceDto) request.getObject();
         deviceDto.setAdminId(JwtTokenUtil.getId(token));
-        return deviceService.authorizeDevice(deviceDto, code);
+        Response response = deviceService.authorizeDevice(deviceDto, code);
+        if (response.getObject() == null)
+            return response;
+
+        return deviceService.addSubscription(deviceDto);
     }
+
+    @GetMapping(value = "/device/anauthorization")
+    @ResponseBody
+    public Response unauthorizeDevice(@RequestBody Request request, HttpServletRequest HttpRequest) throws IOException {
+        String token = HttpRequest.getHeader("Authorization").replace("bearer ","");
+        DeviceDto deviceDto = (DeviceDto) request.getObject();
+        deviceDto.setAdminId(JwtTokenUtil.getId(token));
+        return deviceService.unauthorizeDevice(deviceDto);
+    }
+
     @GetMapping(value = "/device/all/available")
     @ResponseBody
     public Response readAvailableDevices(@RequestBody Request request, HttpServletRequest HttpRequest){
@@ -130,11 +147,8 @@ public class DeviceController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @PostMapping("/subscription/notifications")
-    public ResponseEntity<HttpStatus> getFitBitNotificationData(@PathParam("version") String version, List notificationList) {
-        ExecutorService executor = Executors.newFixedThreadPool(2);
-        //Runnable taskOne = new FitbitDataThread(notificationList);
-        //executor.execute(taskOne);
+    @PostMapping("/subscription")
+    public ResponseEntity<HttpStatus> getFitBitNotificationData() {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

@@ -37,4 +37,7 @@ public class FitbitSubscription implements Serializable {
     @Column(name = "date")
     private Date date;
 
+    public FitbitSubscription(String subscriptionId) {
+        this.subscriptionId = subscriptionId;
+    }
 }
