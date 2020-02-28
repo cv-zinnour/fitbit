@@ -67,6 +67,7 @@ public class DeviceController {
     @ResponseBody
     public Response readDevices(HttpServletRequest HttpRequest){
         String token = HttpRequest.getHeader("Authorization").replace("bearer ","");
+        System.out.println(JwtTokenUtil.getId(token));
         DeviceDto deviceDto = new DeviceDto();
         deviceDto.setAdminId(JwtTokenUtil.getId(token));
         return deviceService.readDevices(deviceDto);
