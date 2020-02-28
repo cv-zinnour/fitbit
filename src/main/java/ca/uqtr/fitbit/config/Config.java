@@ -22,15 +22,6 @@ public class Config {
                 .build();
     }
 
-    @Bean
-    public ResourceBundleMessageSource messageSource() {
-
-        ResourceBundleMessageSource source = new ResourceBundleMessageSource();
-        source.setBasenames("messages/error");
-        source.setUseCodeAsDefaultMessage(true);
-
-        return source;
-    }
 
     @Bean
     public ResourceBundleMessageSource messageResourceSource() {
