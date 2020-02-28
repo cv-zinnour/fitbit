@@ -14,7 +14,6 @@ import org.springframework.context.support.ResourceBundleMessageSource;
 public class Config {
 
 
-
     @Bean
     OkHttpClient okHttpClient(){
         return new OkHttpClient.Builder()
@@ -22,23 +21,18 @@ public class Config {
                 .build();
     }
 
-
     @Bean
     public ResourceBundleMessageSource messageResourceSource() {
-
         ResourceBundleMessageSource source = new ResourceBundleMessageSource();
         source.setBasenames("classpath:messages");
         source.setUseCodeAsDefaultMessage(true);
-
         return source;
     }
-
 
     @Bean
     public ModelMapper modelMapper() {
         return new ModelMapper();
     }
-
 
     @Bean
     public ObjectMapper objectMapper() {
