@@ -93,7 +93,7 @@ public class DeviceServiceImpl implements DeviceService {
     public Response readDevices(DeviceDto device) {
         System.out.println(device.toString());
         Type deviceDtoList = new TypeToken<List<DeviceDto>>() {}.getType();
-        return new Response(modelMapper.map(deviceRepository.findAllByAdminId(UUID.fromString(device.getId())), deviceDtoList), null);
+        return new Response(modelMapper.map(deviceRepository.findAllByAdminId(device.getAdminId()), deviceDtoList), null);
     }
 
     @Override
