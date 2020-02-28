@@ -1,28 +1,18 @@
 package ca.uqtr.fitbit.controller;
 
 import ca.uqtr.fitbit.dto.DeviceDto;
-import ca.uqtr.fitbit.dto.Error;
 import ca.uqtr.fitbit.dto.Request;
 import ca.uqtr.fitbit.dto.Response;
-import ca.uqtr.fitbit.entity.FitbitSubscription;
-import ca.uqtr.fitbit.entity.fitbit.Auth;
-import ca.uqtr.fitbit.service.auth.AuthService;
 import ca.uqtr.fitbit.service.device.DeviceService;
 import ca.uqtr.fitbit.utils.JwtTokenUtil;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.websocket.server.PathParam;
 import java.io.IOException;
-import java.util.List;
-import java.util.Locale;
-import java.util.UUID;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 @RestController
 @RequestMapping
@@ -31,18 +21,18 @@ public class DeviceController {
     private final DeviceService deviceService;
     @Value("${fitbit.subscription.verification-code}")
     private String fitbitVerificationCode;
+    private ObjectMapper mapper;
 
-    public DeviceController(DeviceService deviceService) {
+    public DeviceController(DeviceService deviceService, ObjectMapper mapper) {
         this.deviceService = deviceService;
+        this.mapper = mapper;
     }
 
     @PostMapping(value = "/device")
     @ResponseBody
     public Response createDevice(@RequestBody Request request, HttpServletRequest HttpRequest){
         String token = HttpRequest.getHeader("Authorization").replace("bearer ","");
-        System.out.println(request.toString());
-        System.out.println(request.getObject().toString());
-        DeviceDto deviceDto = (DeviceDto) request.getObject();
+        DeviceDto deviceDto = mapper.convertValue(request.getObject(), DeviceDto.class);
         deviceDto.setAdminId(JwtTokenUtil.getId(token));
         deviceDto.setInstitutionCode(JwtTokenUtil.getInstitutionCode(token));
         return deviceService.createDevice(deviceDto);
@@ -52,7 +42,7 @@ public class DeviceController {
     @ResponseBody
     public Response readDevice(@RequestBody Request request, HttpServletRequest HttpRequest){
         String token = HttpRequest.getHeader("Authorization").replace("bearer ","");
-        DeviceDto deviceDto = (DeviceDto) request.getObject();
+        DeviceDto deviceDto = mapper.convertValue(request.getObject(), DeviceDto.class);
         deviceDto.setAdminId(JwtTokenUtil.getId(token));
         return deviceService.readDevice(deviceDto);
     }
@@ -67,7 +57,7 @@ public class DeviceController {
     @ResponseBody
     public Response updateDevice(@RequestBody Request request, HttpServletRequest HttpRequest){
         String token = HttpRequest.getHeader("Authorization").replace("bearer ","");
-        DeviceDto deviceDto = (DeviceDto) request.getObject();
+        DeviceDto deviceDto = mapper.convertValue(request.getObject(), DeviceDto.class);
         deviceDto.setAdminId(JwtTokenUtil.getId(token));
         return deviceService.updateDevice(deviceDto);
     }
@@ -76,7 +66,7 @@ public class DeviceController {
     @ResponseBody
     public Response readDevices(@RequestBody Request request, HttpServletRequest HttpRequest){
         String token = HttpRequest.getHeader("Authorization").replace("bearer ","");
-        DeviceDto deviceDto = (DeviceDto) request.getObject();
+        DeviceDto deviceDto = mapper.convertValue(request.getObject(), DeviceDto.class);
         deviceDto.setAdminId(JwtTokenUtil.getId(token));
         return deviceService.readDevices(deviceDto);
     }
@@ -86,7 +76,7 @@ public class DeviceController {
     @ResponseBody
     public Response authorizeDevice(@RequestParam String code, @RequestBody Request request, HttpServletRequest HttpRequest) throws IOException {
         String token = HttpRequest.getHeader("Authorization").replace("bearer ","");
-        DeviceDto deviceDto = (DeviceDto) request.getObject();
+        DeviceDto deviceDto = mapper.convertValue(request.getObject(), DeviceDto.class);
         deviceDto.setAdminId(JwtTokenUtil.getId(token));
         Response response = deviceService.authorizeDevice(deviceDto, code);
         if (response.getObject() == null)
@@ -99,7 +89,7 @@ public class DeviceController {
     @ResponseBody
     public Response unauthorizeDevice(@RequestBody Request request, HttpServletRequest HttpRequest) throws IOException {
         String token = HttpRequest.getHeader("Authorization").replace("bearer ","");
-        DeviceDto deviceDto = (DeviceDto) request.getObject();
+        DeviceDto deviceDto = mapper.convertValue(request.getObject(), DeviceDto.class);
         deviceDto.setAdminId(JwtTokenUtil.getId(token));
         return deviceService.unauthorizeDevice(deviceDto);
     }
@@ -108,7 +98,7 @@ public class DeviceController {
     @ResponseBody
     public Response readAvailableDevices(@RequestBody Request request, HttpServletRequest HttpRequest){
         String token = HttpRequest.getHeader("Authorization").replace("bearer ","");
-        DeviceDto deviceDto = (DeviceDto) request.getObject();
+        DeviceDto deviceDto = mapper.convertValue(request.getObject(), DeviceDto.class);
         deviceDto.setAdminId(JwtTokenUtil.getId(token));
         return deviceService.readAvailableDevices(deviceDto);
     }
@@ -117,7 +107,7 @@ public class DeviceController {
     @ResponseBody
     public Response readAvailableDevicesByInstitutionCode(@RequestBody Request request, HttpServletRequest HttpRequest){
         String token = HttpRequest.getHeader("Authorization").replace("bearer ","");
-        DeviceDto deviceDto = (DeviceDto) request.getObject();
+        DeviceDto deviceDto = mapper.convertValue(request.getObject(), DeviceDto.class);
         deviceDto.setAdminId(JwtTokenUtil.getId(token));
         return deviceService.readAvailableDevicesByInstitutionCode(deviceDto);
     }
@@ -126,7 +116,7 @@ public class DeviceController {
     @ResponseBody
     public Response assignDevice(@RequestBody Request request, HttpServletRequest HttpRequest){
         String token = HttpRequest.getHeader("Authorization").replace("bearer ","");
-        DeviceDto deviceDto = (DeviceDto) request.getObject();
+        DeviceDto deviceDto = mapper.convertValue(request.getObject(), DeviceDto.class);
         deviceDto.setAdminId(JwtTokenUtil.getId(token));
         return deviceService.assignDevice(deviceDto);
     }
@@ -135,7 +125,7 @@ public class DeviceController {
     @ResponseBody
     public Response getBackDevice(@RequestBody Request request, HttpServletRequest HttpRequest){
         String token = HttpRequest.getHeader("Authorization").replace("bearer ","");
-        DeviceDto deviceDto = (DeviceDto) request.getObject();
+        DeviceDto deviceDto = mapper.convertValue(request.getObject(), DeviceDto.class);
         deviceDto.setAdminId(JwtTokenUtil.getId(token));
         return deviceService.getBackDevice(deviceDto);
     }
