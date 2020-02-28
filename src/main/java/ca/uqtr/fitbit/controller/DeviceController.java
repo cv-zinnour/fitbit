@@ -35,6 +35,7 @@ public class DeviceController {
         DeviceDto deviceDto = mapper.convertValue(request.getObject(), DeviceDto.class);
         deviceDto.setAdminId(JwtTokenUtil.getId(token));
         deviceDto.setInstitutionCode(JwtTokenUtil.getInstitutionCode(token));
+        System.out.println(deviceDto.toString());
         return deviceService.createDevice(deviceDto);
     }
 

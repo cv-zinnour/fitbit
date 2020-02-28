@@ -33,6 +33,17 @@ public class Config {
     }
 
     @Bean
+    public ResourceBundleMessageSource messageResourceSource() {
+
+        ResourceBundleMessageSource source = new ResourceBundleMessageSource();
+        source.setBasenames("classpath:messages");
+        source.setUseCodeAsDefaultMessage(true);
+
+        return source;
+    }
+
+
+    @Bean
     public ModelMapper modelMapper() {
         return new ModelMapper();
     }
