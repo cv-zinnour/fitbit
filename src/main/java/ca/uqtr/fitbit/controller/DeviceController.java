@@ -65,9 +65,9 @@ public class DeviceController {
 
     @GetMapping(value = "/device/all")
     @ResponseBody
-    public Response readDevices(@RequestBody Request request, HttpServletRequest HttpRequest){
+    public Response readDevices(HttpServletRequest HttpRequest){
         String token = HttpRequest.getHeader("Authorization").replace("bearer ","");
-        DeviceDto deviceDto = mapper.convertValue(request.getObject(), DeviceDto.class);
+        DeviceDto deviceDto = new DeviceDto();
         deviceDto.setAdminId(JwtTokenUtil.getId(token));
         return deviceService.readDevices(deviceDto);
     }
