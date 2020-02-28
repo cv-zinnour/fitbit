@@ -23,7 +23,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 @Controller
-@RequestMapping("/activity")
 public class ActivityController {
 
     @Value("${fitbit.subscription.verification-code}")
@@ -35,7 +34,7 @@ public class ActivityController {
         this.activityService = activityService;
     }
 
-    @GetMapping(value = "/all")
+    @GetMapping(value = "/activity/all")
     @ResponseBody
     public Response getActivitiesBetween2Dates(@RequestParam String date1, @RequestParam String date2,
                                                @RequestBody Request request) throws IOException, ParseException {
@@ -43,14 +42,14 @@ public class ActivityController {
         return activityService.getActivitiesBetween2DatesFromApi(date1, date2, deviceDto);
     }
 
-    @GetMapping(value = "/steps/day/{date}/time/minute/1")
+    @GetMapping(value = "/activity/steps/day/{date}/time/minute/1")
     @ResponseBody
     public Response getStepsOfDayPerMinute(@PathVariable String date, @RequestBody Request request) throws IOException, ParseException {
         DeviceDto deviceDto = (DeviceDto) request.getObject();
         return activityService.getStepsOfDayPerMinuteFromApi(date, deviceDto);
     }
 
-    @GetMapping(value = "/steps/day/{date}/time/{startTime}/{endTime}/minute/1")
+    @GetMapping(value = "/activity/steps/day/{date}/time/{startTime}/{endTime}/minute/1")
     @ResponseBody
     public Response getStepsOfDayBetweenTwoTimePerMinute(@PathVariable String date,
                                                                                 @PathVariable String startTime,
@@ -59,14 +58,14 @@ public class ActivityController {
         return activityService.getStepsOfDayBetweenTwoTimesPerMinuteFromApi(date, startTime, endTime, deviceDto);
     }
 
-    @GetMapping(value = "/calories/day/{date}/time/minute/1")
+    @GetMapping(value = "/activity/calories/day/{date}/time/minute/1")
     @ResponseBody
     public Response getCaloriesOfDayPerMinute(@PathVariable String date, @RequestBody Request request) throws IOException, ParseException {
         DeviceDto deviceDto = (DeviceDto) request.getObject();
         return activityService.getCaloriesOfDayPerMinuteFromApi(date, deviceDto);
     }
 
-    @GetMapping(value = "/calories/day/{date}/time/{startTime}/{endTime}/minute/1")
+    @GetMapping(value = "/activity/calories/day/{date}/time/{startTime}/{endTime}/minute/1")
     @ResponseBody
     public Response getCaloriesOfDayBetweenTwoTimePerMinute(@PathVariable String date,
                                                                                    @PathVariable String startTime,
@@ -77,14 +76,10 @@ public class ActivityController {
 
     @GetMapping("/notifications")
     public ResponseEntity<HttpStatus> getFitBitNotification(@RequestParam String verify) {
-        System.out.println("----------------------------------- " + fitbitVerificationCode);
-        System.out.println("----------------------------------- " + verify);
-        System.out.println("----------------------------------- " + verify.equals(fitbitVerificationCode));
         if(verify.equals(fitbitVerificationCode)) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-
     }
 
     @PostMapping("/subscription/notifications")
