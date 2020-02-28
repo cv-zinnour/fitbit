@@ -25,8 +25,6 @@ import java.util.concurrent.Executors;
 @Controller
 public class ActivityController {
 
-    @Value("${fitbit.subscription.verification-code}")
-    private String fitbitVerificationCode;
     private ActivityService activityService;
 
     @Autowired
@@ -74,20 +72,5 @@ public class ActivityController {
         return activityService.getCaloriesOfDayBetweenTwoTimesPerMinuteFromApi(date, startTime, endTime, deviceDto);
     }
 
-    @GetMapping("/notifications")
-    public ResponseEntity<HttpStatus> getFitBitNotification(@RequestParam String verify) {
-        if(verify.equals(fitbitVerificationCode)) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
-
-    @PostMapping("/subscription/notifications")
-    public ResponseEntity<HttpStatus> getFitBitNotificationData(@PathParam("version") String version,List notificationList) {
-        ExecutorService executor = Executors.newFixedThreadPool(2);
-        //Runnable taskOne = new FitbitDataThread(notificationList);
-        //executor.execute(taskOne);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
 
 }
