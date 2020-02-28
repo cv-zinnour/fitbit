@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.modelmapper.ModelMapper;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -26,7 +27,7 @@ public class DeviceDto {
     private boolean available;
     private String institutionCode;
     private Auth auth;
-    private List<PatientDevice> patientDevices;
+    private List<PatientDeviceDto> patientDevices = new ArrayList<>();
 
     public Device dtoToObj(ModelMapper modelMapper) {
         return modelMapper.map(this, Device.class);
