@@ -3,6 +3,7 @@ package ca.uqtr.fitbit.service.device;
 import ca.uqtr.fitbit.api.FitbitApi;
 import ca.uqtr.fitbit.dto.DeviceDto;
 import ca.uqtr.fitbit.dto.Error;
+import ca.uqtr.fitbit.dto.PatientDeviceDto;
 import ca.uqtr.fitbit.dto.Response;
 import ca.uqtr.fitbit.entity.Device;
 import ca.uqtr.fitbit.entity.FitbitSubscription;
@@ -177,7 +178,7 @@ public class DeviceServiceImpl implements DeviceService {
                         new Error(Integer.parseInt(messageSource.getMessage("error.null.id", null, Locale.US)),
                                 messageSource.getMessage("error.null.message", null, Locale.US)));
             List<PatientDevice> patientDevices = device1.get().getPatientDevices();
-            patientDevices.add(device.getPatientDevices().get(0));
+            patientDevices.add(modelMapper.map(device.getPatientDevices().get(0), PatientDevice.class));
             device1.get().setAvailable(false);
             device1.get().setLastSyncDate(new java.sql.Date(Calendar.getInstance().getTime().getTime()));
             return new Response(modelMapper.map(deviceRepository.save(device1.get()), DeviceDto.class), null);
