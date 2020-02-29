@@ -51,7 +51,8 @@ public class DeviceController {
     @DeleteMapping(value = "/device")
     @ResponseBody
     public void deleteDevice(@RequestBody Request request){
-        deviceService.deleteDevice((DeviceDto) request.getObject());
+        DeviceDto deviceDto = mapper.convertValue(request.getObject(), DeviceDto.class);
+        deviceService.deleteDevice(deviceDto);
     }
 
     @PutMapping(value = "/device")
