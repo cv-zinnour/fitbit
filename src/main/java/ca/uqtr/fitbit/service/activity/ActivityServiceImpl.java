@@ -72,7 +72,7 @@ public class ActivityServiceImpl implements ActivityService {
 
     @Override
     public void saveStepsOfDayPerMinuteFromApiInDB(ActivitiesSteps activitiesSteps, DeviceDto deviceDto) {
-        Device device = deviceRepository.getDeviceWith_LastPatientDevice_FetchTypeEAGER(UUID.fromString(deviceDto.getId()));
+        Device device = deviceRepository.getDeviceWith_LastPatientDevice_FetchTypeEAGER(deviceDto.getId());
         device.getPatientDevices().get(0).getActivitiesSteps().add(activitiesSteps);
         deviceRepository.save(device);
         //activitiesStepsRepository.save(activitiesSteps);
@@ -93,7 +93,7 @@ public class ActivityServiceImpl implements ActivityService {
     }
     @Override
     public void saveCaloriesOfDayPerMinuteFromApiInDB(ActivitiesCalories activitiesCalories, DeviceDto deviceDto) {
-        Device device = deviceRepository.getDeviceWith_LastPatientDevice_FetchTypeEAGER(UUID.fromString(deviceDto.getId()));
+        Device device = deviceRepository.getDeviceWith_LastPatientDevice_FetchTypeEAGER(deviceDto.getId());
         device.getPatientDevices().get(0).getActivitiesCalories().add(activitiesCalories);
         deviceRepository.save(device);
         //activitiesCaloriesRepository.save(activitiesCalories);
