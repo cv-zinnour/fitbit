@@ -53,7 +53,7 @@ public class FitbitApiImpl implements FitbitApi {
         String AuthorizationCodeBase64 = Base64.getEncoder().encodeToString(code.getBytes());
 
         RequestBody body = RequestBody.create(MediaType.get("application/x-www-form-urlencoded; charset=utf-8"),
-                "client_id=22DBSJ&grant_type=authorization_code&redirect_uri=http%3A%2F%2Flocalhost%3A8765%2Fauthorization&code="+authorizationCode);
+                "client_id=22DBSJ&grant_type=authorization_code&redirect_uri=http%3A%2F%2Flocalhost%3A4200%2Fdevice%2Fauthorization&code="+authorizationCode);
         Request request = new Request.Builder()
                 .url(TOKENS_URL)
                 .post(body)
