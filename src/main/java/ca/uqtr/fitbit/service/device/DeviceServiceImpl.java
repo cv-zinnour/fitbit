@@ -49,7 +49,7 @@ public class DeviceServiceImpl implements DeviceService {
         try{
             return new Response(modelMapper.map(deviceRepository.save(device.dtoToObj(modelMapper)), DeviceDto.class), null);
         } catch (Exception ex){
-            LOGGER.log( Level.WARNING, ex.getMessage());
+            LOGGER.log( Level.ALL, ex.getMessage());
             return new Response(null,
                     new Error(Integer.parseInt(messageSource.getMessage("error.null.id", null, Locale.US)),
                             messageSource.getMessage("error.null.message", null, Locale.US)));
@@ -59,9 +59,9 @@ public class DeviceServiceImpl implements DeviceService {
     @Override
     public Response readDevice(DeviceDto device) {
         try{
-            return new Response(modelMapper.map(deviceRepository.findById(UUID.fromString(device.getId())), DeviceDto.class), null);
+            return new Response(modelMapper.map(deviceRepository.findById(device.getId()), DeviceDto.class), null);
         } catch (Exception ex){
-            LOGGER.log( Level.WARNING, ex.getMessage());
+            LOGGER.log( Level.ALL, ex.getMessage());
             return new Response(null,
                     new Error(Integer.parseInt(messageSource.getMessage("error.null.id", null, Locale.US)),
                             messageSource.getMessage("error.null.message", null, Locale.US)));
@@ -83,7 +83,7 @@ public class DeviceServiceImpl implements DeviceService {
         try{
             return new Response(modelMapper.map(deviceRepository.save(device.dtoToObj(modelMapper)), DeviceDto.class), null);
         } catch (Exception ex){
-            LOGGER.log( Level.WARNING, ex.getMessage());
+            LOGGER.log( Level.ALL, ex.getMessage());
             return new Response(null,
                     new Error(Integer.parseInt(messageSource.getMessage("error.null.id", null, Locale.US)),
                             messageSource.getMessage("error.null.message", null, Locale.US)));
@@ -97,7 +97,7 @@ public class DeviceServiceImpl implements DeviceService {
             Type deviceDtoList = new TypeToken<List<DeviceDto>>() {}.getType();
             return new Response(modelMapper.map(deviceRepository.findAllByAdminId(device.getAdminId()), deviceDtoList), null);
         } catch (Exception ex){
-            LOGGER.log( Level.WARNING, ex.getMessage());
+            LOGGER.log( Level.ALL, ex.getMessage());
             return new Response(null,
                     new Error(Integer.parseInt(messageSource.getMessage("error.null.id", null, Locale.US)),
                             messageSource.getMessage("error.null.message", null, Locale.US)));
@@ -107,7 +107,7 @@ public class DeviceServiceImpl implements DeviceService {
     @Override
     public Response authorizeDevice(DeviceDto device, String code) {
         try{
-            Optional<Device> device1 = deviceRepository.findById(UUID.fromString(device.getId()));
+            Optional<Device> device1 = deviceRepository.findById(device.getId());
             if (!device1.isPresent())
                 return new Response(null,
                         new Error(Integer.parseInt(messageSource.getMessage("error.null.id", null, Locale.US)),
@@ -120,7 +120,7 @@ public class DeviceServiceImpl implements DeviceService {
             device1.get().setAuthorized(true);
             return new Response(modelMapper.map(device1, DeviceDto.class), null);
         } catch (Exception ex){
-            LOGGER.log( Level.WARNING, ex.getMessage());
+            LOGGER.log( Level.ALL, ex.getMessage());
             return new Response(null,
                     new Error(Integer.parseInt(messageSource.getMessage("error.null.id", null, Locale.US)),
                             messageSource.getMessage("error.null.message", null, Locale.US)));
@@ -130,7 +130,7 @@ public class DeviceServiceImpl implements DeviceService {
     @Override
     public Response unauthorizeDevice(DeviceDto device) {
         try{
-            Optional<Device> device1 = deviceRepository.findById(UUID.fromString(device.getId()));
+            Optional<Device> device1 = deviceRepository.findById(device.getId());
             if (!device1.isPresent())
                 return new Response(null,
                         new Error(Integer.parseInt(messageSource.getMessage("error.null.id", null, Locale.US)),
@@ -138,7 +138,7 @@ public class DeviceServiceImpl implements DeviceService {
             authService.deleteById(device1.get().getId());
             return new Response(device, null);
         } catch (Exception ex){
-            LOGGER.log( Level.WARNING, ex.getMessage());
+            LOGGER.log( Level.ALL, ex.getMessage());
             return new Response(null,
                     new Error(Integer.parseInt(messageSource.getMessage("error.null.id", null, Locale.US)),
                             messageSource.getMessage("error.null.message", null, Locale.US)));
@@ -149,9 +149,9 @@ public class DeviceServiceImpl implements DeviceService {
     public Response readAvailableDevices(DeviceDto device) {
         try{
             Type deviceDtoList = new TypeToken<List<DeviceDto>>() {}.getType();
-            return new Response(modelMapper.map(deviceRepository.findAllByAdminIdAndAvailable(UUID.fromString(device.getId()), true), deviceDtoList), null);
+            return new Response(modelMapper.map(deviceRepository.findAllByAdminIdAndAvailable(device.getId(), true), deviceDtoList), null);
         } catch (Exception ex){
-            LOGGER.log( Level.WARNING, ex.getMessage());
+            LOGGER.log( Level.ALL, ex.getMessage());
             return new Response(null,
                     new Error(Integer.parseInt(messageSource.getMessage("error.null.id", null, Locale.US)),
                             messageSource.getMessage("error.null.message", null, Locale.US)));
@@ -164,7 +164,7 @@ public class DeviceServiceImpl implements DeviceService {
             Type deviceDtoList = new TypeToken<List<DeviceDto>>() {}.getType();
             return new Response(modelMapper.map(deviceRepository.findAllByInstitutionCodeAndAvailable(device.getInstitutionCode(), true), deviceDtoList), null);
         } catch (Exception ex){
-            LOGGER.log( Level.WARNING, ex.getMessage());
+            LOGGER.log( Level.ALL, ex.getMessage());
             return new Response(null,
                     new Error(Integer.parseInt(messageSource.getMessage("error.null.id", null, Locale.US)),
                             messageSource.getMessage("error.null.message", null, Locale.US)));
@@ -174,7 +174,7 @@ public class DeviceServiceImpl implements DeviceService {
     @Override
     public Response assignDevice(DeviceDto device) {
         try{
-            Optional<Device> device1 = deviceRepository.findById(UUID.fromString(device.getId()));
+            Optional<Device> device1 = deviceRepository.findById(device.getId());
             if (!device1.isPresent())
                 return new Response(null,
                         new Error(Integer.parseInt(messageSource.getMessage("error.null.id", null, Locale.US)),
@@ -185,7 +185,7 @@ public class DeviceServiceImpl implements DeviceService {
             device1.get().setLastSyncDate(new java.sql.Date(Calendar.getInstance().getTime().getTime()));
             return new Response(modelMapper.map(deviceRepository.save(device1.get()), DeviceDto.class), null);
         } catch (Exception ex){
-            LOGGER.log( Level.WARNING, ex.getMessage());
+            LOGGER.log( Level.ALL, ex.getMessage());
             return new Response(null,
                     new Error(Integer.parseInt(messageSource.getMessage("error.null.id", null, Locale.US)),
                             messageSource.getMessage("error.null.message", null, Locale.US)));
@@ -195,7 +195,7 @@ public class DeviceServiceImpl implements DeviceService {
     @Override
     public Response getBackDevice(DeviceDto device) {
         try{
-            Optional<Device> device1 = deviceRepository.findById(UUID.fromString(device.getId()));
+            Optional<Device> device1 = deviceRepository.findById(device.getId());
             if (!device1.isPresent())
                 return new Response(null,
                         new Error(Integer.parseInt(messageSource.getMessage("error.null.id", null, Locale.US)),
@@ -203,7 +203,7 @@ public class DeviceServiceImpl implements DeviceService {
             device1.get().setAvailable(true);
             return new Response(modelMapper.map(deviceRepository.save(device1.get()), DeviceDto.class), null);
         } catch (Exception ex){
-            LOGGER.log( Level.WARNING, ex.getMessage());
+            LOGGER.log( Level.ALL, ex.getMessage());
             return new Response(null,
                     new Error(Integer.parseInt(messageSource.getMessage("error.null.id", null, Locale.US)),
                             messageSource.getMessage("error.null.message", null, Locale.US)));
@@ -212,6 +212,6 @@ public class DeviceServiceImpl implements DeviceService {
 
     @Override
     public Response addSubscription(DeviceDto deviceDto) throws IOException {
-        return fitbitApi.addSubscription(new FitbitSubscription(deviceDto.getId()), authService.getAccessToken(deviceDto.dtoToObj(modelMapper)), COLLECTION_PATH);
+        return fitbitApi.addSubscription(new FitbitSubscription(deviceDto.getId().toString()), authService.getAccessToken(deviceDto.dtoToObj(modelMapper)), COLLECTION_PATH);
     }
 }
