@@ -29,6 +29,10 @@ public class DeviceDto {
     private Auth auth;
     private List<PatientDeviceDto> patientDevices = new ArrayList<>();
 
+    public DeviceDto(String id) {
+        this.id = id;
+    }
+
     public Device dtoToObj(ModelMapper modelMapper) {
         return modelMapper.map(this, Device.class);
     }
