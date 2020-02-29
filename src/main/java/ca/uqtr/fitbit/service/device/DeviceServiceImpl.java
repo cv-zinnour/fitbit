@@ -72,7 +72,7 @@ public class DeviceServiceImpl implements DeviceService {
     public void deleteDevice(DeviceDto device) {
         System.out.println(device.toString());
         try{
-            deviceRepository.delete(device.dtoToObj(modelMapper));
+            deviceRepository.deleteById(device.dtoToObj(modelMapper).getId());
         } catch (Exception ex){
             LOGGER.log( Level.ALL, ex.getMessage());
         }
