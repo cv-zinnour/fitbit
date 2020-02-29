@@ -70,10 +70,11 @@ public class DeviceServiceImpl implements DeviceService {
 
     @Override
     public void deleteDevice(DeviceDto device) {
+        System.out.println(device.toString());
         try{
             deviceRepository.delete(device.dtoToObj(modelMapper));
         } catch (Exception ex){
-            LOGGER.log( Level.WARNING, ex.getMessage());
+            LOGGER.log( Level.ALL, ex.getMessage());
         }
     }
 
