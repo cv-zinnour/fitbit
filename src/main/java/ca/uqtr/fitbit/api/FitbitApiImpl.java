@@ -189,7 +189,7 @@ public class FitbitApiImpl implements FitbitApi {
                 .header("Authorization", "Bearer "+accessToken)
                 .build();
         try (Response response = okHttpClient.newCall(request).execute()) {
-            return new ca.uqtr.fitbit.dto.Response(response.body().toString(), null);
+            return new ca.uqtr.fitbit.dto.Response(response.body().string(), null);
         } catch (Exception ex){
             LOGGER.log( Level.WARNING, ex.getMessage());
             return new ca.uqtr.fitbit.dto.Response(null,

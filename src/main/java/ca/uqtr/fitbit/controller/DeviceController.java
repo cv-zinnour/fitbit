@@ -85,7 +85,7 @@ public class DeviceController {
         if (response.getObject() == null)
             return response;
         Response response1 = deviceService.addSubscription(deviceDto);
-        System.out.println(deviceService.allSubscriptions(deviceDto).getObject().toString());
+        System.out.println("+++++++++++++++++++++++++++++++++++++++ "+deviceService.allSubscriptions(deviceDto).getObject().toString());
         return response1;
     }
 
