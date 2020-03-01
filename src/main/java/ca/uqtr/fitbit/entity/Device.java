@@ -43,4 +43,15 @@ public class Device extends BaseEntity {
     @JoinColumn(name = "device_id")
     private List<FitbitSubscription> fitbitSubscriptions;
 
+    public void setAuth(Auth auth) {
+        if (auth == null) {
+            if (this.auth != null) {
+                this.auth.setDevice(null);
+            }
+        }
+        else {
+            auth.setDevice(this);
+        }
+        this.auth = auth;
+    }
 }
