@@ -186,7 +186,6 @@ public class FitbitApiImpl implements FitbitApi {
 
     @Override
     public ca.uqtr.fitbit.dto.Response allSubscriptions(String accessToken, String collectionPath) throws IOException {
-        FitbitSubscription fitbitSubscriptionObj = new FitbitSubscription();
         Request request = new Request.Builder()
                 .url("https://api.fitbit.com/1/user/-/"+collectionPath+"/apiSubscriptions.json")
                 .delete()

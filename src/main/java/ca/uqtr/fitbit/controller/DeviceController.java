@@ -57,6 +57,8 @@ public class DeviceController {
         if(response1 == null)
             return false;
         deviceService.deleteDevice(deviceDto);
+        System.out.println("+++++++++++++++++++++++++++++++++++++++ "+deviceService.allSubscriptions(deviceDto).getObject().toString());
+
         return true;
     }
 
