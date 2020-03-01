@@ -77,9 +77,10 @@ public class DeviceController {
     //@CrossOrigin(exposedHeaders="Access-Control-Allow-Origin")
     @GetMapping(value = "/device/authorization")
     @ResponseBody
-    public Response authorizeDevice(@RequestParam String code, @RequestParam String deviceId, HttpServletRequest HttpRequest) throws IOException {
+    public Response authorizeDevice(@RequestParam String code, @RequestBody Request request, HttpServletRequest HttpRequest) throws IOException {
         String token = HttpRequest.getHeader("Authorization").replace("bearer ","");
-        DeviceDto deviceDto = new DeviceDto(deviceId);
+        //DeviceDto deviceDto = new DeviceDto(deviceId);
+        DeviceDto deviceDto = mapper.convertValue(request.getObject(), DeviceDto.class);
         deviceDto.setAdminId(JwtTokenUtil.getId(token));
         Response response = deviceService.authorizeDevice(deviceDto, code);
         if (response.getObject() == null)
@@ -88,7 +89,7 @@ public class DeviceController {
         return deviceService.addSubscription(deviceDto);
     }
 
-    @GetMapping(value = "/device/anauthorization")
+    @GetMapping(value = "/device/unauthorization")
     @ResponseBody
     public Response unauthorizeDevice(@RequestBody Request request, HttpServletRequest HttpRequest) throws IOException {
         String token = HttpRequest.getHeader("Authorization").replace("bearer ","");
