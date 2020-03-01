@@ -137,11 +137,12 @@ public class FitbitApiImpl implements FitbitApi {
                 .build();
         try (Response response = okHttpClient.newCall(request).execute()) {
             //System.out.println("---------------  "+response.body().string());
-            if (response.body() == null)
+            ResponseBody responseBody = response.body();
+            if (responseBody == null)
                 return new ca.uqtr.fitbit.dto.Response(null,
                         new Error(Integer.parseInt(messageSource.getMessage("error.null.id", null, Locale.US)),
                                 messageSource.getMessage("error.null.message", null, Locale.US)));
-            final JSONObject jsonObject = new JSONObject(response.body().string());
+            final JSONObject jsonObject = new JSONObject(responseBody.string());
             fitbitSubscriptionObj.setCollectionType(jsonObject.getString("collectionType"));
             fitbitSubscriptionObj.setOwnerId(jsonObject.getString("ownerId"));
             fitbitSubscriptionObj.setOwnerType(jsonObject.getString("ownerType"));
