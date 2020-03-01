@@ -2,6 +2,7 @@ package ca.uqtr.fitbit.entity.fitbit;
 
 import ca.uqtr.fitbit.entity.BaseEntity;
 import ca.uqtr.fitbit.entity.Device;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -33,7 +34,8 @@ public class Auth extends BaseEntity {
     @Column(name = "token_type")
     private String tokenType;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @JsonBackReference
+    @OneToOne
     @MapsId
     @JoinColumn(name = "id")
     private Device device;
