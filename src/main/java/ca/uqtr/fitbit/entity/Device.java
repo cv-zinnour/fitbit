@@ -1,6 +1,7 @@
 package ca.uqtr.fitbit.entity;
 
 import ca.uqtr.fitbit.entity.fitbit.Auth;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -34,6 +35,7 @@ public class Device extends BaseEntity {
     private boolean available;
     @Column(name = "institution_code", nullable = false)
     private UUID institutionCode;
+    @JsonManagedReference
     @OneToOne(mappedBy="device", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Auth auth;
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
