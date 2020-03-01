@@ -35,7 +35,7 @@ public class Auth extends BaseEntity {
 
     @OneToOne(fetch = FetchType.LAZY)
     @MapsId
-    @JoinColumn(name = "id")
+    //@JoinColumn(name = "id")
     private Device device;
 
     public Auth(String authorizationCode, String accessToken, String refreshToken, boolean expiredToken, int expiresIn, String scope, String tokenType) {

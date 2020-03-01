@@ -34,7 +34,7 @@ public class Device extends BaseEntity {
     private boolean available;
     @Column(name = "institution_code", nullable = false)
     private UUID institutionCode;
-    @OneToOne(mappedBy="device", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(mappedBy="device", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Auth auth;
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "device_id")
