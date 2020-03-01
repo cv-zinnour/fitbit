@@ -149,6 +149,7 @@ public class FitbitApiImpl implements FitbitApi {
             fitbitSubscriptionObj.setSubscriberId(jsonObject.getString("subscriberId"));
             fitbitSubscriptionObj.setSubscriptionId(jsonObject.getString("subscriptionId"));
             fitbitSubscriptionObj.setDate(new java.sql.Date(Calendar.getInstance().getTime().getTime()));
+
             return new ca.uqtr.fitbit.dto.Response(fitbitSubscriptionObj, null);
         } catch (Exception ex){
             LOGGER.log( Level.WARNING, ex.getMessage());

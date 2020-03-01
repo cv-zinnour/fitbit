@@ -211,7 +211,17 @@ public class DeviceServiceImpl implements DeviceService {
     }
 
     @Override
-    public Response addSubscription(DeviceDto deviceDto) throws IOException {
-        return fitbitApi.addSubscription(new FitbitSubscription(deviceDto.getId().toString()), authService.getAccessToken(deviceDto.dtoToObj(modelMapper)), COLLECTION_PATH);
+    public Response addSubscription(DeviceDto device) throws IOException {
+
+        Response response = fitbitApi.addSubscription(new FitbitSubscription(device.getId().toString()), authService.getAccessToken(device.dtoToObj(modelMapper)), COLLECTION_PATH);
+        if (response.getObject() == null)
+            return response;
+        Optional<Device> device1 = deviceRepository.findById(device.getId());
+        if (!device1.isPresent())
+            return new Response(null,
+                    new Error(Integer.parseInt(messageSource.getMessage("error.null.id", null, Locale.US)),
+                            messageSource.getMessage("error.null.message", null, Locale.US)));
+        device1.get().getFitbitSubscriptions().add((FitbitSubscription) response.getObject());
+        return new Response(modelMapper.map(deviceRepository.save(device1.get()), DeviceDto.class), null);
     }
 }
