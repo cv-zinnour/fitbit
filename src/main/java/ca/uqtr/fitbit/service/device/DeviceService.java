@@ -22,4 +22,6 @@ public interface DeviceService {
     Response getBackDevice(DeviceDto device);
 
     Response addSubscription(DeviceDto deviceDto) throws IOException;
+
+    Response allSubscriptions(DeviceDto device) throws IOException;
 }

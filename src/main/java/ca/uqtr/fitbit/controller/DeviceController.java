@@ -77,16 +77,16 @@ public class DeviceController {
     //@CrossOrigin(exposedHeaders="Access-Control-Allow-Origin")
     @GetMapping(value = "/device/authorization")
     @ResponseBody
-    public Response authorizeDevice(@RequestParam String code, @RequestBody Request request, HttpServletRequest HttpRequest) throws IOException {
+    public Response authorizeDevice(@RequestParam String code, @RequestParam String deviceId, HttpServletRequest HttpRequest) throws IOException {
         String token = HttpRequest.getHeader("Authorization").replace("bearer ","");
-        //DeviceDto deviceDto = new DeviceDto(deviceId);
-        DeviceDto deviceDto = mapper.convertValue(request.getObject(), DeviceDto.class);
+        DeviceDto deviceDto = new DeviceDto(deviceId);
         deviceDto.setAdminId(JwtTokenUtil.getId(token));
         Response response = deviceService.authorizeDevice(deviceDto, code);
         if (response.getObject() == null)
             return response;
-
-        return deviceService.addSubscription(deviceDto);
+        Response response1 = deviceService.addSubscription(deviceDto);
+        System.out.println(deviceService.allSubscriptions(deviceDto).getObject().toString());
+        return response1;
     }
 
     @GetMapping(value = "/device/unauthorization")
@@ -134,6 +134,11 @@ public class DeviceController {
         return deviceService.getBackDevice(deviceDto);
     }
 
+    @PostMapping("/subscription/all")
+    public Response getAllSubscriptions(@RequestBody Request request) throws IOException {
+        DeviceDto deviceDto = mapper.convertValue(request.getObject(), DeviceDto.class);
+        return deviceService.allSubscriptions(deviceDto);
+    }
 
     @GetMapping("/notifications")
     public ResponseEntity<HttpStatus> getFitBitNotification(@RequestParam String verify) {
@@ -147,4 +152,5 @@ public class DeviceController {
     public ResponseEntity<HttpStatus> getFitBitNotificationData() {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
 }

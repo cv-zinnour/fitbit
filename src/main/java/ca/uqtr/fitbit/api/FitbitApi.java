@@ -23,6 +23,8 @@ public interface FitbitApi {
 
     ca.uqtr.fitbit.dto.Response removeSubscription(FitbitSubscription fitbitSubscription, String accessToken, String collectionPath) throws IOException;
 
+    ca.uqtr.fitbit.dto.Response allSubscriptions(String accessToken, String collectionPath) throws IOException;
+
     Activities getActivities();
 
     Steps getSteps();

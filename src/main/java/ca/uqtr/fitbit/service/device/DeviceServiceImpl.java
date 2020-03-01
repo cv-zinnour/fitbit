@@ -224,4 +224,10 @@ public class DeviceServiceImpl implements DeviceService {
         device1.get().getFitbitSubscriptions().add((FitbitSubscription) response.getObject());
         return new Response(modelMapper.map(deviceRepository.save(device1.get()), DeviceDto.class), null);
     }
+
+    @Override
+    public Response allSubscriptions(DeviceDto device) throws IOException {
+
+        return fitbitApi.allSubscriptions(authService.getAccessToken(device.dtoToObj(modelMapper)), COLLECTION_PATH);
+    }
 }

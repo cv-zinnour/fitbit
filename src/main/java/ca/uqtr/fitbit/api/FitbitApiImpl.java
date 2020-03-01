@@ -180,6 +180,24 @@ public class FitbitApiImpl implements FitbitApi {
         }
     }
 
+    @Override
+    public ca.uqtr.fitbit.dto.Response allSubscriptions(String accessToken, String collectionPath) throws IOException {
+        FitbitSubscription fitbitSubscriptionObj = new FitbitSubscription();
+        Request request = new Request.Builder()
+                .url("https://api.fitbit.com/1/user/-/"+collectionPath+"/apiSubscriptions.json")
+                .delete()
+                .header("Authorization", "Bearer "+accessToken)
+                .build();
+        try (Response response = okHttpClient.newCall(request).execute()) {
+            return new ca.uqtr.fitbit.dto.Response(response.body().toString(), null);
+        } catch (Exception ex){
+            LOGGER.log( Level.WARNING, ex.getMessage());
+            return new ca.uqtr.fitbit.dto.Response(null,
+                    new Error(Integer.parseInt(messageSource.getMessage("error.subscription.remove.id", null, Locale.US)),
+                            messageSource.getMessage("error.subscription.remove.message", null, Locale.US)));
+
+        }
+    }
 
     @Override
     public Activities getActivities() {
