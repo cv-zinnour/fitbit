@@ -162,7 +162,11 @@ public class FitbitApiImpl implements FitbitApi {
 
     @Override
     public ca.uqtr.fitbit.dto.Response removeSubscription(FitbitSubscription fitbitSubscription, String accessToken, String collectionPath) throws IOException {
-        FitbitSubscription fitbitSubscriptionObj = new FitbitSubscription();
+        if (fitbitSubscription == null)
+            return new ca.uqtr.fitbit.dto.Response(null,
+                    new Error(Integer.parseInt(messageSource.getMessage("error.null.id", null, Locale.US)),
+                            messageSource.getMessage("error.null.message", null, Locale.US)));
+
         Request request = new Request.Builder()
                 .url("https://api.fitbit.com/1/user/-/"+collectionPath+"/apiSubscriptions/"+fitbitSubscription.getSubscriptionId()+".json")
                 .delete()

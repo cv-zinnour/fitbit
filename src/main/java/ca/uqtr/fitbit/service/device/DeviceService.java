@@ -24,4 +24,6 @@ public interface DeviceService {
     Response addSubscription(DeviceDto deviceDto) throws IOException;
 
     Response allSubscriptions(DeviceDto device) throws IOException;
+
+    Response removeSubscription(DeviceDto device) throws IOException;
 }

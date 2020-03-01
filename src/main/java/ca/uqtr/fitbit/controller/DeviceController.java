@@ -50,10 +50,14 @@ public class DeviceController {
 
     @DeleteMapping(value = "/device")
     @ResponseBody
-    public void deleteDevice(@RequestBody Request request){
+    public boolean deleteDevice(@RequestBody Request request) throws IOException {
         System.out.println(request.toString());
         DeviceDto deviceDto = mapper.convertValue(request.getObject(), DeviceDto.class);
+        Response response1 = deviceService.removeSubscription(deviceDto);
+        if(response1 == null)
+            return false;
         deviceService.deleteDevice(deviceDto);
+        return true;
     }
 
     @PutMapping(value = "/device")
@@ -95,6 +99,8 @@ public class DeviceController {
         String token = HttpRequest.getHeader("Authorization").replace("bearer ","");
         DeviceDto deviceDto = mapper.convertValue(request.getObject(), DeviceDto.class);
         deviceDto.setAdminId(JwtTokenUtil.getId(token));
+        System.out.println("*******************************"+deviceService.allSubscriptions(deviceDto).getObject().toString());
+
         return deviceService.unauthorizeDevice(deviceDto);
     }
 

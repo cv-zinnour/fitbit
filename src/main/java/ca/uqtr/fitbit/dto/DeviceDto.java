@@ -23,6 +23,7 @@ public class DeviceDto {
     private String deviceVersion;
     private String type;
     private Date lastSyncDate;
+    private boolean authorized;
     private String adminId;
     private boolean available;
     private String institutionCode;

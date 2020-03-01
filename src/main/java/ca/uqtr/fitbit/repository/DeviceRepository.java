@@ -17,4 +17,8 @@ public interface DeviceRepository extends CrudRepository<Device, UUID> {
     List<Device> findAllByInstitutionCodeAndAvailable(UUID institutionCode, boolean available);
     @Query("select d from Device d left join fetch d.patientDevices pd where d.id = :id ORDER BY pd.id DESC ")
     Device  getDeviceWith_LastPatientDevice_FetchTypeEAGER(UUID id);
+
+    @Query("select d from Device d left join fetch d.fitbitSubscriptions fs where d.id = :id ORDER BY fs.id DESC ")
+    Device  getDeviceWith_LastFitbitSubscription_FetchTypeEAGER(UUID id);
+
 }
