@@ -181,6 +181,8 @@ public class DeviceServiceImpl implements DeviceService {
     @Override
     public Response assignDevice(DeviceDto device) {
         try{
+            System.out.println("---------- ++");
+            System.out.println("---------- "+device.getId());
             Optional<Device> device1 = deviceRepository.findById(device.getId());
             if (!device1.isPresent())
                 return new Response(null,
