@@ -204,13 +204,14 @@ public class DeviceServiceImpl implements DeviceService {
     @Override
     public Response getBackDevice(DeviceDto device) {
         try{
-            Optional<Device> device1 = deviceRepository.findById(device.getId());
-            if (!device1.isPresent())
+            Device device2 = deviceRepository.getDeviceWith_LastPatientDevice_FetchTypeEAGER(device.getId());
+            if (device2 == null)
                 return new Response(null,
                         new Error(Integer.parseInt(messageSource.getMessage("error.null.id", null, Locale.US)),
                                 messageSource.getMessage("error.null.message", null, Locale.US)));
-            device1.get().setAvailable(true);
-            return new Response(modelMapper.map(deviceRepository.save(device1.get()), DeviceDto.class), null);
+            device2.setAvailable(true);
+            device2.getPatientDevices().get(0).setReturnedAt(new java.sql.Date(Calendar.getInstance().getTime().getTime()));
+            return new Response(modelMapper.map(deviceRepository.save(device2), DeviceDto.class), null);
         } catch (Exception ex){
             LOGGER.log( Level.ALL, ex.getMessage());
             return new Response(null,
