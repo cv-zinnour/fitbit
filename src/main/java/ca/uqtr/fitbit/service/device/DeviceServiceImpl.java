@@ -181,9 +181,11 @@ public class DeviceServiceImpl implements DeviceService {
                         new Error(Integer.parseInt(messageSource.getMessage("error.null.id", null, Locale.US)),
                                 messageSource.getMessage("error.null.message", null, Locale.US)));
             List<PatientDevice> patientDevices = device1.get().getPatientDevices();
-            patientDevices.add(modelMapper.map(device.getPatientDevices().get(0), PatientDevice.class));
+            PatientDevice patientDevice = modelMapper.map(device.getPatientDevices().get(0), PatientDevice.class);
+            patientDevice.setInitDate(new java.sql.Date(Calendar.getInstance().getTime().getTime()));
+            patientDevices.add(patientDevice);
             device1.get().setAvailable(false);
-            device1.get().setLastSyncDate(new java.sql.Date(Calendar.getInstance().getTime().getTime()));
+            //device1.get().setLastSyncDate(new java.sql.Date(Calendar.getInstance().getTime().getTime()));
             return new Response(modelMapper.map(deviceRepository.save(device1.get()), DeviceDto.class), null);
         } catch (Exception ex){
             LOGGER.log( Level.ALL, ex.getMessage());
