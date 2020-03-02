@@ -188,6 +188,7 @@ public class DeviceServiceImpl implements DeviceService {
             List<PatientDevice> patientDevices = device1.getPatientDevices();
             PatientDevice patientDevice = modelMapper.map(device.getPatientDevices().get(0), PatientDevice.class);
             patientDevice.setInitDate(new java.sql.Date(Calendar.getInstance().getTime().getTime()));
+            patientDevice.setDevice(device1);
             patientDevices.add(patientDevice);
             device1.setAvailable(false);
             //device1.get().setLastSyncDate(new java.sql.Date(Calendar.getInstance().getTime().getTime()));
