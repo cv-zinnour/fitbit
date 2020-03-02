@@ -162,7 +162,9 @@ public class DeviceServiceImpl implements DeviceService {
     public Response readAvailableDevicesByInstitutionCode(DeviceDto device) {
         try{
             Type deviceDtoList = new TypeToken<List<DeviceDto>>() {}.getType();
-            return new Response(modelMapper.map(deviceRepository.findAllByInstitutionCodeAndAvailable(device.getInstitutionCode(), true), deviceDtoList), null);
+            List<Device> devices = deviceRepository.findAllByInstitutionCodeAndAvailableAAndAuthorized(device.getInstitutionCode(), true, true);
+            System.out.println("+++++++++++ devices : "+devices);
+            return new Response(modelMapper.map(devices, deviceDtoList), null);
         } catch (Exception ex){
             LOGGER.log( Level.ALL, ex.getMessage());
             return new Response(null,
