@@ -163,6 +163,7 @@ public class DeviceServiceImpl implements DeviceService {
         try{
             Device device1 = deviceRepository.isPatientHasDevice(UUID.fromString(patientId));
             if (device1 != null){
+                System.out.println(device1.toString());
                 return new Response(modelMapper.map(device1, DeviceDto.class), null);
             }
             Type deviceDtoList = new TypeToken<List<DeviceDto>>() {}.getType();
