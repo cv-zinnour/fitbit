@@ -111,16 +111,16 @@ public class DeviceController {
     public Response readAvailableDevices(HttpServletRequest HttpRequest){
         String token = HttpRequest.getHeader("Authorization").replace("bearer ","");
         DeviceDto deviceDto = new DeviceDto();
-        deviceDto.setInstitutionCode(JwtTokenUtil.getInstitutionCode(token));
+        deviceDto.setAdminId(JwtTokenUtil.getId(token));
         return deviceService.readAvailableDevices(deviceDto);
     }
 
     @PostMapping(value = "/device/all/available/institution")
     @ResponseBody
-    public Response readAvailableDevicesByInstitutionCode(@RequestBody Request request, HttpServletRequest HttpRequest){
+    public Response readAvailableDevicesByInstitutionCode(HttpServletRequest HttpRequest){
         String token = HttpRequest.getHeader("Authorization").replace("bearer ","");
-        DeviceDto deviceDto = mapper.convertValue(request.getObject(), DeviceDto.class);
-        deviceDto.setAdminId(JwtTokenUtil.getId(token));
+        DeviceDto deviceDto = new DeviceDto();
+        deviceDto.setInstitutionCode(JwtTokenUtil.getInstitutionCode(token));
         return deviceService.readAvailableDevicesByInstitutionCode(deviceDto);
     }
 
