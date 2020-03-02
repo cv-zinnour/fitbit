@@ -13,7 +13,7 @@ import javax.persistence.*;
 import javax.persistence.Version;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
+import java.sql.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -33,17 +33,14 @@ public class PatientDevice implements Serializable {
     @Column(name = "version", nullable = false)
     private int version;
     @Column(name = "init_date", nullable = false)
-    @Temporal(value = TemporalType.DATE)
     private Date initDate;
     @Column(name = "return_date", nullable = false)
-    @Temporal(value = TemporalType.DATE)
     private Date returnDate;
     @Column(name = "professional_id", nullable = false)
     private UUID professionalId;
     @Column(name = "medical_file_id", nullable = false)
     private UUID medicalFileId;
     @Column(name = "returned_at", nullable = false)
-    @Temporal(value = TemporalType.DATE)
     private Date returnedAt;
     @OneToMany
     @JoinColumn(name = "id")
