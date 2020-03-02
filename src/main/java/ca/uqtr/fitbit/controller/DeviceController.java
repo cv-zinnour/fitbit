@@ -91,7 +91,6 @@ public class DeviceController {
         if (response.getObject() == null)
             return response;
         Response response1 = deviceService.addSubscription(deviceDto);
-        System.out.println("+++++++++++++++++++++++++++++++++++++++ "+deviceService.allSubscriptions(deviceDto).getObject().toString());
         return response1;
     }
 
@@ -101,7 +100,6 @@ public class DeviceController {
         String token = HttpRequest.getHeader("Authorization").replace("bearer ","");
         DeviceDto deviceDto = mapper.convertValue(request.getObject(), DeviceDto.class);
         deviceDto.setAdminId(JwtTokenUtil.getId(token));
-        System.out.println("*******************************"+deviceService.allSubscriptions(deviceDto).getObject().toString());
 
         return deviceService.unauthorizeDevice(deviceDto);
     }
@@ -128,7 +126,6 @@ public class DeviceController {
     @ResponseBody
     public Response assignDevice(@RequestBody Request request){
         DeviceDto deviceDto = mapper.convertValue(request.getObject(), DeviceDto.class);
-        System.out.println("********* "+ deviceDto.toString());
         return deviceService.assignDevice(deviceDto);
     }
 

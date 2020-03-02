@@ -163,12 +163,10 @@ public class DeviceServiceImpl implements DeviceService {
         try{
             Device device1 = deviceRepository.isPatientHasDevice(UUID.fromString(patientId));
             if (device1 != null){
-                System.out.println(device1.toString());
                 return new Response(modelMapper.map(device1, DeviceDto.class), null);
             }
             Type deviceDtoList = new TypeToken<List<DeviceDto>>() {}.getType();
             List<Device> devices = deviceRepository.findAllByInstitutionCodeAndAvailableAndAuthorized(device.getInstitutionCode(), true, true);
-            System.out.println(devices.toString());
             return new Response(modelMapper.map(devices, deviceDtoList), null);
         } catch (Exception ex){
             LOGGER.log( Level.ALL, ex.getMessage());
@@ -181,20 +179,16 @@ public class DeviceServiceImpl implements DeviceService {
     @Override
     public Response assignDevice(DeviceDto device) {
         try{
-            System.out.println("---------- ++");
-            System.out.println("---------- "+device.getId());
             Device device1 = deviceRepository.getDeviceById(device.getId());
             if (device1 == null)
                 return new Response(null,
                         new Error(Integer.parseInt(messageSource.getMessage("error.null.id", null, Locale.US)),
                                 messageSource.getMessage("error.null.message", null, Locale.US)));
-            System.out.println(device1.toString());
             List<PatientDevice> patientDevices = device1.getPatientDevices();
             PatientDevice patientDevice = modelMapper.map(device.getPatientDevices().get(0), PatientDevice.class);
             patientDevice.setInitDate(new java.sql.Date(Calendar.getInstance().getTime().getTime()));
             patientDevices.add(patientDevice);
             device1.setAvailable(false);
-            System.out.println(device1.toString());
             //device1.get().setLastSyncDate(new java.sql.Date(Calendar.getInstance().getTime().getTime()));
             return new Response(modelMapper.map(deviceRepository.save(device1), DeviceDto.class), null);
         } catch (Exception ex){
