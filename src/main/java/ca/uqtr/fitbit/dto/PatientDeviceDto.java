@@ -27,5 +27,5 @@ public class PatientDeviceDto implements Serializable {
     private Date returnDate;
     private UUID professionalId;
     private UUID medicalFileId;
-    private List<DeviceDto> devices = new ArrayList<>();
+    //private List<DeviceDto> devices = new ArrayList<>();
 }
