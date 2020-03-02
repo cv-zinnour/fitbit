@@ -21,7 +21,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PatientDeviceDto {
-    private String id;
+    private int id;
     private Date initDate;
     private Date returnDate;
     private String professionalId;
@@ -30,13 +30,6 @@ public class PatientDeviceDto {
 
     public PatientDevice dtoToObj(ModelMapper modelMapper) {
         return modelMapper.map(this, PatientDevice.class);
-    }
-
-    public UUID getId() {
-        if (this.id != null)
-            return UUID.fromString(this.id);
-        else
-            return null;
     }
 
     public UUID getProfessionalId() {
