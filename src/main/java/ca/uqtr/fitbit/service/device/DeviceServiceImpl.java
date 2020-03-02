@@ -149,7 +149,7 @@ public class DeviceServiceImpl implements DeviceService {
     public Response readAvailableDevices(DeviceDto device) {
         try{
             Type deviceDtoList = new TypeToken<List<DeviceDto>>() {}.getType();
-            return new Response(modelMapper.map(deviceRepository.findAllByAdminIdAndAvailable(device.getId(), true), deviceDtoList), null);
+            return new Response(modelMapper.map(deviceRepository.findAllByAdminIdAndAvailable(device.getAdminId(), true), deviceDtoList), null);
         } catch (Exception ex){
             LOGGER.log( Level.ALL, ex.getMessage());
             return new Response(null,

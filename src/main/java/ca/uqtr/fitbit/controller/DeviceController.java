@@ -56,9 +56,8 @@ public class DeviceController {
         /*Response response1 = deviceService.removeSubscription(deviceDto);
         if(response1 == null)
             return false;*/
-        deviceService.deleteDevice(deviceDto);
         System.out.println("+++++++++++++++++++++++++++++++++++++++ "+deviceService.allSubscriptions(deviceDto).getObject().toString());
-
+        deviceService.deleteDevice(deviceDto);
         return true;
     }
 
@@ -108,9 +107,9 @@ public class DeviceController {
 
     @GetMapping(value = "/device/all/available")
     @ResponseBody
-    public Response readAvailableDevices(@RequestBody Request request, HttpServletRequest HttpRequest){
+    public Response readAvailableDevices(HttpServletRequest HttpRequest){
         String token = HttpRequest.getHeader("Authorization").replace("bearer ","");
-        DeviceDto deviceDto = mapper.convertValue(request.getObject(), DeviceDto.class);
+        DeviceDto deviceDto = new DeviceDto();
         deviceDto.setAdminId(JwtTokenUtil.getId(token));
         return deviceService.readAvailableDevices(deviceDto);
     }
