@@ -39,22 +39,22 @@ public class DeviceDto {
     }
 
     public UUID getId() {
-        if (this.id != null)
-            return UUID.fromString(this.id);
+        if (id != null)
+            return UUID.fromString(id);
         else
             return null;
     }
 
     public UUID getInstitutionCode() {
-        if (this.institutionCode != null)
-            return UUID.fromString(this.institutionCode);
+        if (institutionCode != null)
+            return UUID.fromString(institutionCode);
         else
             return null;
     }
 
     public UUID getAdminId() {
-        if (this.adminId != null)
-            return UUID.fromString(this.adminId);
+        if (adminId != null)
+            return UUID.fromString(adminId);
         else
             return null;
     }
