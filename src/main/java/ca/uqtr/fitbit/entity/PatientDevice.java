@@ -6,6 +6,7 @@ import ca.uqtr.fitbit.entity.fitbit.ActivitiesSteps;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
 import javax.persistence.Version;
@@ -49,7 +50,7 @@ public class PatientDevice implements Serializable {
     @OneToMany
     @JoinColumn(name = "id")
     private List<ActivitiesSteps> activitiesSteps = new ArrayList<>();
-
+    @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY)
     private Device device;
 }
