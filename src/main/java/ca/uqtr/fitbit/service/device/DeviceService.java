@@ -17,7 +17,7 @@ public interface DeviceService {
     Response unauthorizeDevice(DeviceDto device);
 
     Response readAvailableDevices(DeviceDto device);
-    Response readAvailableDevicesByInstitutionCode(DeviceDto device);
+    Response readAvailableDevicesByInstitutionCode(DeviceDto device, String patientId);
     Response assignDevice(DeviceDto device);
     Response getBackDevice(DeviceDto device);
 

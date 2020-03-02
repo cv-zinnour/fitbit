@@ -40,6 +40,9 @@ public class PatientDevice implements Serializable {
     private UUID professionalId;
     @Column(name = "medical_file_id", nullable = false)
     private UUID medicalFileId;
+    @Column(name = "returned_at", nullable = false)
+    @Temporal(value = TemporalType.DATE)
+    private Date returnedAt;
     @OneToMany
     @JoinColumn(name = "id")
     private List<ActivitiesCalories> activitiesCalories = new ArrayList<>();

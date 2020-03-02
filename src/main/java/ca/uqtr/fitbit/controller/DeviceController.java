@@ -117,11 +117,11 @@ public class DeviceController {
 
     @GetMapping(value = "/device/all/available/institution")
     @ResponseBody
-    public Response readAvailableDevicesByInstitutionCode(HttpServletRequest HttpRequest){
+    public Response readAvailableDevicesByInstitutionCode(@RequestParam String patientId, HttpServletRequest HttpRequest){
         String token = HttpRequest.getHeader("Authorization").replace("bearer ","");
         DeviceDto deviceDto = new DeviceDto();
         deviceDto.setInstitutionCode(JwtTokenUtil.getInstitutionCode(token));
-        return deviceService.readAvailableDevicesByInstitutionCode(deviceDto);
+        return deviceService.readAvailableDevicesByInstitutionCode(deviceDto, patientId);
     }
 
     @PostMapping(value = "/device/assign")
