@@ -238,7 +238,7 @@ public class DeviceServiceImpl implements DeviceService {
             return new Response(null,
                     new Error(Integer.parseInt(messageSource.getMessage("error.null.id", null, Locale.US)),
                             messageSource.getMessage("error.null.message", null, Locale.US)));
-
+        System.out.println(device1.getFitbitSubscriptions().get(0).toString());
         return fitbitApi.removeSubscription(device1.getFitbitSubscriptions().get(0), authService.getAccessToken( device.dtoToObj(modelMapper)), COLLECTION_PATH);
     }
 

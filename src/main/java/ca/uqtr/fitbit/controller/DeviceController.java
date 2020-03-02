@@ -53,9 +53,9 @@ public class DeviceController {
     public boolean deleteDevice(@RequestBody Request request) throws IOException {
         System.out.println(request.toString());
         DeviceDto deviceDto = mapper.convertValue(request.getObject(), DeviceDto.class);
-        Response response1 = deviceService.removeSubscription(deviceDto);
+        /*Response response1 = deviceService.removeSubscription(deviceDto);
         if(response1 == null)
-            return false;
+            return false;*/
         deviceService.deleteDevice(deviceDto);
         System.out.println("+++++++++++++++++++++++++++++++++++++++ "+deviceService.allSubscriptions(deviceDto).getObject().toString());
 
