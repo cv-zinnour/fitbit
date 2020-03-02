@@ -126,10 +126,8 @@ public class DeviceController {
 
     @PostMapping(value = "/device/assign")
     @ResponseBody
-    public Response assignDevice(@RequestBody Request request, HttpServletRequest HttpRequest){
-        String token = HttpRequest.getHeader("Authorization").replace("bearer ","");
+    public Response assignDevice(@RequestBody Request request){
         DeviceDto deviceDto = mapper.convertValue(request.getObject(), DeviceDto.class);
-        deviceDto.setAdminId(JwtTokenUtil.getId(token));
         return deviceService.assignDevice(deviceDto);
     }
 
