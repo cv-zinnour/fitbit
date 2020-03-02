@@ -38,8 +38,9 @@ public class Device extends BaseEntity {
     @JsonManagedReference
     @OneToOne(mappedBy="device", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Auth auth;
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "device_id")
+    /*@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "device_id")*/
+    @OneToMany(mappedBy = "device", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PatientDevice> patientDevices;
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "device_id")

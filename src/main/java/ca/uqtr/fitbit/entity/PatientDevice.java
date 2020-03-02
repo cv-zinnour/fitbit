@@ -49,4 +49,7 @@ public class PatientDevice implements Serializable {
     @OneToMany
     @JoinColumn(name = "id")
     private List<ActivitiesSteps> activitiesSteps = new ArrayList<>();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Device device;
 }

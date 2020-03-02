@@ -161,11 +161,11 @@ public class DeviceServiceImpl implements DeviceService {
     @Override
     public Response readAvailableDevicesByInstitutionCode(DeviceDto device, String patientId) {
         try{
-            /*Device device1 = deviceRepository.isPatientHasDevice(UUID.fromString(patientId));
+            Device device1 = deviceRepository.isPatientHasDevice(UUID.fromString(patientId));
             if (device1 != null){
                 System.out.println(device1.toString());
                 return new Response(modelMapper.map(device1, DeviceDto.class), null);
-            }*/
+            }
             Type deviceDtoList = new TypeToken<List<DeviceDto>>() {}.getType();
             List<Device> devices = deviceRepository.findAllByInstitutionCodeAndAvailableAndAuthorized(device.getInstitutionCode(), true, true);
             return new Response(modelMapper.map(devices, deviceDtoList), null);
