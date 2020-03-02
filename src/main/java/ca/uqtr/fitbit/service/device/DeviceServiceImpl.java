@@ -183,20 +183,20 @@ public class DeviceServiceImpl implements DeviceService {
         try{
             System.out.println("---------- ++");
             System.out.println("---------- "+device.getId());
-            Optional<Device> device1 = deviceRepository.findById(device.getId());
-            if (!device1.isPresent())
+            Device device1 = deviceRepository.getDeviceById(device.getId());
+            if (device1 == null)
                 return new Response(null,
                         new Error(Integer.parseInt(messageSource.getMessage("error.null.id", null, Locale.US)),
                                 messageSource.getMessage("error.null.message", null, Locale.US)));
-            System.out.println(device1.get().toString());
-            List<PatientDevice> patientDevices = device1.get().getPatientDevices();
+            System.out.println(device1.toString());
+            List<PatientDevice> patientDevices = device1.getPatientDevices();
             PatientDevice patientDevice = modelMapper.map(device.getPatientDevices().get(0), PatientDevice.class);
             patientDevice.setInitDate(new java.sql.Date(Calendar.getInstance().getTime().getTime()));
             patientDevices.add(patientDevice);
-            device1.get().setAvailable(false);
+            device1.setAvailable(false);
             System.out.println(device1.toString());
             //device1.get().setLastSyncDate(new java.sql.Date(Calendar.getInstance().getTime().getTime()));
-            return new Response(modelMapper.map(deviceRepository.save(device1.get()), DeviceDto.class), null);
+            return new Response(modelMapper.map(deviceRepository.save(device1), DeviceDto.class), null);
         } catch (Exception ex){
             LOGGER.log( Level.ALL, ex.getMessage());
             return new Response(null,

@@ -12,6 +12,8 @@ import java.util.UUID;
 @Repository
 public interface DeviceRepository extends CrudRepository<Device, UUID> {
 
+    Device getDeviceById(UUID id);
+
     List<Device> findAllByAdminId(UUID adminId);
     List<Device> findAllByAdminIdAndAvailable(UUID adminId, boolean available);
     List<Device> findAllByInstitutionCodeAndAvailableAndAuthorized(UUID institutionCode, boolean available, boolean authorized);
