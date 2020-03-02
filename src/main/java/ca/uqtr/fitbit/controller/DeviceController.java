@@ -128,6 +128,7 @@ public class DeviceController {
     @ResponseBody
     public Response assignDevice(@RequestBody Request request){
         DeviceDto deviceDto = mapper.convertValue(request.getObject(), DeviceDto.class);
+        System.out.println("********* "+ deviceDto.toString());
         return deviceService.assignDevice(deviceDto);
     }
 
