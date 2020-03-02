@@ -1,9 +1,11 @@
 package ca.uqtr.fitbit.dto;
 
 import ca.uqtr.fitbit.entity.Device;
+import ca.uqtr.fitbit.entity.PatientDevice;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.modelmapper.ModelMapper;
 
 import javax.persistence.Column;
 import javax.persistence.Temporal;
@@ -18,14 +20,36 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PatientDeviceDto implements Serializable {
-
-    private static final long serialVersionUID = 1L;
-
-    private UUID id;
+public class PatientDeviceDto {
+    private String id;
     private Date initDate;
     private Date returnDate;
-    private UUID professionalId;
-    private UUID medicalFileId;
+    private String professionalId;
+    private String medicalFileId;
     //private List<DeviceDto> devices = new ArrayList<>();
+
+    public PatientDevice dtoToObj(ModelMapper modelMapper) {
+        return modelMapper.map(this, PatientDevice.class);
+    }
+
+    public UUID getId() {
+        if (this.id != null)
+            return UUID.fromString(this.id);
+        else
+            return null;
+    }
+
+    public UUID getProfessionalId() {
+        if (this.professionalId != null)
+            return UUID.fromString(this.professionalId);
+        else
+            return null;
+    }
+
+    public UUID getMedicalFileId() {
+        if (this.medicalFileId != null)
+            return UUID.fromString(this.medicalFileId);
+        else
+            return null;
+    }
 }
