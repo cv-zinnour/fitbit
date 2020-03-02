@@ -163,7 +163,6 @@ public class DeviceServiceImpl implements DeviceService {
         try{
             Type deviceDtoList = new TypeToken<List<DeviceDto>>() {}.getType();
             List<Device> devices = deviceRepository.findAllByInstitutionCodeAndAvailableAndAuthorized(device.getInstitutionCode(), true, true);
-            System.out.println("+++++++++++ devices : "+devices);
             return new Response(modelMapper.map(devices, deviceDtoList), null);
         } catch (Exception ex){
             LOGGER.log( Level.ALL, ex.getMessage());
