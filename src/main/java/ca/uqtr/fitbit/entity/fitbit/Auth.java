@@ -34,6 +34,7 @@ public class Auth extends BaseEntity {
     @Column(name = "token_type")
     private String tokenType;
 
+    @ToString.Exclude
     @JsonBackReference
     @OneToOne
     @MapsId
