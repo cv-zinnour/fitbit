@@ -44,7 +44,7 @@ public class DeviceController {
     public Response readDevice(@RequestBody Request request, HttpServletRequest HttpRequest){
         String token = HttpRequest.getHeader("Authorization").replace("bearer ","");
         DeviceDto deviceDto = mapper.convertValue(request.getObject(), DeviceDto.class);
-        deviceDto.setInstitutionCode(JwtTokenUtil.getInstitutionCode(token));
+        deviceDto.setAdminId(JwtTokenUtil.getId(token));
         return deviceService.readDevice(deviceDto);
     }
 
@@ -57,6 +57,7 @@ public class DeviceController {
         if(response1 == null)
             return false;*/
         System.out.println("+++++++++++++++++++++++++++++++++++++++ "+deviceService.allSubscriptions(deviceDto).getObject().toString());
+
         deviceService.deleteDevice(deviceDto);
         return true;
     }
@@ -110,7 +111,7 @@ public class DeviceController {
     public Response readAvailableDevices(HttpServletRequest HttpRequest){
         String token = HttpRequest.getHeader("Authorization").replace("bearer ","");
         DeviceDto deviceDto = new DeviceDto();
-        deviceDto.setAdminId(JwtTokenUtil.getId(token));
+        deviceDto.setInstitutionCode(JwtTokenUtil.getInstitutionCode(token));
         return deviceService.readAvailableDevices(deviceDto);
     }
 
