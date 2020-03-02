@@ -36,8 +36,8 @@ public class PatientDevice implements Serializable {
     @Column(name = "return_date", nullable = false)
     @Temporal(value = TemporalType.DATE)
     private Date returnDate;
-    @Column(name = "expert_id", nullable = false)
-    private UUID expertId;
+    @Column(name = "professional_id", nullable = false)
+    private UUID professionalId;
     @Column(name = "medical_file_id", nullable = false)
     private UUID medicalFileId;
     @OneToMany
