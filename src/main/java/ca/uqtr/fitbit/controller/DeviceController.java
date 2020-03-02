@@ -115,7 +115,7 @@ public class DeviceController {
         return deviceService.readAvailableDevices(deviceDto);
     }
 
-    @PostMapping(value = "/device/all/available/institution")
+    @GetMapping(value = "/device/all/available/institution")
     @ResponseBody
     public Response readAvailableDevicesByInstitutionCode(HttpServletRequest HttpRequest){
         String token = HttpRequest.getHeader("Authorization").replace("bearer ","");
