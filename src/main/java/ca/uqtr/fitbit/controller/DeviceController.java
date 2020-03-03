@@ -153,7 +153,7 @@ public class DeviceController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @PostMapping("/subscriptions")
+    @PostMapping("/notifications")
     public ResponseEntity<HttpStatus> getFitBitNotificationData() {
         System.out.println("////////////////////////  getFitBitNotificationData");
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
