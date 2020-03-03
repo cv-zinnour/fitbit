@@ -146,6 +146,7 @@ public class DeviceController {
 
     @GetMapping("/notifications")
     public ResponseEntity<HttpStatus> getFitBitNotification(@RequestParam String verify) {
+        System.out.println("////////////////////////  getFitBitNotification");
         if(verify.equals(fitbitVerificationCode)) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
