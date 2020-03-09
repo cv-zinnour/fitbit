@@ -47,5 +47,8 @@ public class Device extends BaseEntity {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "device_id")
     private List<FitbitSubscription> fitbitSubscriptions;
+    @JsonManagedReference
+    @OneToMany(mappedBy = "device", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Synchronization> synchronizations;
 
 }

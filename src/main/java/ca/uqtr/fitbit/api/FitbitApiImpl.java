@@ -3,6 +3,7 @@ package ca.uqtr.fitbit.api;
 import ca.uqtr.fitbit.api.data.ActivitiesTypeData;
 import ca.uqtr.fitbit.api.data.activities.Activities;
 import ca.uqtr.fitbit.api.data.calories.Calories;
+import ca.uqtr.fitbit.api.data.distance.Distance;
 import ca.uqtr.fitbit.api.data.steps.Steps;
 import ca.uqtr.fitbit.dto.Error;
 import ca.uqtr.fitbit.entity.FitbitSubscription;
@@ -32,15 +33,17 @@ public class FitbitApiImpl implements FitbitApi {
     private OkHttpClient okHttpClient;
     private Activities activities;
     private Steps steps;
-    private final Calories calories;
-    private final ActivitiesTypeData activitiesTypeData;
+    private Calories calories;
+    private Distance distance;
+    private ActivitiesTypeData activitiesTypeData;
     private MessageSource messageSource;
 
     @Autowired
-    public FitbitApiImpl(OkHttpClient okHttpClient, Activities activities, Steps steps, ActivitiesTypeData activitiesTypeData, Calories calories, MessageSource messageSource) {
+    public FitbitApiImpl(OkHttpClient okHttpClient, Activities activities, Steps steps, Distance distance, ActivitiesTypeData activitiesTypeData, Calories calories, MessageSource messageSource) {
         this.okHttpClient = okHttpClient;
         this.activities = activities;
         this.steps = steps;
+        this.distance = distance;
         this.activitiesTypeData = activitiesTypeData;
         this.calories = calories;
         this.messageSource = messageSource;
@@ -215,6 +218,11 @@ public class FitbitApiImpl implements FitbitApi {
     @Override
     public Calories getCalories() {
         return calories;
+    }
+
+    @Override
+    public Distance geDistance() {
+        return distance;
     }
 
     @Override

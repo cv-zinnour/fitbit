@@ -2,6 +2,7 @@ package ca.uqtr.fitbit.service.device;
 
 import ca.uqtr.fitbit.dto.DeviceDto;
 import ca.uqtr.fitbit.dto.Response;
+import reactor.core.publisher.Flux;
 
 import java.io.IOException;
 
@@ -26,4 +27,6 @@ public interface DeviceService {
     Response allSubscriptions(DeviceDto device) throws IOException;
 
     Response removeSubscription(DeviceDto device) throws IOException;
+
+    Flux<DeviceDto> getDevicesNotReturned();
 }

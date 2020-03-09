@@ -2,6 +2,7 @@ package ca.uqtr.fitbit.entity;
 
 
 import ca.uqtr.fitbit.entity.fitbit.ActivitiesCalories;
+import ca.uqtr.fitbit.entity.fitbit.ActivitiesDistance;
 import ca.uqtr.fitbit.entity.fitbit.ActivitiesSteps;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
@@ -40,6 +41,8 @@ public class PatientDevice implements Serializable {
     private UUID professionalId;
     @Column(name = "medical_file_id", nullable = false)
     private UUID medicalFileId;
+    @Column(name = "patient_email", nullable = false)
+    private String patientEmail;
     @Column(name = "returned_at", nullable = false)
     private Date returnedAt;
     @OneToMany
@@ -48,6 +51,9 @@ public class PatientDevice implements Serializable {
     @OneToMany
     @JoinColumn(name = "id")
     private List<ActivitiesSteps> activitiesSteps = new ArrayList<>();
+    @OneToMany
+    @JoinColumn(name = "id")
+    private List<ActivitiesDistance> activitiesDistance = new ArrayList<>();
     //@ToString.Exclude
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)

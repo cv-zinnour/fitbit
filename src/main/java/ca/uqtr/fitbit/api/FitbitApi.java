@@ -5,6 +5,7 @@ import ca.uqtr.fitbit.api.data.ActivitiesTypeData;
 import ca.uqtr.fitbit.api.data.ActivitiesTypeDataImpl;
 import ca.uqtr.fitbit.api.data.activities.Activities;
 import ca.uqtr.fitbit.api.data.calories.Calories;
+import ca.uqtr.fitbit.api.data.distance.Distance;
 import ca.uqtr.fitbit.api.data.steps.Steps;
 import ca.uqtr.fitbit.entity.FitbitSubscription;
 import ca.uqtr.fitbit.entity.fitbit.Auth;
@@ -30,6 +31,8 @@ public interface FitbitApi {
     Steps getSteps();
 
     Calories getCalories();
+
+    Distance geDistance();
 
     ActivitiesTypeData getActivitiesTypeData();
 

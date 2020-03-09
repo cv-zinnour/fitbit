@@ -23,7 +23,6 @@ public class ActivitiesTypeDataImpl implements ActivitiesTypeData<ActivitesT> {
     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
 
-
     @Autowired
     public ActivitiesTypeDataImpl(OkHttpClient okHttpClient) throws IOException {
         this.okHttpClient = okHttpClient;
@@ -38,7 +37,6 @@ public class ActivitiesTypeDataImpl implements ActivitiesTypeData<ActivitesT> {
                 .get()
                 .header("Authorization", "Bearer "+accessToken)
                 .build();
-        System.out.println("+++++++++++++"+okHttpClient.newCall(request).execute());
         try (Response response = okHttpClient.newCall(request).execute()) {
             //System.out.println(response.body().string());
             json = response.body().string();
@@ -78,8 +76,6 @@ public class ActivitiesTypeDataImpl implements ActivitiesTypeData<ActivitesT> {
         Date dateTime = Date.valueOf(activities_type.getJSONObject(0).getString("dateTime"));;
         int value = activities_type.getJSONObject(0).getInt("value");
         JSONObject activities_type_intraday = jsonObject.getJSONObject("activities-"+activityType+"-intraday");
-        int datasetInterval = activities_type_intraday.getInt("datasetInterval");
-
         JSONArray dataset = activities_type_intraday.getJSONArray("dataset");
         JSONArray jsonArray = new JSONArray();
         for(int n = 0; n < dataset.length(); n++)
@@ -89,6 +85,7 @@ public class ActivitiesTypeDataImpl implements ActivitiesTypeData<ActivitesT> {
                 jsonArray.put(object);
             }
         };
+        int datasetInterval = activities_type_intraday.getInt("datasetInterval");
         return new Serialization(dateTime, value, dataset.toString(), datasetInterval);
     }
 

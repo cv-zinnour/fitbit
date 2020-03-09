@@ -26,4 +26,8 @@ public interface DeviceRepository extends CrudRepository<Device, UUID> {
     @Query("select d from Device d left join fetch d.patientDevices pd where pd.medicalFileId = :patientDevice AND pd.returnedAt IS NULL ORDER BY pd.id DESC")
     Device  isPatientHasDevice(UUID patientDevice);
 
+    @Query("select d.id, d.patientDevices, d.synchronizations from Device d left join fetch d.patientDevices pd where pd.returnedAt IS NULL ORDER BY pd.id DESC")
+    List<Device>  devicesNotReturned();
+
+
 }

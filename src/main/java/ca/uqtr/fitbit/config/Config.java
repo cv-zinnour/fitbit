@@ -11,8 +11,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.context.support.ResourceBundleMessageSource;
+import org.springframework.data.r2dbc.repository.config.EnableR2dbcRepositories;
 
 @Configuration
+@EnableR2dbcRepositories
 public class Config {
 
     @Bean
@@ -20,16 +22,6 @@ public class Config {
         return new OkHttpClient.Builder()
                 .addInterceptor(new LoggingInterceptor())
                 .build();
-    }
-
-    @Bean
-    public ResourceBundleMessageSource messageResourceSource() {
-
-        ResourceBundleMessageSource source = new ResourceBundleMessageSource();
-        source.setBasenames("classpath:messages");
-        source.setUseCodeAsDefaultMessage(true);
-
-        return source;
     }
 
     @Bean

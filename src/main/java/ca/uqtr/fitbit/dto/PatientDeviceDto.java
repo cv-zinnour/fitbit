@@ -26,6 +26,7 @@ public class PatientDeviceDto {
     private Date returnDate;
     private String professionalId;
     private String medicalFileId;
+    private String patientEmail;
     private Date returnedAt;
     //private List<DeviceDto> devices = new ArrayList<>();
 

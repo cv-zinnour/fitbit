@@ -3,12 +3,12 @@ package ca.uqtr.fitbit.service.device;
 import ca.uqtr.fitbit.api.FitbitApi;
 import ca.uqtr.fitbit.dto.DeviceDto;
 import ca.uqtr.fitbit.dto.Error;
-import ca.uqtr.fitbit.dto.PatientDeviceDto;
 import ca.uqtr.fitbit.dto.Response;
 import ca.uqtr.fitbit.entity.Device;
 import ca.uqtr.fitbit.entity.FitbitSubscription;
 import ca.uqtr.fitbit.entity.PatientDevice;
 import ca.uqtr.fitbit.entity.fitbit.Auth;
+import ca.uqtr.fitbit.repository.DeviceReactiveRepository;
 import ca.uqtr.fitbit.repository.DeviceRepository;
 import ca.uqtr.fitbit.service.auth.AuthService;
 import javassist.bytecode.stackmap.TypeData;
@@ -17,6 +17,7 @@ import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -30,14 +31,16 @@ public class DeviceServiceImpl implements DeviceService {
     private final static String COLLECTION_PATH = "activities";
 
     private DeviceRepository deviceRepository;
+    private DeviceReactiveRepository deviceReactiveRepository;
     private ModelMapper modelMapper;
     private MessageSource messageSource;
     private AuthService authService;
     private FitbitApi fitbitApi;
 
     @Autowired
-    public DeviceServiceImpl(DeviceRepository deviceRepository, ModelMapper modelMapper, MessageSource messageSource, AuthService authService, FitbitApi fitbitApi) {
+    public DeviceServiceImpl(DeviceRepository deviceRepository, DeviceReactiveRepository deviceReactiveRepository, ModelMapper modelMapper, MessageSource messageSource, AuthService authService, FitbitApi fitbitApi) {
         this.deviceRepository = deviceRepository;
+        this.deviceReactiveRepository = deviceReactiveRepository;
         this.modelMapper = modelMapper;
         this.messageSource = messageSource;
         this.authService = authService;
@@ -249,6 +252,12 @@ public class DeviceServiceImpl implements DeviceService {
                             messageSource.getMessage("error.null.message", null, Locale.US)));
         System.out.println(device1.getFitbitSubscriptions().get(0).toString());
         return fitbitApi.removeSubscription(device1.getFitbitSubscriptions().get(0), authService.getAccessToken( device.dtoToObj(modelMapper)), COLLECTION_PATH);
+    }
+
+    @Override
+    public Flux<DeviceDto> getDevicesNotReturned() {
+        Flux<Device> devices = deviceReactiveRepository.devicesNotReturned();
+        return devices.map(device -> modelMapper.map(device, DeviceDto.class));
     }
 
 }
