@@ -34,7 +34,7 @@ public class ScheduledNotification {
         return cronRepo.findOne("cron").getCronValue();
     }, cron="#{@getCronValue}"*/
 
-    @Scheduled(fixedDelay = 43200)
+    @Scheduled(fixedDelay = 43200000)
     public void scheduleFixedRateTaskAsync() {
         Calendar cal = Calendar.getInstance();
         List<Device> devices = deviceRepository.devicesNotReturned();
