@@ -9,6 +9,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -38,6 +39,7 @@ public class ScheduledNotification {
         Calendar cal = Calendar.getInstance();
         List<Device> devices = deviceRepository.devicesNotReturned();
         if (devices != null && !devices.isEmpty()){
+            System.out.println("--------------"+ Arrays.toString(devices.toArray()));
             for (Device device: devices) {
                 long time = cal.getTime().getTime() - (device.getSynchronizations().get(0).getLastSyncTime().getTime() + TimeUnit.DAYS.toMillis(5));
                 if (time <= 0){
