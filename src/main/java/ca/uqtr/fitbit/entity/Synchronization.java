@@ -27,8 +27,5 @@ public class Synchronization  implements Serializable {
     private int version;
     @Column(name = "last_sync_time", nullable = false)
     private Timestamp lastSyncTime;
-    @JsonBackReference
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Device device;
 
 }

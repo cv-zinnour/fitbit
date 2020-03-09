@@ -44,12 +44,11 @@ public class Device extends BaseEntity {
     @JsonManagedReference
     @OneToMany(mappedBy = "device", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PatientDevice> patientDevices;
-    @ToString.Exclude
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "device_id")
     private List<FitbitSubscription> fitbitSubscriptions;
-    @JsonManagedReference
-    @OneToMany(mappedBy = "device", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "device_id")
     private List<Synchronization> synchronizations;
 
 }
