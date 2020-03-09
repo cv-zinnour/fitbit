@@ -11,7 +11,6 @@ import reactor.core.publisher.Flux;
 import java.util.List;
 import java.util.UUID;
 
-@Repository
 public interface DeviceReactiveRepository extends R2dbcRepository<Device, UUID> {
 
     @Query("select d.id, d.patientDevices, d.synchronizations from Device d left join fetch d.patientDevices pd where pd.returnedAt IS NULL ORDER BY pd.id DESC")
