@@ -46,8 +46,6 @@ public class ScheduledNotification {
                     eventPublisher.publishEvent(new OnSynchronizationEmailEvent(modelMapper.map(device, DeviceDto.class)));
 
                 }
-
-
             }
         }
     }
