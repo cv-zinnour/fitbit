@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 
 @Component
@@ -48,7 +49,7 @@ public class StepsImpl implements Steps {
         //System.out.println(json);
         JSONObject jsonObject = new JSONObject(json);
         JSONArray activities_steps = jsonObject.getJSONArray("activities-steps");
-        Date dateTime = Date.valueOf(activities_steps.getJSONObject(0).getString("dateTime"));;
+        Timestamp dateTime = Timestamp.valueOf(activities_steps.getJSONObject(0).getString("dateTime"));;
         int stepsValue = activities_steps.getJSONObject(0).getInt("value");
         JSONObject activities_steps_intraday = jsonObject.getJSONObject("activities-steps-intraday");
         int datasetInterval = activities_steps_intraday.getInt("datasetInterval");
@@ -87,7 +88,7 @@ public class StepsImpl implements Steps {
         //System.out.println(json);
         JSONObject jsonObject = new JSONObject(json);
         JSONArray activities_steps = jsonObject.getJSONArray("activities-steps");
-        Date dateTime = Date.valueOf(activities_steps.getJSONObject(0).getString("dateTime"));;
+        Timestamp dateTime = Timestamp.valueOf(activities_steps.getJSONObject(0).getString("dateTime"));;
         int stepsValue = activities_steps.getJSONObject(0).getInt("value");
         JSONObject activities_steps_intraday = jsonObject.getJSONObject("activities-steps-intraday");
         int datasetInterval = activities_steps_intraday.getInt("datasetInterval");

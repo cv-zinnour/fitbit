@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 
 @Component
@@ -48,7 +49,7 @@ public class CaloriesImpl implements Calories {
         //System.out.println(json);
         JSONObject jsonObject = new JSONObject(json);
         JSONArray activities_calories = jsonObject.getJSONArray("activities-calories");
-        Date dateTime = Date.valueOf(activities_calories.getJSONObject(0).getString("dateTime"));
+        Timestamp dateTime = Timestamp.valueOf(activities_calories.getJSONObject(0).getString("dateTime"));
         double caloriesValue = activities_calories.getJSONObject(0).getDouble("value");
         JSONObject activities_calories_intraday = jsonObject.getJSONObject("activities-calories-intraday");
         int datasetInterval = activities_calories_intraday.getInt("datasetInterval");
@@ -85,7 +86,7 @@ public class CaloriesImpl implements Calories {
         //System.out.println(json);
         JSONObject jsonObject = new JSONObject(json);
         JSONArray activities_calories = jsonObject.getJSONArray("activities-calories");
-        Date dateTime = Date.valueOf(activities_calories.getJSONObject(0).getString("dateTime"));;
+        Timestamp dateTime = Timestamp.valueOf(activities_calories.getJSONObject(0).getString("dateTime"));;
         double caloriesValue = activities_calories.getJSONObject(0).getDouble("value");
         JSONObject activities_calories_intraday = jsonObject.getJSONObject("activities-calories-intraday");
         int datasetInterval = activities_calories_intraday.getInt("datasetInterval");

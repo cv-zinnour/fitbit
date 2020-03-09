@@ -8,7 +8,6 @@ import ca.uqtr.fitbit.entity.Device;
 import ca.uqtr.fitbit.entity.FitbitSubscription;
 import ca.uqtr.fitbit.entity.PatientDevice;
 import ca.uqtr.fitbit.entity.fitbit.Auth;
-import ca.uqtr.fitbit.repository.DeviceReactiveRepository;
 import ca.uqtr.fitbit.repository.DeviceRepository;
 import ca.uqtr.fitbit.service.auth.AuthService;
 import javassist.bytecode.stackmap.TypeData;
@@ -31,16 +30,14 @@ public class DeviceServiceImpl implements DeviceService {
     private final static String COLLECTION_PATH = "activities";
 
     private DeviceRepository deviceRepository;
-    private DeviceReactiveRepository deviceReactiveRepository;
     private ModelMapper modelMapper;
     private MessageSource messageSource;
     private AuthService authService;
     private FitbitApi fitbitApi;
 
     @Autowired
-    public DeviceServiceImpl(DeviceRepository deviceRepository, DeviceReactiveRepository deviceReactiveRepository, ModelMapper modelMapper, MessageSource messageSource, AuthService authService, FitbitApi fitbitApi) {
+    public DeviceServiceImpl(DeviceRepository deviceRepository, ModelMapper modelMapper, MessageSource messageSource, AuthService authService, FitbitApi fitbitApi) {
         this.deviceRepository = deviceRepository;
-        this.deviceReactiveRepository = deviceReactiveRepository;
         this.modelMapper = modelMapper;
         this.messageSource = messageSource;
         this.authService = authService;
@@ -256,8 +253,9 @@ public class DeviceServiceImpl implements DeviceService {
 
     @Override
     public Flux<DeviceDto> getDevicesNotReturned() {
-        Flux<Device> devices = deviceReactiveRepository.devicesNotReturned();
-        return devices.map(device -> modelMapper.map(device, DeviceDto.class));
+        /*Flux<Device> devices = deviceReactiveRepository.devicesNotReturned();
+        return devices.map(device -> modelMapper.map(device, DeviceDto.class));*/
+        return null;
     }
 
 }

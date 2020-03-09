@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 
 @Component
@@ -73,7 +74,7 @@ public class ActivitiesTypeDataImpl implements ActivitiesTypeData<ActivitesT> {
     public Serialization deserialization(String json, String activityType) {
         JSONObject jsonObject = new JSONObject(json);
         JSONArray activities_type = jsonObject.getJSONArray("activities-"+activityType);
-        Date dateTime = Date.valueOf(activities_type.getJSONObject(0).getString("dateTime"));;
+        Timestamp dateTime = Timestamp.valueOf(activities_type.getJSONObject(0).getString("dateTime"));;
         int value = activities_type.getJSONObject(0).getInt("value");
         JSONObject activities_type_intraday = jsonObject.getJSONObject("activities-"+activityType+"-intraday");
         JSONArray dataset = activities_type_intraday.getJSONArray("dataset");
@@ -91,7 +92,7 @@ public class ActivitiesTypeDataImpl implements ActivitiesTypeData<ActivitesT> {
 
     @Getter
     class Serialization{
-        private Date dateTime;
+        private Timestamp dateTime;
         private int value;
         private String dataset;
         private int datasetInterval;
@@ -99,7 +100,7 @@ public class ActivitiesTypeDataImpl implements ActivitiesTypeData<ActivitesT> {
         public Serialization() {
         }
 
-        public Serialization(Date dateTime, int value, String dataset, int datasetInterval) {
+        public Serialization(Timestamp dateTime, int value, String dataset, int datasetInterval) {
             this.dateTime = dateTime;
             this.value = value;
             this.dataset = dataset;

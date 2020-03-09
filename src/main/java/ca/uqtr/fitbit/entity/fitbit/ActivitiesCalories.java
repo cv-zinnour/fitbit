@@ -8,7 +8,8 @@ import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
-import java.sql.Date;
+import java.sql.Timestamp;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -26,9 +27,8 @@ public class ActivitiesCalories extends Activities{
     @Version
     @Column(name = "version", nullable = false)
     private int version;
-
     @Column(name = "date")
-    private Date dateTime;
+    private Timestamp dateTime;
     @Column(name = "calories")
     private double calories;
     @Type(type = "jsonb")
@@ -39,7 +39,7 @@ public class ActivitiesCalories extends Activities{
 
 
 
-    public ActivitiesCalories(Date dateTime, double calories, String dataset, int datasetInterval) {
+    public ActivitiesCalories(Timestamp dateTime, double calories, String dataset, int datasetInterval) {
         this.dateTime = dateTime;
         this.calories = calories;
         this.dataset = dataset;

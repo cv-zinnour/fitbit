@@ -8,7 +8,8 @@ import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
-import java.sql.Date;
+import java.sql.Timestamp;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -26,9 +27,8 @@ public class ActivitiesDistance extends Activities{
     @Version
     @Column(name = "version", nullable = false)
     private int version;
-
     @Column(name = "date")
-    private Date dateTime;
+    private Timestamp dateTime;
     @Column(name = "distance")
     private double distance;
     @Type(type = "jsonb")
@@ -37,7 +37,7 @@ public class ActivitiesDistance extends Activities{
     @Column(name = "dataset_interval")
     private int datasetInterval;
 
-    public ActivitiesDistance(Date dateTime, double distance, String dataset, int datasetInterval) {
+    public ActivitiesDistance(Timestamp dateTime, double distance, String dataset, int datasetInterval) {
         this.dateTime = dateTime;
         this.distance = distance;
         this.dataset = dataset;
@@ -46,4 +46,6 @@ public class ActivitiesDistance extends Activities{
 
     public ActivitiesDistance() {
     }
+
+
 }
