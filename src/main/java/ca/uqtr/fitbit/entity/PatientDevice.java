@@ -45,12 +45,15 @@ public class PatientDevice implements Serializable {
     private String patientEmail;
     @Column(name = "returned_at", nullable = false)
     private Date returnedAt;
+    @ToString.Exclude
     @OneToMany
     @JoinColumn(name = "id")
     private List<ActivitiesCalories> activitiesCalories = new ArrayList<>();
+    @ToString.Exclude
     @OneToMany
     @JoinColumn(name = "id")
     private List<ActivitiesSteps> activitiesSteps = new ArrayList<>();
+    @ToString.Exclude
     @OneToMany
     @JoinColumn(name = "id")
     private List<ActivitiesDistance> activitiesDistance = new ArrayList<>();
