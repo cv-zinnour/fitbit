@@ -57,7 +57,7 @@ public class PatientDevice implements Serializable {
     @OneToMany
     @JoinColumn(name = "id")
     private List<ActivitiesDistance> activitiesDistance = new ArrayList<>();
-    //@ToString.Exclude
+    @ToString.Exclude
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     private Device device;
