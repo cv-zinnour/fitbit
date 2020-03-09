@@ -9,6 +9,7 @@ import lombok.ToString;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.UUID;
 
@@ -26,8 +27,8 @@ public class Device extends BaseEntity {
     private String deviceVersion;
     @Column(name = "type", nullable = false)
     private String type;
-    @Column(name = "last_sync_date", nullable = false)
-    private Date lastSyncDate;
+    @Column(name = "last_sync_date")
+    private Timestamp lastSyncDate;
     @Column(name = "authorized", nullable = false)
     private boolean authorized;
     @Column(name = "admin_id", nullable = false)

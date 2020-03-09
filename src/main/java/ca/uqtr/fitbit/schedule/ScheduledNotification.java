@@ -40,7 +40,7 @@ public class ScheduledNotification {
         List<Device> devices = deviceRepository.devicesNotReturned();
         if (devices != null && !devices.isEmpty()){
             for (Device device: devices) {
-                long time = cal.getTime().getTime() - (device.getSynchronizations().get(0).getLastSyncTime().getTime() + TimeUnit.DAYS.toMillis(5));
+                long time = cal.getTime().getTime() - (device.getLastSyncDate().getTime() + TimeUnit.DAYS.toMillis(5));
                 if (time <= 0){
                     eventPublisher.publishEvent(new OnSynchronizationEmailEvent(modelMapper.map(device, DeviceDto.class)));
                 }
