@@ -10,16 +10,16 @@ import java.sql.Date;
 public class Activities {
 
     private Date dateTime;
-    private int steps;
+    private double value;
     private String dataset;
     private int datasetInterval;
 
     public Activities() {
     }
 
-    public Activities(Date dateTime, int steps, String dataset, int datasetInterval) {
+    public Activities(Date dateTime, double value, String dataset, int datasetInterval) {
         this.dateTime = dateTime;
-        this.steps = steps;
+        this.value = value;
         this.dataset = dataset;
         this.datasetInterval = datasetInterval;
     }

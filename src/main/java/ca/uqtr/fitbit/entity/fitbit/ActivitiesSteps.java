@@ -28,8 +28,8 @@ public class ActivitiesSteps extends Activities {
     private int version;
     @Column(name = "date")
     private Date dateTime;
-    @Column(name = "steps")
-    private int steps;
+    @Column(name = "value")
+    private double value;
     @Type(type = "jsonb")
     @Column(name = "dataset", columnDefinition = "jsonb")
     private String dataset;
@@ -39,9 +39,9 @@ public class ActivitiesSteps extends Activities {
     public ActivitiesSteps() {
     }
 
-    public ActivitiesSteps(Date dateTime, int steps, String dataset, int datasetInterval) {
+    public ActivitiesSteps(Date dateTime, double value, String dataset, int datasetInterval) {
         this.dateTime = dateTime;
-        this.steps = steps;
+        this.value = value;
         this.dataset = dataset;
         this.datasetInterval = datasetInterval;
     }

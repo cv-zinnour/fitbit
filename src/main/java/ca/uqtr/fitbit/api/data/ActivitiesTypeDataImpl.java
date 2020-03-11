@@ -94,7 +94,11 @@ public class ActivitiesTypeDataImpl implements ActivitiesTypeData<Activities> {
         JSONObject jsonObject = new JSONObject(json);
         JSONArray activities_type = jsonObject.getJSONArray("activities-"+activityType);
         String dateTime = activities_type.getJSONObject(0).getString("dateTime");
-        int value = activities_type.getJSONObject(0).getInt("value");
+        double value;
+        if (activityType.equals("steps"))
+            value = activities_type.getJSONObject(0).getInt("value");
+        else
+            value = activities_type.getJSONObject(0).getDouble("value");
         JSONObject activities_type_intraday = jsonObject.getJSONObject("activities-"+activityType+"-intraday");
         JSONArray dataset = activities_type_intraday.getJSONArray("dataset");
         JSONArray jsonArray = new JSONArray();
