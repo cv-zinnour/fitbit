@@ -38,6 +38,9 @@ public class ActivitiesDistance extends Activities{
     private String dataset;
     @Column(name = "dataset_interval")
     private int datasetInterval;
+    @JsonBackReference
+    @ManyToOne(fetch = FetchType.LAZY)
+    private PatientDevice patientDevice;
 
     public ActivitiesDistance(Date dateTime, double value, String dataset, int datasetInterval) {
         this.dateTime = dateTime;

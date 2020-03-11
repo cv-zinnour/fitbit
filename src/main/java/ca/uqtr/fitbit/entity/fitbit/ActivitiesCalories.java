@@ -40,6 +40,9 @@ public class ActivitiesCalories extends Activities{
     private String dataset;
     @Column(name = "dataset_interval")
     private int datasetInterval;
+    @JsonBackReference
+    @ManyToOne(fetch = FetchType.LAZY)
+    private PatientDevice patientDevice;
 
 
 
