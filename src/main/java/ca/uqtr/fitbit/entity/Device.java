@@ -42,7 +42,6 @@ public class Device extends BaseEntity {
     private Auth auth;
     /*@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "device_id")*/
-    @JsonManagedReference
     @OneToMany(mappedBy = "device", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PatientDevice> patientDevices;
     @ToString.Exclude

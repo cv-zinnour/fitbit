@@ -56,7 +56,6 @@ public class PatientDevice implements Serializable {
     @JsonManagedReference
     @OneToMany(mappedBy = "patientDevice", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ActivitiesDistance> activitiesDistance = new ArrayList<>();
-    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     private Device device;
 }
