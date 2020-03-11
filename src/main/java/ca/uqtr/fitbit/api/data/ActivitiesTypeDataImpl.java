@@ -1,6 +1,5 @@
 package ca.uqtr.fitbit.api.data;
 
-import ca.uqtr.fitbit.entity.fitbit.ActivitesT;
 import ca.uqtr.fitbit.entity.fitbit.Activities;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -21,7 +20,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 @Component
-public class ActivitiesTypeDataImpl implements ActivitiesTypeData<ActivitesT> {
+public class ActivitiesTypeDataImpl implements ActivitiesTypeData<Activities> {
 
     private OkHttpClient okHttpClient;
     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
@@ -37,7 +36,7 @@ public class ActivitiesTypeDataImpl implements ActivitiesTypeData<ActivitesT> {
             maxAttempts = 5,
             backoff = @Backoff(delay = 60000))
     @Override
-    public ActivitesT getDataOfDayPerMinute(String activityType, String date, String accessToken) throws ParseException {
+    public Activities getDataOfDayPerMinute(String activityType, String date, String accessToken) throws ParseException {
         Response response = null;
         Serialization data = null;
         //https://api.fitbit.com/1/user/-/activities/steps/date/2020-01-20/1d/15min.json
@@ -64,7 +63,7 @@ public class ActivitiesTypeDataImpl implements ActivitiesTypeData<ActivitesT> {
             maxAttempts = 5,
             backoff = @Backoff(delay = 60000))
     @Override
-    public ActivitesT getDataOfDayBetweenTwoTimePerMinute(String activityType, String date, String endDate, String startTime, String endTime, String accessToken) throws UnsupportedEncodingException, ParseException {
+    public Activities getDataOfDayBetweenTwoTimePerMinute(String activityType, String date, String endDate, String startTime, String endTime, String accessToken) throws UnsupportedEncodingException, ParseException {
         Response response = null;
         Serialization data = null;
         //https://api.fitbit.com/1/user/-/activities/steps/date/2020-01-20/1d/1min/time/08%3A00/12%3A00.json

@@ -7,7 +7,7 @@ import java.sql.Date;
 
 @Getter
 @Setter
-public class Activities implements ActivitesT {
+public class Activities {
 
     private Date dateTime;
     private int steps;
