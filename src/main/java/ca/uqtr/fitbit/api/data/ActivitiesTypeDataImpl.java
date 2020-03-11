@@ -19,6 +19,7 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 @Component
@@ -38,7 +39,7 @@ public class ActivitiesTypeDataImpl implements ActivitiesTypeData<ActivitesT> {
             maxAttempts = 5,
             backoff = @Backoff(delay = 60000))
     @Override
-    public ActivitesT getDataOfDayPerMinute(String activityType, String date, String accessToken) {
+    public ActivitesT getDataOfDayPerMinute(String activityType, String date, String accessToken) throws ParseException {
         Response response = null;
         Serialization data = null;
         //https://api.fitbit.com/1/user/-/activities/steps/date/2020-01-20/1d/15min.json
@@ -58,14 +59,14 @@ public class ActivitiesTypeDataImpl implements ActivitiesTypeData<ActivitesT> {
                 response.close();
             }
         }
-        return new Activities(data.dateTime, data.value, data.dataset, data.datasetInterval);
+        return new Activities(new Date(new SimpleDateFormat("yyyy-MM-dd").parse(data.dateTime).getTime()), data.value, data.dataset, data.datasetInterval);
     }
     @Retryable(
             value = { Exception.class },
             maxAttempts = 5,
             backoff = @Backoff(delay = 60000))
     @Override
-    public ActivitesT getDataOfDayBetweenTwoTimePerMinute(String activityType, String date, String endDate, String startTime, String endTime, String accessToken) throws UnsupportedEncodingException {
+    public ActivitesT getDataOfDayBetweenTwoTimePerMinute(String activityType, String date, String endDate, String startTime, String endTime, String accessToken) throws UnsupportedEncodingException, ParseException {
         Response response = null;
         Serialization data = null;
         //https://api.fitbit.com/1/user/-/activities/steps/date/2020-01-20/1d/1min/time/08%3A00/12%3A00.json
@@ -87,14 +88,15 @@ public class ActivitiesTypeDataImpl implements ActivitiesTypeData<ActivitesT> {
                 response.close();
             }
         }
-        return new Activities(data.dateTime, data.value, data.dataset, data.datasetInterval);
+
+        return new Activities(new Date(new SimpleDateFormat("yyyy-MM-dd").parse(data.dateTime).getTime()), data.value, data.dataset, data.datasetInterval);
     }
 
     @Override
     public Serialization deserialization(String json, String activityType) {
         JSONObject jsonObject = new JSONObject(json);
         JSONArray activities_type = jsonObject.getJSONArray("activities-"+activityType);
-        Timestamp dateTime = Timestamp.valueOf(activities_type.getJSONObject(0).getString("dateTime"));;
+        String dateTime = activities_type.getJSONObject(0).getString("dateTime");
         int value = activities_type.getJSONObject(0).getInt("value");
         JSONObject activities_type_intraday = jsonObject.getJSONObject("activities-"+activityType+"-intraday");
         JSONArray dataset = activities_type_intraday.getJSONArray("dataset");
@@ -112,7 +114,7 @@ public class ActivitiesTypeDataImpl implements ActivitiesTypeData<ActivitesT> {
 
     @Getter
     class Serialization{
-        private Timestamp dateTime;
+        private String dateTime;
         private int value;
         private String dataset;
         private int datasetInterval;
@@ -120,7 +122,7 @@ public class ActivitiesTypeDataImpl implements ActivitiesTypeData<ActivitesT> {
         public Serialization() {
         }
 
-        public Serialization(Timestamp dateTime, int value, String dataset, int datasetInterval) {
+        public Serialization(String dateTime, int value, String dataset, int datasetInterval) {
             this.dateTime = dateTime;
             this.value = value;
             this.dataset = dataset;

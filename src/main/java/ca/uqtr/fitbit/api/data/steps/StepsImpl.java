@@ -49,7 +49,7 @@ public class StepsImpl implements Steps {
         //System.out.println(json);
         JSONObject jsonObject = new JSONObject(json);
         JSONArray activities_steps = jsonObject.getJSONArray("activities-steps");
-        Timestamp dateTime = Timestamp.valueOf(activities_steps.getJSONObject(0).getString("dateTime"));;
+        String dateTime = activities_steps.getJSONObject(0).getString("dateTime");
         int stepsValue = activities_steps.getJSONObject(0).getInt("value");
         JSONObject activities_steps_intraday = jsonObject.getJSONObject("activities-steps-intraday");
         int datasetInterval = activities_steps_intraday.getInt("datasetInterval");
@@ -64,7 +64,7 @@ public class StepsImpl implements Steps {
             }
         }
 
-        return new ActivitiesSteps(dateTime, stepsValue, jsonArray.toString(), datasetInterval);
+        return new ActivitiesSteps(new Date(new SimpleDateFormat("yyyy-MM-dd").parse(dateTime).getTime()), stepsValue, jsonArray.toString(), datasetInterval);
 
     }
 
@@ -88,7 +88,7 @@ public class StepsImpl implements Steps {
         //System.out.println(json);
         JSONObject jsonObject = new JSONObject(json);
         JSONArray activities_steps = jsonObject.getJSONArray("activities-steps");
-        Timestamp dateTime = Timestamp.valueOf(activities_steps.getJSONObject(0).getString("dateTime"));;
+        String dateTime = activities_steps.getJSONObject(0).getString("dateTime");
         int stepsValue = activities_steps.getJSONObject(0).getInt("value");
         JSONObject activities_steps_intraday = jsonObject.getJSONObject("activities-steps-intraday");
         int datasetInterval = activities_steps_intraday.getInt("datasetInterval");
@@ -103,7 +103,7 @@ public class StepsImpl implements Steps {
             }
         }
 
-        return new ActivitiesSteps(dateTime, stepsValue, jsonArray.toString(), datasetInterval);
+        return new ActivitiesSteps(new Date(new SimpleDateFormat("yyyy-MM-dd").parse(dateTime).getTime()), stepsValue, jsonArray.toString(), datasetInterval);
 
     }
 }

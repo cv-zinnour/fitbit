@@ -7,8 +7,8 @@ import org.hibernate.annotations.TypeDef;
 import org.hibernate.annotations.TypeDefs;
 
 import javax.persistence.*;
+import java.sql.Date;
 import java.sql.Timestamp;
-import java.util.Date;
 
 @Getter
 @Setter
@@ -27,7 +27,7 @@ public class ActivitiesSteps extends Activities {
     @Column(name = "version", nullable = false)
     private int version;
     @Column(name = "date")
-    private Timestamp dateTime;
+    private Date dateTime;
     @Column(name = "steps")
     private int steps;
     @Type(type = "jsonb")
@@ -39,7 +39,7 @@ public class ActivitiesSteps extends Activities {
     public ActivitiesSteps() {
     }
 
-    public ActivitiesSteps(Timestamp dateTime, int steps, String dataset, int datasetInterval) {
+    public ActivitiesSteps(Date dateTime, int steps, String dataset, int datasetInterval) {
         this.dateTime = dateTime;
         this.steps = steps;
         this.dataset = dataset;

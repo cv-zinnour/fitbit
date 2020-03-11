@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 @Component
@@ -30,7 +31,7 @@ public class CaloriesImpl implements Calories {
 
 
     @Override
-    public ActivitiesCalories getCaloriesOfDayPerMinute(String date, String accessToken) throws IOException {
+    public ActivitiesCalories getCaloriesOfDayPerMinute(String date, String accessToken) throws IOException, ParseException {
         System.out.println(accessToken);
         String json;
         //https://api.fitbit.com/1/user/-/activities/steps/date/2020-01-20/1d/15min.json
@@ -49,7 +50,7 @@ public class CaloriesImpl implements Calories {
         //System.out.println(json);
         JSONObject jsonObject = new JSONObject(json);
         JSONArray activities_calories = jsonObject.getJSONArray("activities-calories");
-        Timestamp dateTime = Timestamp.valueOf(activities_calories.getJSONObject(0).getString("dateTime"));
+        String dateTime = activities_calories.getJSONObject(0).getString("dateTime");
         double caloriesValue = activities_calories.getJSONObject(0).getDouble("value");
         JSONObject activities_calories_intraday = jsonObject.getJSONObject("activities-calories-intraday");
         int datasetInterval = activities_calories_intraday.getInt("datasetInterval");
@@ -64,11 +65,11 @@ public class CaloriesImpl implements Calories {
             }
         }
 
-        return new ActivitiesCalories(dateTime, caloriesValue, jsonArray.toString(), datasetInterval);
+        return new ActivitiesCalories(new Date(new SimpleDateFormat("yyyy-MM-dd").parse(dateTime).getTime()), caloriesValue, jsonArray.toString(), datasetInterval);
     }
 
     @Override
-    public ActivitiesCalories getCaloriesOfDayBetweenTwoTimePerMinute(String date, String startTime, String endTime, String accessToken) throws IOException {
+    public ActivitiesCalories getCaloriesOfDayBetweenTwoTimePerMinute(String date, String startTime, String endTime, String accessToken) throws IOException, ParseException {
         String json;
         //https://api.fitbit.com/1/user/-/activities/steps/date/2020-01-20/1d/1min/time/08%3A00/12%3A00.json
         Request request = new Request.Builder()
@@ -86,7 +87,7 @@ public class CaloriesImpl implements Calories {
         //System.out.println(json);
         JSONObject jsonObject = new JSONObject(json);
         JSONArray activities_calories = jsonObject.getJSONArray("activities-calories");
-        Timestamp dateTime = Timestamp.valueOf(activities_calories.getJSONObject(0).getString("dateTime"));;
+        String dateTime = activities_calories.getJSONObject(0).getString("dateTime");
         double caloriesValue = activities_calories.getJSONObject(0).getDouble("value");
         JSONObject activities_calories_intraday = jsonObject.getJSONObject("activities-calories-intraday");
         int datasetInterval = activities_calories_intraday.getInt("datasetInterval");
@@ -101,7 +102,7 @@ public class CaloriesImpl implements Calories {
             }
         }
 
-        return new ActivitiesCalories(dateTime, caloriesValue, jsonArray.toString(), datasetInterval);
+        return new ActivitiesCalories(new Date(new SimpleDateFormat("yyyy-MM-dd").parse(dateTime).getTime()), caloriesValue, jsonArray.toString(), datasetInterval);
 
     }
 }
