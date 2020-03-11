@@ -276,7 +276,7 @@ public class DeviceServiceImpl implements DeviceService {
                         new Error(Integer.parseInt(messageSource.getMessage("error.null.id", null, Locale.US)),
                                 messageSource.getMessage("error.null.message", null, Locale.US)));
             long d1 = device1.get().getLastSyncDate().getTime();
-            long minutes = TimeUnit.MILLISECONDS.toMinutes(cal.getTime().getTime() - d1);
+            long minutes = TimeUnit.MILLISECONDS.toMinutes(Calendar.getInstance(TimeZone.getTimeZone(TimeZone.getTimeZone("PST").toZoneId())).getTime().getTime() - d1);
             int j = (int) (minutes/1440);
             long d2 = d1 + TimeUnit.MINUTES.toMillis(1439);
             for (int i = 0; i < j; i++) {
