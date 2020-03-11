@@ -58,11 +58,7 @@ public class ActivityServiceImpl implements ActivityService {
 
     @Override
     public void getDataOfDayPerMinuteFromApi(String date, DeviceDto deviceDto) throws IOException, ParseException {
-        System.out.println("------------------------");
-        System.out.println(api.getActivitiesTypeData().getDataOfDayPerMinute("steps",date, authService.getAccessToken(deviceDto.dtoToObj(modelMapper))).toString());
         ActivitiesSteps activitiesSteps = modelMapper.map(api.getActivitiesTypeData().getDataOfDayPerMinute("steps",date, authService.getAccessToken(deviceDto.dtoToObj(modelMapper))), ActivitiesSteps.class);
-
-
         ActivitiesCalories activitiesCalories = modelMapper.map(api.getActivitiesTypeData().getDataOfDayPerMinute("calories",date, authService.getAccessToken(deviceDto.dtoToObj(modelMapper))), ActivitiesCalories.class);
         ActivitiesDistance activitiesDistance = modelMapper.map(api.getActivitiesTypeData().getDataOfDayPerMinute("distance",date, authService.getAccessToken(deviceDto.dtoToObj(modelMapper))), ActivitiesDistance.class);
         this.saveStepsOfDayFromApiInDB(activitiesSteps, deviceDto);
@@ -72,9 +68,10 @@ public class ActivityServiceImpl implements ActivityService {
 
     @Override
     public void getDataOfDayBetweenTwoTimesPerMinuteFromApi(String date, String endDate, String startTime, String endTime, DeviceDto deviceDto) throws IOException, ParseException {
-        ActivitiesSteps activitiesSteps = (ActivitiesSteps) api.getActivitiesTypeData().getDataOfDayBetweenTwoTimePerMinute("steps",date,endDate,startTime,endTime, authService.getAccessToken(deviceDto.dtoToObj(modelMapper)));
-        ActivitiesCalories activitiesCalories = (ActivitiesCalories) api.getActivitiesTypeData().getDataOfDayBetweenTwoTimePerMinute("calories",date,endDate,startTime,endTime, authService.getAccessToken(deviceDto.dtoToObj(modelMapper)));
-        ActivitiesDistance activitiesDistance = (ActivitiesDistance) api.getActivitiesTypeData().getDataOfDayBetweenTwoTimePerMinute("distance",date,endDate,startTime,endTime, authService.getAccessToken(deviceDto.dtoToObj(modelMapper)));
+        ActivitiesSteps activitiesSteps = modelMapper.map(api.getActivitiesTypeData().getDataOfDayBetweenTwoTimePerMinute("steps",date,endDate,startTime,endTime, authService.getAccessToken(deviceDto.dtoToObj(modelMapper))), ActivitiesSteps.class);
+        System.out.println(activitiesSteps.toString());
+        ActivitiesCalories activitiesCalories = modelMapper.map(api.getActivitiesTypeData().getDataOfDayBetweenTwoTimePerMinute("calories",date,endDate,startTime,endTime, authService.getAccessToken(deviceDto.dtoToObj(modelMapper))), ActivitiesCalories.class);
+        ActivitiesDistance activitiesDistance = modelMapper.map(api.getActivitiesTypeData().getDataOfDayBetweenTwoTimePerMinute("distance",date,endDate,startTime,endTime, authService.getAccessToken(deviceDto.dtoToObj(modelMapper))), ActivitiesDistance.class);
         this.saveStepsOfDayFromApiInDB(activitiesSteps, deviceDto);
         this.saveCaloriesOfDayFromApiInDB(activitiesCalories, deviceDto);
         this.saveDistanceOfDayFromApiInDB(activitiesDistance, deviceDto);
