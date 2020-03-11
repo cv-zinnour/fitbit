@@ -69,10 +69,6 @@ public class FitbitApiImpl implements FitbitApi {
 
     @Override
     public boolean isTokenExpired(String accessToken) throws IOException {
-        System.out.println(accessToken);
-        MediaType mediaType = MediaType.get("application/json; charset=utf-8");
-
-        //RequestBody body = RequestBody.create(mediaType, "eeee");
         RequestBody body = RequestBody.create(MediaType.get("application/x-www-form-urlencoded"),
                 "token="+accessToken);
 
@@ -81,15 +77,12 @@ public class FitbitApiImpl implements FitbitApi {
                 .build();
         Buffer buffer = new Buffer();
         requestBody.writeTo(buffer);
-        System.out.println("---------- bufer : "+buffer.readUtf8());
-
         Request request = new Request.Builder()
                 .url("https://api.fitbit.com/1.1/oauth2/introspect")
                 .post(requestBody)
                 .header("authorization", "Bearer "+accessToken)
                 .addHeader("Content-Type", "application/x-www-form-urlencoded")
                 .build();
-
 
         try (Response response = okHttpClient.newCall(request).execute()) {
             //System.out.println("refresh = ======= "+response.body().string());
@@ -102,17 +95,13 @@ public class FitbitApiImpl implements FitbitApi {
             }else{
                 return true;
             }
-
         }
     }
 
     @Override
     public Auth refreshToken(String refreshToken, Auth auth) throws IOException {
-
         String code = clientId+":"+secretId;
         String AuthorizationCodeBase64 = Base64.getEncoder().encodeToString(code.getBytes());
-        System.out.println(AuthorizationCodeBase64);
-
         RequestBody body = RequestBody.create(MediaType.get("application/x-www-form-urlencoded; charset=utf-8"),
                 "grant_type=refresh_token&refresh_token="+refreshToken);
         Request request = new Request.Builder()
@@ -126,7 +115,6 @@ public class FitbitApiImpl implements FitbitApi {
              auth.setAccessTokenRefreshToken(jsonObject.getString("access_token"), jsonObject.getString("refresh_token"));
 
         }
-        System.out.println("getAccessToken = "+auth.getAccessToken() +"getRefreshToken=  "+auth.getRefreshToken());
         return auth;
     }
 

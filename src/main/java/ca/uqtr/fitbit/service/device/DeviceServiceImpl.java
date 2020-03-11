@@ -80,7 +80,6 @@ public class DeviceServiceImpl implements DeviceService {
 
     @Override
     public void deleteDevice(DeviceDto device) {
-        System.out.println(device.toString());
         try{
             deviceRepository.deleteById(device.dtoToObj(modelMapper).getId());
         } catch (Exception ex){
@@ -102,7 +101,6 @@ public class DeviceServiceImpl implements DeviceService {
 
     @Override
     public Response readDevices(DeviceDto device) {
-        System.out.println(device.toString());
         try{
             Type deviceDtoList = new TypeToken<List<DeviceDto>>() {}.getType();
             return new Response(modelMapper.map(deviceRepository.findAllByAdminId(device.getAdminId()), deviceDtoList), null);
@@ -258,7 +256,6 @@ public class DeviceServiceImpl implements DeviceService {
             return new Response(null,
                     new Error(Integer.parseInt(messageSource.getMessage("error.null.id", null, Locale.US)),
                             messageSource.getMessage("error.null.message", null, Locale.US)));
-        System.out.println(device1.getFitbitSubscriptions().get(0).toString());
         return fitbitApi.removeSubscription(device1.getFitbitSubscriptions().get(0), authService.getAccessToken( device.dtoToObj(modelMapper)), COLLECTION_PATH);
     }
 
