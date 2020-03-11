@@ -111,7 +111,7 @@ public class ActivitiesTypeDataImpl implements ActivitiesTypeData<Activities> {
             }
         };
         int datasetInterval = activities_type_intraday.getInt("datasetInterval");
-        return new Serialization(dateTime, value, dataset.toString(), datasetInterval);
+        return new Serialization(dateTime, value, jsonArray.toString(), datasetInterval);
     }
 
 }
