@@ -69,9 +69,9 @@ public class ActivityServiceImpl implements ActivityService {
     @Override
     public void getDataOfDayBetweenTwoTimesPerMinuteFromApi(String date, String endDate, String startTime, String endTime, DeviceDto deviceDto) throws IOException, ParseException {
         ActivitiesSteps activitiesSteps = modelMapper.map(api.getActivitiesTypeData().getDataOfDayBetweenTwoTimePerMinute("steps",date,endDate,startTime,endTime, authService.getAccessToken(deviceDto.dtoToObj(modelMapper))), ActivitiesSteps.class);
-        System.out.println(activitiesSteps.toString());
         ActivitiesCalories activitiesCalories = modelMapper.map(api.getActivitiesTypeData().getDataOfDayBetweenTwoTimePerMinute("calories",date,endDate,startTime,endTime, authService.getAccessToken(deviceDto.dtoToObj(modelMapper))), ActivitiesCalories.class);
         ActivitiesDistance activitiesDistance = modelMapper.map(api.getActivitiesTypeData().getDataOfDayBetweenTwoTimePerMinute("distance",date,endDate,startTime,endTime, authService.getAccessToken(deviceDto.dtoToObj(modelMapper))), ActivitiesDistance.class);
+        System.out.println(activitiesSteps.toString());
         this.saveStepsOfDayFromApiInDB(activitiesSteps, deviceDto);
         this.saveCaloriesOfDayFromApiInDB(activitiesCalories, deviceDto);
         this.saveDistanceOfDayFromApiInDB(activitiesDistance, deviceDto);
@@ -97,6 +97,7 @@ public class ActivityServiceImpl implements ActivityService {
     @Override
     public void saveStepsOfDayFromApiInDB(ActivitiesSteps activitiesSteps, DeviceDto deviceDto) {
         Device device = deviceRepository.getDeviceWith_LastPatientDevice_FetchTypeEAGER(deviceDto.getId());
+        System.out.println(device.toString());
         device.getPatientDevices().get(0).getActivitiesSteps().add(activitiesSteps);
         deviceRepository.save(device);
         //activitiesStepsRepository.save(activitiesSteps);

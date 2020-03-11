@@ -31,11 +31,11 @@ public class ActivitiesTypeDataImpl implements ActivitiesTypeData<Activities> {
         this.okHttpClient = okHttpClient;
     }
 
+    @Override
     @Retryable(
             value = { Exception.class },
             maxAttempts = 5,
             backoff = @Backoff(delay = 60000))
-    @Override
     public Activities getDataOfDayPerMinute(String activityType, String date, String accessToken) throws ParseException {
         Response response = null;
         Serialization data = null;
@@ -58,11 +58,12 @@ public class ActivitiesTypeDataImpl implements ActivitiesTypeData<Activities> {
         }
         return new Activities(new Date(new SimpleDateFormat("yyyy-MM-dd").parse(data.getDateTime()).getTime()), data.getValue(), data.getDataset(), data.getDatasetInterval());
     }
+
+    @Override
     @Retryable(
             value = { Exception.class },
             maxAttempts = 5,
             backoff = @Backoff(delay = 60000))
-    @Override
     public Activities getDataOfDayBetweenTwoTimePerMinute(String activityType, String date, String endDate, String startTime, String endTime, String accessToken) throws UnsupportedEncodingException, ParseException {
         Response response = null;
         Serialization data = null;
@@ -85,7 +86,7 @@ public class ActivitiesTypeDataImpl implements ActivitiesTypeData<Activities> {
                 response.close();
             }
         }
-        System.out.println(data.toString());
+        //System.out.println(data.toString());
         return new Activities(new Date(new SimpleDateFormat("yyyy-MM-dd").parse(data.getDateTime()).getTime()), data.getValue(), data.getDataset(), data.getDatasetInterval());
     }
 
@@ -104,7 +105,6 @@ public class ActivitiesTypeDataImpl implements ActivitiesTypeData<Activities> {
         JSONArray jsonArray = new JSONArray();
         for(int n = 0; n < dataset.length(); n++)
         {
-            System.out.println(n);
             JSONObject object = dataset.getJSONObject(n);
             if (object.getInt("value") > 0){
                 jsonArray.put(object);
