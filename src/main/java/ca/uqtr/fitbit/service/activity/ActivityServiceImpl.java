@@ -71,9 +71,9 @@ public class ActivityServiceImpl implements ActivityService {
         System.out.println("////////////////////activitiesCalories   "+activitiesCalories.toString());
         System.out.println("////////////////////activitiesDistance   "+activitiesDistance.toString());
 
-        this.saveStepsOfDayFromApiInDB(activitiesSteps, deviceDto);
-        this.saveCaloriesOfDayFromApiInDB(activitiesCalories, deviceDto);
-        this.saveDistanceOfDayFromApiInDB(activitiesDistance, deviceDto);
+        saveStepsOfDayFromApiInDB(activitiesSteps, deviceDto);
+        saveCaloriesOfDayFromApiInDB(activitiesCalories, deviceDto);
+        saveDistanceOfDayFromApiInDB(activitiesDistance, deviceDto);
     }
 
     //------------------------------------------------------------------- 1day 1min

@@ -104,7 +104,7 @@ public class ActivitiesTypeDataImpl implements ActivitiesTypeData<Activities> {
         for(int n = 0; n < dataset.length(); n++)
         {
             JSONObject object = dataset.getJSONObject(n);
-            if (object.getInt("value") > 0){
+            if (object.getDouble("value") > 0){
                 jsonArray.put(object);
             }
         };
