@@ -40,9 +40,6 @@ public class ActivitiesCalories extends Activities{
     private String dataset;
     @Column(name = "dataset_interval")
     private int datasetInterval;
-    @JsonBackReference
-    @Column(name = "patient_device_id")
-    private UUID patientDevice;
 
 
 

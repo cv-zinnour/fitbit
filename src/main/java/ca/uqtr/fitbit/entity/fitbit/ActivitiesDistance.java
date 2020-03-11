@@ -38,9 +38,6 @@ public class ActivitiesDistance extends Activities{
     private String dataset;
     @Column(name = "dataset_interval")
     private int datasetInterval;
-    @JsonBackReference
-    @Column(name = "patient_device_id")
-    private UUID patientDevice;
 
     public ActivitiesDistance(Date dateTime, double value, String dataset, int datasetInterval) {
         this.dateTime = dateTime;
