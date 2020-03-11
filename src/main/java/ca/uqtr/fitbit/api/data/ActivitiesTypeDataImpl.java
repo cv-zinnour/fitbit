@@ -14,6 +14,8 @@ import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.sql.Date;
 import java.sql.Timestamp;
@@ -63,12 +65,12 @@ public class ActivitiesTypeDataImpl implements ActivitiesTypeData<ActivitesT> {
             maxAttempts = 5,
             backoff = @Backoff(delay = 60000))
     @Override
-    public ActivitesT getDataOfDayBetweenTwoTimePerMinute(String activityType, String date, String endDate, String startTime, String endTime, String accessToken) {
+    public ActivitesT getDataOfDayBetweenTwoTimePerMinute(String activityType, String date, String endDate, String startTime, String endTime, String accessToken) throws UnsupportedEncodingException {
         Response response = null;
         Serialization data = null;
         //https://api.fitbit.com/1/user/-/activities/steps/date/2020-01-20/1d/1min/time/08%3A00/12%3A00.json
         Request request = new Request.Builder()
-                .url("https://api.fitbit.com/1/user/-/activities/calories/date/"+date+"/"+endDate+"/1min/time/"+startTime+"/"+endTime+".json")
+                .url(URLEncoder.encode("https://api.fitbit.com/1/user/-/activities/calories/date/"+date+"/"+endDate+"/1min/time/"+startTime+"/"+endTime+".json", StandardCharsets.UTF_8.toString()))
                 .get()
                 .header("Authorization", "Bearer "+accessToken)
                 .build();
