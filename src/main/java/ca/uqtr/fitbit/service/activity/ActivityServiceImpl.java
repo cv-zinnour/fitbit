@@ -69,7 +69,7 @@ public class ActivityServiceImpl implements ActivityService {
         ActivitiesDistance activitiesDistance = modelMapper.map(api.getActivitiesTypeData().getDataOfDayBetweenTwoTimePerMinute("distance",date,endDate,startTime,endTime, authService.getAccessToken(deviceDto.dtoToObj(modelMapper))), ActivitiesDistance.class);
         System.out.println("////////////////////activitiesSteps   "+activitiesSteps.getDateTime().toString());
         System.out.println("////////////////////activitiesCalories   "+activitiesCalories.getDateTime().toString());
-        System.out.println("////////////////////activitiesDistance   "+activitiesDistance.getDateTime().toString());
+        System.out.println(".......................   "+deviceDto.getId().toString());
         System.out.println(deviceRepository.getDeviceById(deviceDto.getId()).toString());
     }
 
