@@ -72,7 +72,7 @@ public class ActivitiesTypeDataImpl implements ActivitiesTypeData<ActivitesT> {
         String url =URLEncoder.encode(startTime, StandardCharsets.UTF_8.toString());
         System.out.println(url);
         Request request = new Request.Builder()
-                .url("https://api.fitbit.com/1/user/-/activities/calories/date/"+date+"/"+endDate+"/1min/time/"+URLEncoder.encode(startTime, StandardCharsets.UTF_8.toString())+"/"+URLEncoder.encode(endTime, StandardCharsets.UTF_8.toString())+".json")
+                .url("https://api.fitbit.com/1/user/-/activities/"+activityType+"/date/"+date+"/"+endDate+"/1min/time/"+URLEncoder.encode(startTime, StandardCharsets.UTF_8.toString())+"/"+URLEncoder.encode(endTime, StandardCharsets.UTF_8.toString())+".json")
                 .get()
                 .header("Authorization", "Bearer "+accessToken)
                 .build();
