@@ -98,7 +98,7 @@ public class ActivityServiceImpl implements ActivityService {
         patientDevice.getActivitiesSteps().add(activitiesSteps);
         System.out.println("*************  "+ activitiesSteps.toString());
         System.out.println("--------------  "+patientDevice.getActivitiesSteps().toString());
-
+        deviceRepository.save(device);
        // patientDeviceRepository.save(patientDevice);
         //activitiesStepsRepository.save(activitiesSteps);
     }
