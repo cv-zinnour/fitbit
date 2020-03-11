@@ -39,7 +39,6 @@ public class ScheduledNotification {
         Calendar cal = Calendar.getInstance();
         List<Device> devices = deviceRepository.devicesNotReturned();
         if (devices != null && !devices.isEmpty()){
-            System.out.println(Arrays.toString(devices.toArray()));
             for (Device device: devices) {
                 long time = cal.getTime().getTime() - (device.getLastSyncDate().getTime() + TimeUnit.DAYS.toMillis(5));
                 if (time <= 0){
