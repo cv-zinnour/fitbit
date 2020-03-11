@@ -7,14 +7,12 @@ import ca.uqtr.fitbit.dto.DeviceDto;
 import ca.uqtr.fitbit.dto.Error;
 import ca.uqtr.fitbit.dto.Response;
 import ca.uqtr.fitbit.entity.Device;
+import ca.uqtr.fitbit.entity.PatientDevice;
 import ca.uqtr.fitbit.entity.fitbit.ActivitiesCalories;
 import ca.uqtr.fitbit.entity.fitbit.ActivitiesDistance;
 import ca.uqtr.fitbit.entity.fitbit.ActivitiesSteps;
 import ca.uqtr.fitbit.entity.fitbit.Activity;
-import ca.uqtr.fitbit.repository.ActivitiesCaloriesRepository;
-import ca.uqtr.fitbit.repository.ActivitiesStepsRepository;
-import ca.uqtr.fitbit.repository.ActivityRepository;
-import ca.uqtr.fitbit.repository.DeviceRepository;
+import ca.uqtr.fitbit.repository.*;
 import ca.uqtr.fitbit.service.auth.AuthService;
 import javassist.bytecode.stackmap.TypeData;
 import org.modelmapper.ModelMapper;
@@ -38,19 +36,17 @@ public class ActivityServiceImpl implements ActivityService {
     private AuthService authService;
     private FitbitApi api;
     private ActivityRepository activityRepository;
-    private final ActivitiesStepsRepository activitiesStepsRepository;
-    private final ActivitiesCaloriesRepository activitiesCaloriesRepository;
+    private PatientDeviceRepository patientDeviceRepository;
     private ModelMapper modelMapper;
     private MessageSource messageSource;
     private DeviceRepository deviceRepository;
 
     @Autowired
-    public ActivityServiceImpl(AuthService authService, FitbitApi api, ActivityRepository activityRepository, ActivitiesStepsRepository activitiesStepsRepository, ActivitiesCaloriesRepository activitiesCaloriesRepository, ModelMapper modelMapper, MessageSource messageSource, DeviceRepository deviceRepository) {
+    public ActivityServiceImpl(AuthService authService, FitbitApi api, ActivityRepository activityRepository, PatientDeviceRepository patientDeviceRepository, ModelMapper modelMapper, MessageSource messageSource, DeviceRepository deviceRepository) {
         this.authService = authService;
         this.api = api;
         this.activityRepository = activityRepository;
-        this.activitiesStepsRepository = activitiesStepsRepository;
-        this.activitiesCaloriesRepository = activitiesCaloriesRepository;
+        this.patientDeviceRepository = patientDeviceRepository;
         this.modelMapper = modelMapper;
         this.messageSource = messageSource;
         this.deviceRepository = deviceRepository;
@@ -98,8 +94,9 @@ public class ActivityServiceImpl implements ActivityService {
     public void saveStepsOfDayFromApiInDB(ActivitiesSteps activitiesSteps, DeviceDto deviceDto) {
         Device device = deviceRepository.getDeviceWith_LastPatientDevice_FetchTypeEAGER(deviceDto.getId());
         System.out.println(device.toString());
-        device.getPatientDevices().get(0).getActivitiesSteps().add(activitiesSteps);
-        deviceRepository.save(device);
+        PatientDevice patientDevice = device.getPatientDevices().get(0);
+        patientDevice.getActivitiesSteps().add(activitiesSteps);
+        patientDeviceRepository.save(patientDevice);
         //activitiesStepsRepository.save(activitiesSteps);
     }
 

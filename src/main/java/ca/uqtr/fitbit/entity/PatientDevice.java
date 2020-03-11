@@ -49,7 +49,6 @@ public class PatientDevice implements Serializable {
     @OneToMany
     @JoinColumn(name = "id")
     private List<ActivitiesCalories> activitiesCalories = new ArrayList<>();
-    @ToString.Exclude
     @OneToMany
     @JoinColumn(name = "id")
     private List<ActivitiesSteps> activitiesSteps = new ArrayList<>();
