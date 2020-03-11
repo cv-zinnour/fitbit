@@ -121,7 +121,7 @@ public class FitbitApiImpl implements FitbitApi {
                 .header("Authorization", "Basic "+AuthorizationCodeBase64)
                 .build();
         try (Response response = okHttpClient.newCall(request).execute()) {
-           //System.out.println("---------------  "+response.body().string());
+           System.out.println("---------------  "+response.body().string());
             final JSONObject jsonObject = new JSONObject(response.body().string());
              auth.setAccessTokenRefreshToken(jsonObject.getString("access_token"), jsonObject.getString("refresh_token"));
 
