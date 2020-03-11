@@ -32,7 +32,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @Service
-@Transactional
+//@Transactional
 public class DeviceServiceImpl implements DeviceService {
     private static final Logger LOGGER = Logger.getLogger( TypeData.ClassName.class.getName() );
     private final static String COLLECTION_PATH = "activities";
