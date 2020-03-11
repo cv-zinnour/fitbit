@@ -107,7 +107,7 @@ public class ActivitiesTypeDataImpl implements ActivitiesTypeData<Activities> {
             if (object.getDouble("value") > 0){
                 jsonArray.put(object);
             }
-        };
+        }
         int datasetInterval = activities_type_intraday.getInt("datasetInterval");
         return new Serialization(dateTime, value, jsonArray.toString(), datasetInterval);
     }
