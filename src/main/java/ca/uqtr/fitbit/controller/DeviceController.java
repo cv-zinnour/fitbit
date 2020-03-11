@@ -179,5 +179,4 @@ public class DeviceController {
             executorService.shutdown();
         }
     }
-
 }
