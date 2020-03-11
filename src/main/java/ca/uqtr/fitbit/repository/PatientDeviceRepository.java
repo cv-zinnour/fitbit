@@ -11,4 +11,5 @@ import java.util.UUID;
 @Repository
 public interface PatientDeviceRepository extends CrudRepository<PatientDevice, UUID> {
 
+    PatientDevice getPatientDeviceByDeviceId(UUID deviceId);
 }
