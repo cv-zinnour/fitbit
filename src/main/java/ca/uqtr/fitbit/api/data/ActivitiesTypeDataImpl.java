@@ -60,10 +60,10 @@ public class ActivitiesTypeDataImpl implements ActivitiesTypeData<Activities> {
     }
 
     @Override
-    @Retryable(
+   /* @Retryable(
             value = { Exception.class },
             maxAttempts = 5,
-            backoff = @Backoff(delay = 60000))
+            backoff = @Backoff(delay = 60000))*/
     public Activities getDataOfDayBetweenTwoTimePerMinute(String activityType, String date, String endDate, String startTime, String endTime, String accessToken) throws UnsupportedEncodingException, ParseException {
         Response response = null;
         Serialization data = null;
