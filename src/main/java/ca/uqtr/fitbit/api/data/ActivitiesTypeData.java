@@ -7,7 +7,7 @@ public interface ActivitiesTypeData<T> {
 
     T getDataOfDayPerMinute(String activityType, String date, String accessToken) throws IOException, ParseException;
     T getDataOfDayBetweenTwoTimePerMinute(String activityType, String date, String endDate, String startTime, String endTime, String accessToken) throws IOException, ParseException;
-    ActivitiesTypeDataImpl.Serialization deserialization(String json, String activityType);
+    Serialization deserialization(String json, String activityType);
 
 
 }

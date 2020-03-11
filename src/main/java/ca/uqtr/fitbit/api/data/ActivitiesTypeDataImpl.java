@@ -2,7 +2,6 @@ package ca.uqtr.fitbit.api.data;
 
 import ca.uqtr.fitbit.entity.fitbit.ActivitesT;
 import ca.uqtr.fitbit.entity.fitbit.Activities;
-import lombok.Getter;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -18,7 +17,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.sql.Date;
-import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
@@ -59,7 +57,7 @@ public class ActivitiesTypeDataImpl implements ActivitiesTypeData<ActivitesT> {
                 response.close();
             }
         }
-        return new Activities(new Date(new SimpleDateFormat("yyyy-MM-dd").parse(data.dateTime).getTime()), data.value, data.dataset, data.datasetInterval);
+        return new Activities(new Date(new SimpleDateFormat("yyyy-MM-dd").parse(data.getDateTime()).getTime()), data.getValue(), data.getDataset(), data.getDatasetInterval());
     }
     @Retryable(
             value = { Exception.class },
@@ -89,7 +87,7 @@ public class ActivitiesTypeDataImpl implements ActivitiesTypeData<ActivitesT> {
             }
         }
         System.out.println(data.toString());
-        return new Activities(new Date(new SimpleDateFormat("yyyy-MM-dd").parse(data.dateTime).getTime()), data.value, data.dataset, data.datasetInterval);
+        return new Activities(new Date(new SimpleDateFormat("yyyy-MM-dd").parse(data.getDateTime()).getTime()), data.getValue(), data.getDataset(), data.getDatasetInterval());
     }
 
     @Override
@@ -113,21 +111,4 @@ public class ActivitiesTypeDataImpl implements ActivitiesTypeData<ActivitesT> {
         return new Serialization(dateTime, value, dataset.toString(), datasetInterval);
     }
 
-    @Getter
-    class Serialization{
-        private String dateTime;
-        private int value;
-        private String dataset;
-        private int datasetInterval;
-
-        public Serialization() {
-        }
-
-        public Serialization(String dateTime, int value, String dataset, int datasetInterval) {
-            this.dateTime = dateTime;
-            this.value = value;
-            this.dataset = dataset;
-            this.datasetInterval = datasetInterval;
-        }
-    }
 }
