@@ -6,6 +6,8 @@ import ca.uqtr.fitbit.dto.Response;
 import ca.uqtr.fitbit.service.device.DeviceService;
 import ca.uqtr.fitbit.utils.JwtTokenUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +15,11 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequestMapping
@@ -154,9 +161,22 @@ public class DeviceController {
     }
    // @JsonInclude(JsonInclude.Include.NON_NULL)
     @PostMapping("/notifications")
-    public ResponseEntity<HttpStatus> getFitBitNotificationData() {
-        System.out.println("////////////////////////  getFitBitNotificationData");
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    public ResponseEntity<HttpStatus> getFitBitNotificationData(@RequestBody String responseFromAPI) {
+        ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+
+        try {
+            System.out.println(responseFromAPI);
+            System.out.println("////////////////////////111  getFitBitNotificationData");
+            JSONObject jsonObject = new JSONObject(responseFromAPI);
+            String subscriptionId = jsonObject.getString("subscriptionId");
+
+
+            executorService.schedule(() -> { deviceService.getDataFromAPIToDB(new DeviceDto(subscriptionId)); }, 20, TimeUnit.SECONDS);
+            System.out.println("////////////////////////222  getFitBitNotificationData");
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }finally{
+            executorService.shutdown();
+        }
     }
 
 }

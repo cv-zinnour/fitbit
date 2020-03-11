@@ -15,7 +15,7 @@ import java.util.List;
 public interface ActivityService{
 
     void getDataOfDayPerMinuteFromApi(String date, DeviceDto deviceDto) throws IOException;
-    void getDataOfDayBetweenTwoTimesPerMinuteFromApi(String date, String startTime, String endTime, DeviceDto deviceDto) throws IOException;
+    void getDataOfDayBetweenTwoTimesPerMinuteFromApi(String date, String endDate, String startTime, String endTime, DeviceDto deviceDto) throws IOException;
 
 
 

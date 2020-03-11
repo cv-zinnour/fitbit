@@ -8,7 +8,9 @@ import ca.uqtr.fitbit.entity.Device;
 import ca.uqtr.fitbit.entity.FitbitSubscription;
 import ca.uqtr.fitbit.entity.PatientDevice;
 import ca.uqtr.fitbit.entity.fitbit.Auth;
+import ca.uqtr.fitbit.event.reminder.OnSynchronizationEmailEvent;
 import ca.uqtr.fitbit.repository.DeviceRepository;
+import ca.uqtr.fitbit.service.activity.ActivityService;
 import ca.uqtr.fitbit.service.auth.AuthService;
 import javassist.bytecode.stackmap.TypeData;
 import org.modelmapper.ModelMapper;
@@ -20,7 +22,11 @@ import reactor.core.publisher.Flux;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.sql.Date;
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -34,14 +40,16 @@ public class DeviceServiceImpl implements DeviceService {
     private MessageSource messageSource;
     private AuthService authService;
     private FitbitApi fitbitApi;
+    private ActivityService activityService;
 
     @Autowired
-    public DeviceServiceImpl(DeviceRepository deviceRepository, ModelMapper modelMapper, MessageSource messageSource, AuthService authService, FitbitApi fitbitApi) {
+    public DeviceServiceImpl(DeviceRepository deviceRepository, ModelMapper modelMapper, MessageSource messageSource, AuthService authService, FitbitApi fitbitApi, ActivityService activityService) {
         this.deviceRepository = deviceRepository;
         this.modelMapper = modelMapper;
         this.messageSource = messageSource;
         this.authService = authService;
         this.fitbitApi = fitbitApi;
+        this.activityService = activityService;
     }
 
     @Override
@@ -257,6 +265,62 @@ public class DeviceServiceImpl implements DeviceService {
         /*Flux<Device> devices = deviceReactiveRepository.devicesNotReturned();
         return devices.map(device -> modelMapper.map(device, DeviceDto.class));*/
         return null;
+    }
+
+    @Override
+    public Response getDataFromAPIToDB(DeviceDto device) {
+        Calendar cal = Calendar.getInstance();
+        try{
+            Optional<Device> device1 = deviceRepository.findById(device.getId());
+            if (!device1.isPresent())
+                return new Response(null,
+                        new Error(Integer.parseInt(messageSource.getMessage("error.null.id", null, Locale.US)),
+                                messageSource.getMessage("error.null.message", null, Locale.US)));
+            long d1 = device1.get().getLastSyncDate().getTime();
+            long minutes = TimeUnit.MILLISECONDS.toMinutes(cal.getTime().getTime() - d1);
+            int j = (int) (minutes/1440);
+            long d2 = d1 + TimeUnit.MINUTES.toMillis(1440);
+            for (int i = 0; i < j; i++) {
+                System.out.println("d1 =   "+new java.sql.Date(d1 - TimeUnit.DAYS.toMillis(1)).toLocalDate() +"   d2   "+ new Date(d2 - TimeUnit.DAYS.toMillis(1)).toLocalDate());
+                System.out.println("d1 =   "+ new Time(d1).toString().substring(0,5)+"   d2   "+ new Time(d2).toString().substring(0,5));
+                activityService.getDataOfDayBetweenTwoTimesPerMinuteFromApi(
+                        new java.sql.Date(d1 - TimeUnit.DAYS.toMillis(1)).toLocalDate().toString(),
+                        new Date(d2 - TimeUnit.DAYS.toMillis(1)).toLocalDate().toString(),
+                        new Time(d1).toString().substring(0,5),
+                        new Time(d2).toString().substring(0,5),
+                        device);
+                minutes -= 1440;
+                if (minutes >= 1440){
+                    minutes -= 1;
+                    d1 = d2 + TimeUnit.MINUTES.toMillis(1);
+                    d2 = d1 + TimeUnit.MINUTES.toMillis(1440);
+                }
+            }
+            if (minutes > 0){
+                d1 = d2 + TimeUnit.MINUTES.toMillis(1);
+                d2 = d1 + TimeUnit.MINUTES.toMillis(minutes);
+                System.out.println("d1 =   "+new Date(d1 - TimeUnit.DAYS.toMillis(1)).toLocalDate() +"   d2   "+ new Date(d2 - TimeUnit.DAYS.toMillis(1)).toLocalDate());
+                System.out.println("d1 =   "+ new Time(d1).toString().substring(0,5)+"   d2   "+ new Time(d2).toString().substring(0,5));
+                activityService.getDataOfDayBetweenTwoTimesPerMinuteFromApi(
+                        new java.sql.Date(d1 - TimeUnit.DAYS.toMillis(1)).toLocalDate().toString(),
+                        new Date(d2 - TimeUnit.DAYS.toMillis(1)).toLocalDate().toString(),
+                        new Time(d1).toString().substring(0,5),
+                        new Time(d2).toString().substring(0,5),
+                        device);
+            }
+
+
+
+
+
+            return new Response(device, null);
+        } catch (Exception ex){
+            LOGGER.log( Level.ALL, ex.getMessage());
+            return new Response(null,
+                    new Error(Integer.parseInt(messageSource.getMessage("error.null.id", null, Locale.US)),
+                            messageSource.getMessage("error.null.message", null, Locale.US)));
+        }
+
     }
 
 }

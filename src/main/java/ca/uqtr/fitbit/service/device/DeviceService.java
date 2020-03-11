@@ -29,4 +29,6 @@ public interface DeviceService {
     Response removeSubscription(DeviceDto device) throws IOException;
 
     Flux<DeviceDto> getDevicesNotReturned();
+
+    Response getDataFromAPIToDB(DeviceDto device);
 }

@@ -12,9 +12,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.data.r2dbc.repository.config.EnableR2dbcRepositories;
+import org.springframework.retry.annotation.EnableRetry;
 
 @Configuration
 @EnableR2dbcRepositories
+@EnableRetry
 public class Config {
 
     @Bean

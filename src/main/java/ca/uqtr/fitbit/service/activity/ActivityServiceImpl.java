@@ -67,10 +67,10 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
     @Override
-    public void getDataOfDayBetweenTwoTimesPerMinuteFromApi(String date, String startTime, String endTime, DeviceDto deviceDto) throws IOException {
-        ActivitiesSteps activitiesSteps = (ActivitiesSteps) api.getActivitiesTypeData().getDataOfDayBetweenTwoTimePerMinute("steps",date,startTime,endTime, authService.getAccessToken(deviceDto.dtoToObj(modelMapper)));
-        ActivitiesCalories activitiesCalories = (ActivitiesCalories) api.getActivitiesTypeData().getDataOfDayBetweenTwoTimePerMinute("calories",date,startTime,endTime, authService.getAccessToken(deviceDto.dtoToObj(modelMapper)));
-        ActivitiesDistance activitiesDistance = (ActivitiesDistance) api.getActivitiesTypeData().getDataOfDayBetweenTwoTimePerMinute("distance",date,startTime,endTime, authService.getAccessToken(deviceDto.dtoToObj(modelMapper)));
+    public void getDataOfDayBetweenTwoTimesPerMinuteFromApi(String date, String endDate, String startTime, String endTime, DeviceDto deviceDto) throws IOException {
+        ActivitiesSteps activitiesSteps = (ActivitiesSteps) api.getActivitiesTypeData().getDataOfDayBetweenTwoTimePerMinute("steps",date,endDate,startTime,endTime, authService.getAccessToken(deviceDto.dtoToObj(modelMapper)));
+        ActivitiesCalories activitiesCalories = (ActivitiesCalories) api.getActivitiesTypeData().getDataOfDayBetweenTwoTimePerMinute("calories",date,endDate,startTime,endTime, authService.getAccessToken(deviceDto.dtoToObj(modelMapper)));
+        ActivitiesDistance activitiesDistance = (ActivitiesDistance) api.getActivitiesTypeData().getDataOfDayBetweenTwoTimePerMinute("distance",date,endDate,startTime,endTime, authService.getAccessToken(deviceDto.dtoToObj(modelMapper)));
         this.saveStepsOfDayFromApiInDB(activitiesSteps, deviceDto);
         this.saveCaloriesOfDayFromApiInDB(activitiesCalories, deviceDto);
         this.saveDistanceOfDayFromApiInDB(activitiesDistance, deviceDto);
@@ -128,7 +128,6 @@ public class ActivityServiceImpl implements ActivityService {
         device.getPatientDevices().get(0).getActivitiesDistance().add(activitiesDistance);
         deviceRepository.save(device);
     }
-
 
     //*------------------------------------------------------------------------ 1day 2times 1min
     @Override
