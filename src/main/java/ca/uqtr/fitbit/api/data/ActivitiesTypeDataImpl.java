@@ -86,7 +86,7 @@ public class ActivitiesTypeDataImpl implements ActivitiesTypeData<Activities> {
             }
         }
         //System.out.println(data.toString());
-        return new Activities(new Date(new SimpleDateFormat("yyyy-MM-dd").parse(data.getDateTime()).getTime()), data.getValue(), data.getDataset(), data.getDatasetInterval());
+        return new Activities();
     }
 
     @Override
