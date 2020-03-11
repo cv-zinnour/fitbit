@@ -70,8 +70,6 @@ public class ActivityServiceImpl implements ActivityService {
         System.out.println("////////////////////activitiesSteps   "+activitiesSteps.getDateTime().toString());
         System.out.println("////////////////////activitiesCalories   "+activitiesCalories.getDateTime().toString());
         System.out.println("////////////////////activitiesDistance   "+activitiesDistance.getDateTime().toString());
-        Device device = deviceRepository.getDeviceById(deviceDto.getId());
-        System.out.println("////////////////////   "+device.toString());
 
     }
 
