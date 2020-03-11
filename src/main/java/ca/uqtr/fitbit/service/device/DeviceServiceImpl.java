@@ -18,6 +18,7 @@ import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
 
 import java.io.IOException;
@@ -31,6 +32,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @Service
+@Transactional
 public class DeviceServiceImpl implements DeviceService {
     private static final Logger LOGGER = Logger.getLogger( TypeData.ClassName.class.getName() );
     private final static String COLLECTION_PATH = "activities";
