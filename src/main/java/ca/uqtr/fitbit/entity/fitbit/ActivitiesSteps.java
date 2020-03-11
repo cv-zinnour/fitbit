@@ -11,6 +11,7 @@ import org.hibernate.annotations.TypeDefs;
 import javax.persistence.*;
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -38,8 +39,8 @@ public class ActivitiesSteps extends Activities {
     @Column(name = "dataset_interval")
     private int datasetInterval;
     @JsonBackReference
-    @ManyToOne(fetch = FetchType.LAZY)
-    private PatientDevice patientDevice;
+    @Column(name = "patient_device_id")
+    private UUID patientDevice;
 
     public ActivitiesSteps() {
     }
