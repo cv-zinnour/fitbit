@@ -53,7 +53,7 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
     @Override
-    public void getDataOfDayPerMinuteFromApi(Stri3ng date, DeviceDto deviceDto) throws IOException, ParseException {
+    public void getDataOfDayPerMinuteFromApi(String date, DeviceDto deviceDto) throws IOException, ParseException {
         ActivitiesSteps activitiesSteps = modelMapper.map(api.getActivitiesTypeData().getDataOfDayPerMinute("steps",date, authService.getAccessToken(deviceDto.dtoToObj(modelMapper))), ActivitiesSteps.class);
         ActivitiesCalories activitiesCalories = modelMapper.map(api.getActivitiesTypeData().getDataOfDayPerMinute("calories",date, authService.getAccessToken(deviceDto.dtoToObj(modelMapper))), ActivitiesCalories.class);
         ActivitiesDistance activitiesDistance = modelMapper.map(api.getActivitiesTypeData().getDataOfDayPerMinute("distance",date, authService.getAccessToken(deviceDto.dtoToObj(modelMapper))), ActivitiesDistance.class);
