@@ -67,13 +67,10 @@ public class ActivityServiceImpl implements ActivityService {
         ActivitiesSteps activitiesSteps = modelMapper.map(api.getActivitiesTypeData().getDataOfDayBetweenTwoTimePerMinute("steps",date,endDate,startTime,endTime, authService.getAccessToken(deviceDto.dtoToObj(modelMapper))), ActivitiesSteps.class);
         ActivitiesCalories activitiesCalories = modelMapper.map(api.getActivitiesTypeData().getDataOfDayBetweenTwoTimePerMinute("calories",date,endDate,startTime,endTime, authService.getAccessToken(deviceDto.dtoToObj(modelMapper))), ActivitiesCalories.class);
         ActivitiesDistance activitiesDistance = modelMapper.map(api.getActivitiesTypeData().getDataOfDayBetweenTwoTimePerMinute("distance",date,endDate,startTime,endTime, authService.getAccessToken(deviceDto.dtoToObj(modelMapper))), ActivitiesDistance.class);
-        System.out.println("////////////////////activitiesSteps   "+activitiesSteps.toString());
-        System.out.println("////////////////////activitiesCalories   "+activitiesCalories.toString());
-        System.out.println("////////////////////activitiesDistance   "+activitiesDistance.toString());
+        System.out.println("////////////////////activitiesSteps   "+activitiesSteps.getDateTime().toString());
+        System.out.println("////////////////////activitiesCalories   "+activitiesCalories.getDateTime().toString());
+        System.out.println("////////////////////activitiesDistance   "+activitiesDistance.getDateTime().toString());
 
-        saveStepsOfDayFromApiInDB(activitiesSteps, deviceDto);
-        saveCaloriesOfDayFromApiInDB(activitiesCalories, deviceDto);
-        saveDistanceOfDayFromApiInDB(activitiesDistance, deviceDto);
     }
 
     //------------------------------------------------------------------- 1day 1min
