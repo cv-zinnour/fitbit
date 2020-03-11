@@ -171,7 +171,7 @@ public class DeviceController {
             JSONObject obj = (JSONObject) jsonArray.get(0);
             String subscriptionId = obj.getString("subscriptionId");
 
-            executorService.schedule(() -> { deviceService.getDataFromAPIToDB(new DeviceDto(subscriptionId)); }, 20, TimeUnit.SECONDS);
+            executorService.schedule(() -> { deviceService.getDataFromAPIToDB(new DeviceDto(subscriptionId)); }, 5, TimeUnit.SECONDS);
             System.out.println("////////////////////////222  getFitBitNotificationData");
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }finally{

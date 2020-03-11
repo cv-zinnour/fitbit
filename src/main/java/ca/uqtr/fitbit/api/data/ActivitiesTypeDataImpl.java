@@ -79,7 +79,7 @@ public class ActivitiesTypeDataImpl implements ActivitiesTypeData<ActivitesT> {
                 .build();
         try {
             response = okHttpClient.newCall(request).execute();
-            System.out.println(response.body().string());
+            //System.out.println(response.body().string());
             data = this.deserialization(response.body().string(), activityType);
         }catch (Exception e) {
             e.printStackTrace();
@@ -103,6 +103,7 @@ public class ActivitiesTypeDataImpl implements ActivitiesTypeData<ActivitesT> {
         JSONArray jsonArray = new JSONArray();
         for(int n = 0; n < dataset.length(); n++)
         {
+            System.out.println(n);
             JSONObject object = dataset.getJSONObject(n);
             if (object.getInt("value") > 0){
                 jsonArray.put(object);
