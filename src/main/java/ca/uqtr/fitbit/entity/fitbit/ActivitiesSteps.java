@@ -1,5 +1,7 @@
 package ca.uqtr.fitbit.entity.fitbit;
 
+import ca.uqtr.fitbit.entity.PatientDevice;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import org.hibernate.annotations.Type;
@@ -35,6 +37,9 @@ public class ActivitiesSteps extends Activities {
     private String dataset;
     @Column(name = "dataset_interval")
     private int datasetInterval;
+    @JsonBackReference
+    @ManyToOne(fetch = FetchType.LAZY)
+    private PatientDevice patientDevice;
 
     public ActivitiesSteps() {
     }

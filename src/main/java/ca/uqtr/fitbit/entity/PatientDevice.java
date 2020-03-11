@@ -5,6 +5,7 @@ import ca.uqtr.fitbit.entity.fitbit.ActivitiesCalories;
 import ca.uqtr.fitbit.entity.fitbit.ActivitiesDistance;
 import ca.uqtr.fitbit.entity.fitbit.ActivitiesSteps;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -45,19 +46,18 @@ public class PatientDevice implements Serializable {
     private String patientEmail;
     @Column(name = "returned_at", nullable = false)
     private Date returnedAt;
-    @ToString.Exclude
-    @OneToMany
-    @JoinColumn(name = "id")
+    @JsonManagedReference
+    @OneToMany(mappedBy = "patientDevice", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "patient_device_id")
     private List<ActivitiesCalories> activitiesCalories = new ArrayList<>();
-    @ToString.Exclude
-    @OneToMany
-    @JoinColumn(name = "id")
+    @JsonManagedReference
+    @OneToMany(mappedBy = "patientDevice", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "patient_device_id")
     private List<ActivitiesSteps> activitiesSteps = new ArrayList<>();
-    @ToString.Exclude
-    @OneToMany
-    @JoinColumn(name = "id")
+    @JsonManagedReference
+    @OneToMany(mappedBy = "patientDevice", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "patient_device_id")
     private List<ActivitiesDistance> activitiesDistance = new ArrayList<>();
-    @ToString.Exclude
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     private Device device;
