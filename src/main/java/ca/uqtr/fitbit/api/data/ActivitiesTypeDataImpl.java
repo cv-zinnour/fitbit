@@ -69,14 +69,16 @@ public class ActivitiesTypeDataImpl implements ActivitiesTypeData<ActivitesT> {
         Response response = null;
         Serialization data = null;
         //https://api.fitbit.com/1/user/-/activities/steps/date/2020-01-20/1d/1min/time/08%3A00/12%3A00.json
+        String url =URLEncoder.encode("https://api.fitbit.com/1/user/-/activities/calories/date/"+date+"/"+endDate+"/1min/time/"+startTime+"/"+endTime+".json", StandardCharsets.UTF_8.toString());
+        System.out.println(url);
         Request request = new Request.Builder()
-                .url(URLEncoder.encode("https://api.fitbit.com/1/user/-/activities/calories/date/"+date+"/"+endDate+"/1min/time/"+startTime+"/"+endTime+".json", StandardCharsets.UTF_8.toString()))
+                .url(url)
                 .get()
                 .header("Authorization", "Bearer "+accessToken)
                 .build();
         try {
             response = okHttpClient.newCall(request).execute();
-            //System.out.println(response.body().string());
+            System.out.println(response.body().string());
             data = this.deserialization(response.body().string(), activityType);
         }catch (Exception e) {
             e.printStackTrace();
