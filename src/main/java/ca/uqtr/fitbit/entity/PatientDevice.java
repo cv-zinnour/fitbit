@@ -47,15 +47,15 @@ public class PatientDevice implements Serializable {
     @Column(name = "returned_at", nullable = false)
     private Date returnedAt;
     @JsonManagedReference
-    @OneToMany(mappedBy = "patientDevice", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "patient_device_id")
     private List<ActivitiesCalories> activitiesCalories = new ArrayList<>();
     @JsonManagedReference
-    @OneToMany(mappedBy = "patientDevice", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "patient_device_id")
     private List<ActivitiesSteps> activitiesSteps = new ArrayList<>();
     @JsonManagedReference
-    @OneToMany(mappedBy = "patientDevice", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "patient_device_id")
     private List<ActivitiesDistance> activitiesDistance = new ArrayList<>();
     @JsonBackReference
