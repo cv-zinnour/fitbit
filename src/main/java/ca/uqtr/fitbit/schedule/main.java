@@ -27,20 +27,19 @@ public class main {
     public static void main(String[] args) {
 
         Calendar cal = Calendar.getInstance();
-        long d1 = java.sql.Timestamp.valueOf("2020-03-06 17:56:50.327000").getTime();
+        long d1 = java.sql.Timestamp.valueOf("2020-03-08 17:56:50.327000").getTime();
         long minutes = TimeUnit.MILLISECONDS.toMinutes(cal.getTime().getTime() - d1);
         int j = (int) (minutes/1440);
         System.out.println(j);
-        long d2 = d1 + TimeUnit.MINUTES.toMillis(1440);
+        long d2 = d1 + TimeUnit.MINUTES.toMillis(1439);
         for (int i = 0; i < j; i++) {
             System.out.println(i);
-            System.out.println("d1 =   "+new Date(d1 - TimeUnit.DAYS.toMillis(1)).toLocalDate().toString() +"   d2   "+ new Date(d2 - TimeUnit.DAYS.toMillis(1)).toLocalDate());
+            System.out.println("d1 =   "+new Date(d1).toLocalDate().toString() +"   d2   "+ new Date(d2).toLocalDate());
             System.out.println("d1 =   "+ new Time(d1).toString().substring(0,5)+"   d2   "+ new Time(d2).toString().substring(0,5));
             minutes -= 1440;
             if (minutes >= 1440){
-                minutes -= 1;
                 d1 = d2 + TimeUnit.MINUTES.toMillis(1);
-                d2 = d1 + TimeUnit.MINUTES.toMillis(1440);
+                d2 = d1 + TimeUnit.MINUTES.toMillis(1439);
             }
         }
         if (minutes > 0){
@@ -49,6 +48,7 @@ public class main {
             d2 = d1 + TimeUnit.MINUTES.toMillis(minutes);
             System.out.println("d1 =   "+new Timestamp(d1)+"   d2   "+new Timestamp(d2));
         }
+        System.out.println(new Timestamp(d2 + TimeUnit.MINUTES.toMillis(1)));
 
     }
 }
