@@ -64,13 +64,13 @@ public class ActivityServiceImpl implements ActivityService {
 
     @Override
     public void getDataOfDayBetweenTwoTimesPerMinuteFromApi(String date, String endDate, String startTime, String endTime, DeviceDto deviceDto) throws IOException, ParseException {
-        ActivitiesSteps activitiesSteps = modelMapper.map(api.getActivitiesTypeData().getDataOfDayBetweenTwoTimePerMinute("steps",date,endDate,startTime,endTime, authService.getAccessToken(deviceDto.dtoToObj(modelMapper))), ActivitiesSteps.class);
-        ActivitiesCalories activitiesCalories = modelMapper.map(api.getActivitiesTypeData().getDataOfDayBetweenTwoTimePerMinute("calories",date,endDate,startTime,endTime, authService.getAccessToken(deviceDto.dtoToObj(modelMapper))), ActivitiesCalories.class);
-        ActivitiesDistance activitiesDistance = modelMapper.map(api.getActivitiesTypeData().getDataOfDayBetweenTwoTimePerMinute("distance",date,endDate,startTime,endTime, authService.getAccessToken(deviceDto.dtoToObj(modelMapper))), ActivitiesDistance.class);
-        System.out.println("////////////////////activitiesSteps   "+activitiesSteps.getDateTime().toString());
-        System.out.println("////////////////////activitiesCalories   "+activitiesCalories.getDateTime().toString());
+//        ActivitiesSteps activitiesSteps = modelMapper.map(api.getActivitiesTypeData().getDataOfDayBetweenTwoTimePerMinute("steps",date,endDate,startTime,endTime, authService.getAccessToken(deviceDto.dtoToObj(modelMapper))), ActivitiesSteps.class);
+//        ActivitiesCalories activitiesCalories = modelMapper.map(api.getActivitiesTypeData().getDataOfDayBetweenTwoTimePerMinute("calories",date,endDate,startTime,endTime, authService.getAccessToken(deviceDto.dtoToObj(modelMapper))), ActivitiesCalories.class);
+//        ActivitiesDistance activitiesDistance = modelMapper.map(api.getActivitiesTypeData().getDataOfDayBetweenTwoTimePerMinute("distance",date,endDate,startTime,endTime, authService.getAccessToken(deviceDto.dtoToObj(modelMapper))), ActivitiesDistance.class);
+//        System.out.println("////////////////////activitiesSteps   "+activitiesSteps.getDateTime().toString());
+//        System.out.println("////////////////////activitiesCalories   "+activitiesCalories.getDateTime().toString());
         System.out.println(".......................   "+deviceDto.getId().toString());
-        System.out.println(deviceRepository.getDeviceById(deviceDto.getId()).toString());
+        System.out.println("++++++++ "+deviceRepository.getDeviceById(deviceDto.getId()).toString());
     }
 
     //------------------------------------------------------------------- 1day 1min
