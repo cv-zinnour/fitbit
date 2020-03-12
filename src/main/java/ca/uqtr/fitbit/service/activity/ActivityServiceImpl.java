@@ -40,11 +40,9 @@ public class ActivityServiceImpl implements ActivityService {
     private ModelMapper modelMapper;
     private MessageSource messageSource;
     private DeviceRepository deviceRepository;
-    private AuthRepository authRepository;
-
 
     @Autowired
-    public ActivityServiceImpl(AuthService authService, FitbitApi api, ActivityRepository activityRepository, PatientDeviceRepository patientDeviceRepository, ModelMapper modelMapper, MessageSource messageSource, DeviceRepository deviceRepository, AuthRepository authRepository) {
+    public ActivityServiceImpl(AuthService authService, FitbitApi api, ActivityRepository activityRepository, PatientDeviceRepository patientDeviceRepository, ModelMapper modelMapper, MessageSource messageSource, DeviceRepository deviceRepository) {
         this.authService = authService;
         this.api = api;
         this.activityRepository = activityRepository;
@@ -52,7 +50,6 @@ public class ActivityServiceImpl implements ActivityService {
         this.modelMapper = modelMapper;
         this.messageSource = messageSource;
         this.deviceRepository = deviceRepository;
-        this.authRepository = authRepository;
     }
 
     @Override
@@ -73,8 +70,7 @@ public class ActivityServiceImpl implements ActivityService {
 //        System.out.println("////////////////////activitiesSteps   "+activitiesSteps.getDateTime().toString());
 //        System.out.println("////////////////////activitiesCalories   "+activitiesCalories.getDateTime().toString());
         System.out.println(".......................   "+deviceDto.getId().toString());
-        System.out.println("++++++++ "+authRepository.findTopByOrderByIdDesc().toString());
-        System.out.println("++++++++ "+authRepository.findAll().toString());
+        System.out.println("++++++++ "+deviceRepository.getDeviceById(deviceDto.getId()).toString());
     }
 
     //------------------------------------------------------------------- 1day 1min
