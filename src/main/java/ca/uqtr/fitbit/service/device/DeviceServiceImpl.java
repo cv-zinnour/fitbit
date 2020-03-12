@@ -281,10 +281,10 @@ public class DeviceServiceImpl implements DeviceService {
             int j = (int) (minutes/1440);
             long d2 = d1 + TimeUnit.MINUTES.toMillis(1439);
             for (int i = 0; i < j; i++) {
-                System.out.println("d1 =   "+new java.sql.Date(d1).toLocalDate() +"   d2   "+ new Date(d2).toLocalDate());
+                System.out.println("d1 =   "+new Date(d1).toLocalDate() +"   d2   "+ new Date(d2).toLocalDate());
                 System.out.println("d1 =   "+ new Time(d1).toString().substring(0,5)+"   d2   "+ new Time(d2).toString().substring(0,5));
                 activityService.getDataOfDayBetweenTwoTimesPerMinuteFromApi(
-                        new java.sql.Date(d1).toLocalDate().toString(),
+                        new Date(d1).toLocalDate().toString(),
                         new Date(d2).toLocalDate().toString(),
                         new Time(d1).toString().substring(0,5),
                         new Time(d2).toString().substring(0,5),
