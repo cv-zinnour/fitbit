@@ -95,7 +95,7 @@ public class ActivityServiceImpl implements ActivityService {
 
     @Override
     public void saveStepsOfDayFromApiInDB(ActivitiesSteps activitiesSteps, DeviceDto deviceDto) {
-        PatientDevice patientDevice = patientDeviceRepository.getPatientDeviceByDeviceId(deviceDto.getId());
+        PatientDevice patientDevice = patientDeviceRepository.getByDeviceIdAndReturnedAtIsNull(deviceDto.getId());
         System.out.println("-------------------- "+patientDevice);
         activitiesSteps.setPatientDevice(patientDevice);
         patientDevice.getActivitiesSteps().add(activitiesSteps);
