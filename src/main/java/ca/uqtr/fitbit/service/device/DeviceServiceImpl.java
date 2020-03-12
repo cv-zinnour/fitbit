@@ -288,6 +288,7 @@ public class DeviceServiceImpl implements DeviceService {
                         new Date(d2).toLocalDate().toString(),
                         new Time(d1).toString().substring(0,5),
                         new Time(d2).toString().substring(0,5),
+                        new Timestamp(d1), new Timestamp(d2),
                         device);
                 minutes -= 1440;
                 if (minutes >= 1440){
@@ -305,6 +306,7 @@ public class DeviceServiceImpl implements DeviceService {
                         new Date(d2 ).toLocalDate().toString(),
                         new Time(d1).toString().substring(0,5),
                         new Time(d2).toString().substring(0,5),
+                        new Timestamp(d1), new Timestamp(d2),
                         device);
             }
             device1.get().setLastSyncDate(new Timestamp(d2 + TimeUnit.MINUTES.toMillis(1)));

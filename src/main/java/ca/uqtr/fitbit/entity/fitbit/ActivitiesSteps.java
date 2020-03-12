@@ -38,6 +38,10 @@ public class ActivitiesSteps extends Activities {
     private String dataset;
     @Column(name = "dataset_interval")
     private int datasetInterval;
+    @Column(name = "time_start")
+    private Timestamp timeStart;
+    @Column(name = "time_end")
+    private Timestamp timeEnd;
     @ToString.Exclude
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)

@@ -11,6 +11,7 @@ import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.UUID;
 
 @Getter
@@ -38,6 +39,10 @@ public class ActivitiesDistance extends Activities{
     private String dataset;
     @Column(name = "dataset_interval")
     private int datasetInterval;
+    @Column(name = "time_start")
+    private Timestamp timeStart;
+    @Column(name = "time_end")
+    private Timestamp timeEnd;
     @ToString.Exclude
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)

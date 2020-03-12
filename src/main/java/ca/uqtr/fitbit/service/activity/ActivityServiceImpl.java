@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.List;
 import java.util.Locale;
@@ -63,9 +64,11 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
     @Override
-    public void getDataOfDayBetweenTwoTimesPerMinuteFromApi(String date, String endDate, String startTime, String endTime, DeviceDto deviceDto) throws IOException, ParseException {
+    public void getDataOfDayBetweenTwoTimesPerMinuteFromApi(String date, String endDate, String startTime, String endTime, Timestamp t1, Timestamp t2, DeviceDto deviceDto) throws IOException, ParseException {
         ActivitiesSteps activitiesSteps = modelMapper.map(api.getActivitiesTypeData().getDataOfDayBetweenTwoTimePerMinute("steps",date,endDate,startTime,endTime, authService.getAccessToken(deviceDto.dtoToObj(modelMapper))), ActivitiesSteps.class);
-//        ActivitiesCalories activitiesCalories = modelMapper.map(api.getActivitiesTypeData().getDataOfDayBetweenTwoTimePerMinute("calories",date,endDate,startTime,endTime, authService.getAccessToken(deviceDto.dtoToObj(modelMapper))), ActivitiesCalories.class);
+        activitiesSteps.setTimeStart(t1);
+        activitiesSteps.setTimeEnd(t2);
+        //        ActivitiesCalories activitiesCalories = modelMapper.map(api.getActivitiesTypeData().getDataOfDayBetweenTwoTimePerMinute("calories",date,endDate,startTime,endTime, authService.getAccessToken(deviceDto.dtoToObj(modelMapper))), ActivitiesCalories.class);
 //        ActivitiesDistance activitiesDistance = modelMapper.map(api.getActivitiesTypeData().getDataOfDayBetweenTwoTimePerMinute("distance",date,endDate,startTime,endTime, authService.getAccessToken(deviceDto.dtoToObj(modelMapper))), ActivitiesDistance.class);
         System.out.println(activitiesSteps);
         saveStepsOfDayFromApiInDB(activitiesSteps, deviceDto);
@@ -92,16 +95,11 @@ public class ActivityServiceImpl implements ActivityService {
 
     @Override
     public void saveStepsOfDayFromApiInDB(ActivitiesSteps activitiesSteps, DeviceDto deviceDto) {
-        System.out.println("...............................   "+deviceDto.toString());
         Device device = deviceRepository.getDeviceWith_LastPatientDevice_FetchTypeEAGER(deviceDto.getId());
-        System.out.println("////////////////////   "+device.toString());
         PatientDevice patientDevice = device.getPatientDevices().get(0);
+        activitiesSteps.setPatientDevice(patientDevice);
         patientDevice.getActivitiesSteps().add(activitiesSteps);
-        System.out.println("*************  "+ activitiesSteps.toString());
-        System.out.println("--------------  "+patientDevice.getActivitiesSteps().toString());
         deviceRepository.save(device);
-       // patientDeviceRepository.save(patientDevice);
-        //activitiesStepsRepository.save(activitiesSteps);
     }
 
     @Override//----------------------------- calories
@@ -120,15 +118,18 @@ public class ActivityServiceImpl implements ActivityService {
     @Override
     public void saveCaloriesOfDayFromApiInDB(ActivitiesCalories activitiesCalories, DeviceDto deviceDto) {
         Device device = deviceRepository.getDeviceWith_LastPatientDevice_FetchTypeEAGER(deviceDto.getId());
-        device.getPatientDevices().get(0).getActivitiesCalories().add(activitiesCalories);
+        PatientDevice patientDevice = device.getPatientDevices().get(0);
+        activitiesCalories.setPatientDevice(patientDevice);
+        patientDevice.getActivitiesCalories().add(activitiesCalories);
         deviceRepository.save(device);
-        //activitiesCaloriesRepository.save(activitiesCalories);
     }
 
     @Override
     public void saveDistanceOfDayFromApiInDB(ActivitiesDistance activitiesDistance, DeviceDto deviceDto) {
         Device device = deviceRepository.getDeviceWith_LastPatientDevice_FetchTypeEAGER(deviceDto.getId());
-        device.getPatientDevices().get(0).getActivitiesDistance().add(activitiesDistance);
+        PatientDevice patientDevice = device.getPatientDevices().get(0);
+        activitiesDistance.setPatientDevice(patientDevice);
+        patientDevice.getActivitiesDistance().add(activitiesDistance);
         deviceRepository.save(device);
     }
 

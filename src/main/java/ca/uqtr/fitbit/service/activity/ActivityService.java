@@ -9,14 +9,14 @@ import ca.uqtr.fitbit.entity.fitbit.ActivitiesSteps;
 import ca.uqtr.fitbit.entity.fitbit.Activity;
 
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.List;
 
 public interface ActivityService{
 
     void getDataOfDayPerMinuteFromApi(String date, DeviceDto deviceDto) throws IOException, ParseException;
-    void getDataOfDayBetweenTwoTimesPerMinuteFromApi(String date, String endDate, String startTime, String endTime, DeviceDto deviceDto) throws IOException, ParseException;
-
+    void getDataOfDayBetweenTwoTimesPerMinuteFromApi(String date, String endDate, String startTime, String endTime, Timestamp t1, Timestamp t2, DeviceDto deviceDto) throws IOException, ParseException;
 
 
     Response getStepsOfDayPerMinuteFromApi(String date, DeviceDto deviceDto) throws IOException;
