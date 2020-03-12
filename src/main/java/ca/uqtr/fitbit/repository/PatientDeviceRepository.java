@@ -10,7 +10,6 @@ import java.util.UUID;
 
 @Repository
 public interface PatientDeviceRepository extends CrudRepository<PatientDevice, UUID> {
-    //@Query("select d from Device d left join fetch d.patientDevices pd on d.id = pd.device.id where d.id = :id and pd.returnedAt is null")
-
+    @Query("select pd from PatientDevice pd where pd.device.id = :id and pd.returnedAt is null")
     PatientDevice getByDeviceIdAndReturnedAtIsNull(UUID deviceId);
 }
