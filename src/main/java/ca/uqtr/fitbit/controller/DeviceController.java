@@ -3,6 +3,8 @@ package ca.uqtr.fitbit.controller;
 import ca.uqtr.fitbit.dto.DeviceDto;
 import ca.uqtr.fitbit.dto.Request;
 import ca.uqtr.fitbit.dto.Response;
+import ca.uqtr.fitbit.repository.DeviceRepository;
+import ca.uqtr.fitbit.service.activity.ActivityService;
 import ca.uqtr.fitbit.service.device.DeviceService;
 import ca.uqtr.fitbit.utils.JwtTokenUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,8 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.sql.Timestamp;
-import java.util.concurrent.Callable;
+import java.util.UUID;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -30,9 +31,10 @@ public class DeviceController {
     private String fitbitVerificationCode;
     private ObjectMapper mapper;
 
-    public DeviceController(DeviceService deviceService, ObjectMapper mapper) {
+    public DeviceController(DeviceService deviceService, ObjectMapper mapper, DeviceRepository deviceRepository) {
         this.deviceService = deviceService;
         this.mapper = mapper;
+        this.deviceRepository = deviceRepository;
     }
 
     @PostMapping(value = "/device")
@@ -178,5 +180,12 @@ public class DeviceController {
         }finally{
             executorService.shutdown();
         }
+    }
+
+private DeviceRepository deviceRepository;
+    @GetMapping("/test")
+    public String test() {
+        System.out.println("****************** test");
+        return deviceRepository.getDeviceById(UUID.fromString("89873f09-aa05-4cff-988a-e57879de1df0")).toString();
     }
 }
