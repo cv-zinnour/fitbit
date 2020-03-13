@@ -26,4 +26,5 @@ public interface AuthService {
 
     Auth authorizationCode2AccessAndRefreshToken(String authorizationCode, Device device);
 
+    String getFitbitProfileId(Device device) throws IOException;
 }

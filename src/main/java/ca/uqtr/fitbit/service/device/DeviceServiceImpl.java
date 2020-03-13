@@ -337,4 +337,9 @@ public class DeviceServiceImpl implements DeviceService {
 
     }
 
+    @Override
+    public Response isFitbitProfileAssigned(DeviceDto deviceDto) {
+        return null;
+    }
+
 }

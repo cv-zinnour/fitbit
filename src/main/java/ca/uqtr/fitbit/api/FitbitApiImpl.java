@@ -11,12 +11,17 @@ import ca.uqtr.fitbit.entity.fitbit.Auth;
 import javassist.bytecode.stackmap.TypeData;
 import okhttp3.*;
 import okio.Buffer;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.Base64;
 import java.util.Calendar;
 import java.util.Locale;
@@ -217,5 +222,10 @@ public class FitbitApiImpl implements FitbitApi {
     @Override
     public ActivitiesTypeData getActivitiesTypeData() {
         return activitiesTypeData;
+    }
+
+    @Override
+    public String getFitbitProfileId(String accessToken) {
+return null;
     }
 }

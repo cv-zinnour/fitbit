@@ -92,5 +92,11 @@ public class AuthServiceImpl  implements AuthService {
         return authRepository.save(auth);
     }
 
+    @Override
+    public String getFitbitProfileId(Device device) throws IOException {
+        String profileId = fitbitApi.getFitbitProfileId(getAccessToken(device));
+
+        return null;
+    }
 
 }

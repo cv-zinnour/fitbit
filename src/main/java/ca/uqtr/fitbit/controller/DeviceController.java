@@ -138,6 +138,13 @@ public class DeviceController {
         return deviceService.assignDevice(deviceDto);
     }
 
+    @PostMapping(value = "/device/assign")
+    @ResponseBody
+    public Response isFitbitProfileAssigned(@RequestBody Request request){
+        DeviceDto deviceDto = mapper.convertValue(request.getObject(), DeviceDto.class);
+        return deviceService.isFitbitProfileAssigned(deviceDto);
+    }
+
     @PostMapping(value = "/device/back")
     @ResponseBody
     public Response getBackDevice(@RequestBody Request request, HttpServletRequest HttpRequest){

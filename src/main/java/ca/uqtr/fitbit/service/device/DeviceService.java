@@ -31,4 +31,6 @@ public interface DeviceService {
     Flux<DeviceDto> getDevicesNotReturned();
 
     Response getDataFromAPIToDB(DeviceDto device);
+
+    Response isFitbitProfileAssigned(DeviceDto deviceDto);
 }

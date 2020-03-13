@@ -37,5 +37,5 @@ public interface FitbitApi {
     ActivitiesTypeData getActivitiesTypeData();
 
 
-
+    String getFitbitProfileId(String accessToken);
 }
