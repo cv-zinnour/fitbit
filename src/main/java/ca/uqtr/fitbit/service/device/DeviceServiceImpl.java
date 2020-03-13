@@ -321,6 +321,7 @@ public class DeviceServiceImpl implements DeviceService {
                             new Time(d2).toString().substring(0,5),
                             new Timestamp(d1), new Timestamp(d2),
                             device);
+                    minutes -= minutes;
                 }
             }
             if (minutes == 0 ) {
