@@ -338,8 +338,13 @@ public class DeviceServiceImpl implements DeviceService {
     }
 
     @Override
-    public Response isFitbitProfileAssigned(DeviceDto deviceDto) {
-        return null;
+    public Response isFitbitProfileAssigned(DeviceDto deviceDto) throws IOException {
+        String encodedId = authService.getFitbitProfileId(modelMapper.map(deviceDto, Device.class));
+        if (encodedId == null)
+            return new Response(null,
+                    new Error(Integer.parseInt(messageSource.getMessage("error.null.id", null, Locale.US)),
+                            messageSource.getMessage("error.null.message", null, Locale.US)));
+        return new Response(encodedId, null);
     }
 
 }

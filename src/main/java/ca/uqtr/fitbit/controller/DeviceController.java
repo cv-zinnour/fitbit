@@ -140,7 +140,7 @@ public class DeviceController {
 
     @PostMapping(value = "/profile/assigned")
     @ResponseBody
-    public Response isFitbitProfileAssigned(@RequestBody Request request){
+    public Response isFitbitProfileAssigned(@RequestBody Request request) throws IOException {
         DeviceDto deviceDto = mapper.convertValue(request.getObject(), DeviceDto.class);
         return deviceService.isFitbitProfileAssigned(deviceDto);
     }

@@ -226,6 +226,20 @@ public class FitbitApiImpl implements FitbitApi {
 
     @Override
     public String getFitbitProfileId(String accessToken) {
-return null;
+        Request request = new Request.Builder()
+                .url("https://api.fitbit.com/1/user/-/profile.json")
+                .get()
+                .header("Authorization", "Bearer "+accessToken)
+                .build();
+        try (Response response = okHttpClient.newCall(request).execute()) {
+            JSONObject jsonObject = new JSONObject(response.body().string());
+            JSONObject user = jsonObject.getJSONObject("user");
+            String encodedId = user.getString("encodedId");
+
+            return encodedId;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

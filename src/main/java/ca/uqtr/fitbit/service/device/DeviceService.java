@@ -32,5 +32,5 @@ public interface DeviceService {
 
     Response getDataFromAPIToDB(DeviceDto device);
 
-    Response isFitbitProfileAssigned(DeviceDto deviceDto);
+    Response isFitbitProfileAssigned(DeviceDto deviceDto) throws IOException;
 }
