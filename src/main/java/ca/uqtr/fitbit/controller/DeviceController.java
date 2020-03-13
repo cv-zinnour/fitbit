@@ -98,9 +98,7 @@ public class DeviceController {
         deviceDto.setAdminId(JwtTokenUtil.getId(token));
         Response response = deviceService.authorizeDevice(deviceDto, code);
         System.out.println(response.toString());
-        if (response.getObject() == null)
-            return response;
-        return deviceService.addSubscription(deviceDto);
+        return response;
     }
 
     @GetMapping(value = "/device/unauthorization")
@@ -111,9 +109,8 @@ public class DeviceController {
         deviceDto.setAdminId(JwtTokenUtil.getId(token));
         Response response = deviceService.unauthorizeDevice(deviceDto);
         System.out.println(response.toString());
-        if (response.getObject() == null)
-            return response;
-        return deviceService.removeSubscription(deviceDto);
+        return response;
+
     }
 
     @GetMapping(value = "/device/all/available")

@@ -8,7 +8,6 @@ import ca.uqtr.fitbit.entity.Device;
 import ca.uqtr.fitbit.entity.FitbitSubscription;
 import ca.uqtr.fitbit.entity.PatientDevice;
 import ca.uqtr.fitbit.entity.fitbit.Auth;
-import ca.uqtr.fitbit.event.reminder.OnSynchronizationEmailEvent;
 import ca.uqtr.fitbit.repository.DeviceRepository;
 import ca.uqtr.fitbit.service.activity.ActivityService;
 import ca.uqtr.fitbit.service.auth.AuthService;
@@ -43,15 +42,17 @@ public class DeviceServiceImpl implements DeviceService {
     private AuthService authService;
     private FitbitApi fitbitApi;
     private ActivityService activityService;
+    private DeviceService deviceService;
 
     @Autowired
-    public DeviceServiceImpl(DeviceRepository deviceRepository, ModelMapper modelMapper, MessageSource messageSource, AuthService authService, FitbitApi fitbitApi, ActivityService activityService) {
+    public DeviceServiceImpl(DeviceRepository deviceRepository, ModelMapper modelMapper, MessageSource messageSource, AuthService authService, FitbitApi fitbitApi, ActivityService activityService, DeviceService deviceService) {
         this.deviceRepository = deviceRepository;
         this.modelMapper = modelMapper;
         this.messageSource = messageSource;
         this.authService = authService;
         this.fitbitApi = fitbitApi;
         this.activityService = activityService;
+        this.deviceService = deviceService;
     }
 
     @Override
@@ -127,6 +128,7 @@ public class DeviceServiceImpl implements DeviceService {
                         new Error(Integer.parseInt(messageSource.getMessage("error.null.id", null, Locale.US)),
                                 messageSource.getMessage("error.null.message", null, Locale.US)));
             device1.get().setAuthorized(true);
+            deviceService.addSubscription(device);
             return new Response(modelMapper.map(device1, DeviceDto.class), null);
         } catch (Exception ex){
             LOGGER.log( Level.ALL, ex.getMessage());
@@ -145,6 +147,7 @@ public class DeviceServiceImpl implements DeviceService {
                         new Error(Integer.parseInt(messageSource.getMessage("error.null.id", null, Locale.US)),
                                 messageSource.getMessage("error.null.message", null, Locale.US)));
             authService.deleteById(device1.get().getId());
+            deviceService.removeSubscription(device);
             return new Response(device, null);
         } catch (Exception ex){
             LOGGER.log( Level.ALL, ex.getMessage());
