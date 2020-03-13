@@ -70,7 +70,6 @@ public class ActivityServiceImpl implements ActivityService {
         activitiesSteps.setTimeEnd(t2);
         //        ActivitiesCalories activitiesCalories = modelMapper.map(api.getActivitiesTypeData().getDataOfDayBetweenTwoTimePerMinute("calories",date,endDate,startTime,endTime, authService.getAccessToken(deviceDto.dtoToObj(modelMapper))), ActivitiesCalories.class);
 //        ActivitiesDistance activitiesDistance = modelMapper.map(api.getActivitiesTypeData().getDataOfDayBetweenTwoTimePerMinute("distance",date,endDate,startTime,endTime, authService.getAccessToken(deviceDto.dtoToObj(modelMapper))), ActivitiesDistance.class);
-        System.out.println(activitiesSteps);
         saveStepsOfDayFromApiInDB(activitiesSteps, deviceDto);
 //        saveCaloriesOfDayFromApiInDB(activitiesCalories, deviceDto);
 //        saveDistanceOfDayFromApiInDB(activitiesDistance, deviceDto);
@@ -95,9 +94,7 @@ public class ActivityServiceImpl implements ActivityService {
 
     @Override
     public void saveStepsOfDayFromApiInDB(ActivitiesSteps activitiesSteps, DeviceDto deviceDto) {
-        System.out.println("-------------------- "+deviceDto.getId());
         PatientDevice patientDevice = patientDeviceRepository.getByDeviceIdAndReturnedAtIsNull(deviceDto.getId());
-        System.out.println("-------------------- "+patientDevice);
         activitiesSteps.setPatientDevice(patientDevice);
         patientDevice.getActivitiesSteps().add(activitiesSteps);
         patientDeviceRepository.save(patientDevice);

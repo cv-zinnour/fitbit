@@ -278,6 +278,7 @@ public class DeviceServiceImpl implements DeviceService {
             long d1 = device1.get().getLastSyncDate().getTime();
             //TODO Delete - TimeUnit.MINUTES.toMillis(240)
             long minutes = TimeUnit.MILLISECONDS.toMinutes(cal.getTime().getTime() - d1 - TimeUnit.MINUTES.toMillis(240));
+            System.out.println(minutes);
             int j = (int) (minutes/1440);
             long d2 = 0;
             if (minutes > 1440){
