@@ -42,6 +42,8 @@ public class ActivitiesSteps extends Activities {
     private Timestamp timeStart;
     @Column(name = "time_end")
     private Timestamp timeEnd;
+    @Column(name = "sync_time")
+    private Timestamp SyncTime;
     @ToString.Exclude
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)

@@ -68,12 +68,15 @@ public class ActivityServiceImpl implements ActivityService {
         ActivitiesSteps activitiesSteps = modelMapper.map(api.getActivitiesTypeData().getDataOfDayBetweenTwoTimePerMinute("steps",date,endDate,startTime,endTime, authService.getAccessToken(deviceDto.dtoToObj(modelMapper))), ActivitiesSteps.class);
         activitiesSteps.setTimeStart(t1);
         activitiesSteps.setTimeEnd(t2);
+        activitiesSteps.setSyncTime(t2);
         ActivitiesCalories activitiesCalories = modelMapper.map(api.getActivitiesTypeData().getDataOfDayBetweenTwoTimePerMinute("calories",date,endDate,startTime,endTime, authService.getAccessToken(deviceDto.dtoToObj(modelMapper))), ActivitiesCalories.class);
         activitiesCalories.setTimeStart(t1);
         activitiesCalories.setTimeEnd(t2);
+        activitiesSteps.setSyncTime(t2);
         ActivitiesDistance activitiesDistance = modelMapper.map(api.getActivitiesTypeData().getDataOfDayBetweenTwoTimePerMinute("distance",date,endDate,startTime,endTime, authService.getAccessToken(deviceDto.dtoToObj(modelMapper))), ActivitiesDistance.class);
         activitiesDistance.setTimeStart(t1);
         activitiesDistance.setTimeEnd(t2);
+        activitiesSteps.setSyncTime(t2);
         saveStepsOfDayFromApiInDB(activitiesSteps, deviceDto);
         saveCaloriesOfDayFromApiInDB(activitiesCalories, deviceDto);
         saveDistanceOfDayFromApiInDB(activitiesDistance, deviceDto);
