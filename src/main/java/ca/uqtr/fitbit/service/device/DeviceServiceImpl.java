@@ -293,7 +293,6 @@ public class DeviceServiceImpl implements DeviceService {
                         new Time(d2).toString().substring(0,5),
                         new Timestamp(d1), new Timestamp(d2),
                         device);
-                minutes -= minutes;
             }
 
             for (int i = 0; i < j; i++) {
@@ -321,10 +320,9 @@ public class DeviceServiceImpl implements DeviceService {
                             new Time(d2).toString().substring(0,5),
                             new Timestamp(d1), new Timestamp(d2),
                             device);
-                    minutes -= minutes;
                 }
             }
-            if (minutes == 0 ) {
+            if (minutes > 0 ) {
                 device1.get().setLastSyncDate(new Timestamp(d2 + TimeUnit.MINUTES.toMillis(1)));
                 deviceRepository.save(device1.get());
             }
