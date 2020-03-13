@@ -97,6 +97,7 @@ public class DeviceController {
         DeviceDto deviceDto = new DeviceDto(deviceId);
         deviceDto.setAdminId(JwtTokenUtil.getId(token));
         Response response = deviceService.authorizeDevice(deviceDto, code);
+        System.out.println(response.toString());
         if (response.getObject() == null)
             return response;
         return deviceService.addSubscription(deviceDto);
@@ -109,9 +110,10 @@ public class DeviceController {
         DeviceDto deviceDto = mapper.convertValue(request.getObject(), DeviceDto.class);
         deviceDto.setAdminId(JwtTokenUtil.getId(token));
         Response response = deviceService.unauthorizeDevice(deviceDto);
+        System.out.println(response.toString());
         if (response.getObject() == null)
             return response;
-        return deviceService.addSubscription(deviceDto);
+        return deviceService.removeSubscription(deviceDto);
     }
 
     @GetMapping(value = "/device/all/available")
