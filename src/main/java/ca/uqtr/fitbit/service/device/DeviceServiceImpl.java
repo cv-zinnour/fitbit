@@ -280,10 +280,7 @@ public class DeviceServiceImpl implements DeviceService {
             long minutes = TimeUnit.MILLISECONDS.toMinutes(cal.getTime().getTime() - d1 - TimeUnit.MINUTES.toMillis(240));
             System.out.println(minutes);
             int j = (int) (minutes/1440);
-            long d2 = 0;
-            if (minutes > 1440){
-                d2 = d1 + TimeUnit.MINUTES.toMillis(1439);
-            }
+            long d2 = d1 + TimeUnit.MINUTES.toMillis(1439);
             for (int i = 0; i < j; i++) {
                 System.out.println("d1 =   "+new Date(d1).toLocalDate() +"   d2   "+ new Date(d2).toLocalDate());
                 System.out.println("d1 =   "+ new Time(d1).toString().substring(0,5)+"   d2   "+ new Time(d2).toString().substring(0,5));
@@ -295,23 +292,21 @@ public class DeviceServiceImpl implements DeviceService {
                         new Timestamp(d1), new Timestamp(d2),
                         device);
                 minutes -= 1440;
-                if (minutes >= 1440){
-                    d1 = d2 + TimeUnit.MINUTES.toMillis(1);
-                    d2 = d1 + TimeUnit.MINUTES.toMillis(1439);
-                }
-            }
-            if (minutes > 0){
                 d1 = d2 + TimeUnit.MINUTES.toMillis(1);
-                d2 = d1 + TimeUnit.MINUTES.toMillis(minutes);
-                System.out.println("d1 =   "+new Date(d1 ).toLocalDate() +"   d2   "+ new Date(d2 ).toLocalDate());
-                System.out.println("d1 =   "+ new Time(d1).toString().substring(0,5)+"   d2   "+ new Time(d2).toString().substring(0,5));
-                activityService.getDataOfDayBetweenTwoTimesPerMinuteFromApi(
-                        new Date(d1 ).toLocalDate().toString(),
-                        new Date(d2 ).toLocalDate().toString(),
-                        new Time(d1).toString().substring(0,5),
-                        new Time(d2).toString().substring(0,5),
-                        new Timestamp(d1), new Timestamp(d2),
-                        device);
+                if (minutes >= 1440){
+                    d2 = d1 + TimeUnit.MINUTES.toMillis(1439);
+                }else {
+                    d2 = d1 + TimeUnit.MINUTES.toMillis(minutes);
+                    System.out.println("d1 =   "+new Date(d1 ).toLocalDate() +"   d2   "+ new Date(d2 ).toLocalDate());
+                    System.out.println("d1 =   "+ new Time(d1).toString().substring(0,5)+"   d2   "+ new Time(d2).toString().substring(0,5));
+                    activityService.getDataOfDayBetweenTwoTimesPerMinuteFromApi(
+                            new Date(d1 ).toLocalDate().toString(),
+                            new Date(d2 ).toLocalDate().toString(),
+                            new Time(d1).toString().substring(0,5),
+                            new Time(d2).toString().substring(0,5),
+                            new Timestamp(d1), new Timestamp(d2),
+                            device);
+                }
             }
             device1.get().setLastSyncDate(new Timestamp(d2 + TimeUnit.MINUTES.toMillis(1)));
             deviceRepository.save(device1.get());
