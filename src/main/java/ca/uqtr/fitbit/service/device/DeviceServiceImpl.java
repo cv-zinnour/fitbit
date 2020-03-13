@@ -278,9 +278,21 @@ public class DeviceServiceImpl implements DeviceService {
             long d1 = device1.get().getLastSyncDate().getTime();
             //TODO Delete - TimeUnit.MINUTES.toMillis(240)
             long minutes = TimeUnit.MILLISECONDS.toMinutes(cal.getTime().getTime() - d1 - TimeUnit.MINUTES.toMillis(240));
-            System.out.println(minutes);
             int j = (int) (minutes/1440);
             long d2 = d1 + TimeUnit.MINUTES.toMillis(1439);
+
+            if (minutes > 0 && minutes < 1440) {
+                System.out.println("d1 =   "+new Date(d1 ).toLocalDate() +"   d2   "+ new Date(d2 ).toLocalDate());
+                System.out.println("d1 =   "+ new Time(d1).toString().substring(0,5)+"   d2   "+ new Time(d2).toString().substring(0,5));
+                activityService.getDataOfDayBetweenTwoTimesPerMinuteFromApi(
+                        new Date(d1 ).toLocalDate().toString(),
+                        new Date(d2 ).toLocalDate().toString(),
+                        new Time(d1).toString().substring(0,5),
+                        new Time(d2).toString().substring(0,5),
+                        new Timestamp(d1), new Timestamp(d2),
+                        device);
+            }
+
             for (int i = 0; i < j; i++) {
                 System.out.println("d1 =   "+new Date(d1).toLocalDate() +"   d2   "+ new Date(d2).toLocalDate());
                 System.out.println("d1 =   "+ new Time(d1).toString().substring(0,5)+"   d2   "+ new Time(d2).toString().substring(0,5));
@@ -308,6 +320,7 @@ public class DeviceServiceImpl implements DeviceService {
                             device);
                 }
             }
+
             device1.get().setLastSyncDate(new Timestamp(d2 + TimeUnit.MINUTES.toMillis(1)));
             deviceRepository.save(device1.get());
             return new Response(device, null);
