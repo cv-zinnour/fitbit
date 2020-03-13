@@ -99,8 +99,7 @@ public class DeviceController {
         Response response = deviceService.authorizeDevice(deviceDto, code);
         if (response.getObject() == null)
             return response;
-        Response response1 = deviceService.addSubscription(deviceDto);
-        return response1;
+        return deviceService.addSubscription(deviceDto);
     }
 
     @GetMapping(value = "/device/unauthorization")
@@ -109,8 +108,10 @@ public class DeviceController {
         String token = HttpRequest.getHeader("Authorization").replace("bearer ","");
         DeviceDto deviceDto = mapper.convertValue(request.getObject(), DeviceDto.class);
         deviceDto.setAdminId(JwtTokenUtil.getId(token));
-
-        return deviceService.unauthorizeDevice(deviceDto);
+        Response response = deviceService.unauthorizeDevice(deviceDto);
+        if (response.getObject() == null)
+            return response;
+        return deviceService.addSubscription(deviceDto);
     }
 
     @GetMapping(value = "/device/all/available")
