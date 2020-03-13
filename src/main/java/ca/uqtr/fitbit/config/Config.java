@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Configuration
 @EnableR2dbcRepositories
 @EnableRetry
-//@EnableTransactionManagement
+@EnableTransactionManagement
 public class Config {
 
     @Bean

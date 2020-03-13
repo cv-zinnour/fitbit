@@ -68,11 +68,15 @@ public class ActivityServiceImpl implements ActivityService {
         ActivitiesSteps activitiesSteps = modelMapper.map(api.getActivitiesTypeData().getDataOfDayBetweenTwoTimePerMinute("steps",date,endDate,startTime,endTime, authService.getAccessToken(deviceDto.dtoToObj(modelMapper))), ActivitiesSteps.class);
         activitiesSteps.setTimeStart(t1);
         activitiesSteps.setTimeEnd(t2);
-        //        ActivitiesCalories activitiesCalories = modelMapper.map(api.getActivitiesTypeData().getDataOfDayBetweenTwoTimePerMinute("calories",date,endDate,startTime,endTime, authService.getAccessToken(deviceDto.dtoToObj(modelMapper))), ActivitiesCalories.class);
-//        ActivitiesDistance activitiesDistance = modelMapper.map(api.getActivitiesTypeData().getDataOfDayBetweenTwoTimePerMinute("distance",date,endDate,startTime,endTime, authService.getAccessToken(deviceDto.dtoToObj(modelMapper))), ActivitiesDistance.class);
+        ActivitiesCalories activitiesCalories = modelMapper.map(api.getActivitiesTypeData().getDataOfDayBetweenTwoTimePerMinute("calories",date,endDate,startTime,endTime, authService.getAccessToken(deviceDto.dtoToObj(modelMapper))), ActivitiesCalories.class);
+        activitiesCalories.setTimeStart(t1);
+        activitiesCalories.setTimeEnd(t2);
+        ActivitiesDistance activitiesDistance = modelMapper.map(api.getActivitiesTypeData().getDataOfDayBetweenTwoTimePerMinute("distance",date,endDate,startTime,endTime, authService.getAccessToken(deviceDto.dtoToObj(modelMapper))), ActivitiesDistance.class);
+        activitiesDistance.setTimeStart(t1);
+        activitiesDistance.setTimeEnd(t2);
         saveStepsOfDayFromApiInDB(activitiesSteps, deviceDto);
-//        saveCaloriesOfDayFromApiInDB(activitiesCalories, deviceDto);
-//        saveDistanceOfDayFromApiInDB(activitiesDistance, deviceDto);
+        saveCaloriesOfDayFromApiInDB(activitiesCalories, deviceDto);
+        saveDistanceOfDayFromApiInDB(activitiesDistance, deviceDto);
     }
 
     //------------------------------------------------------------------- 1day 1min
@@ -115,20 +119,18 @@ public class ActivityServiceImpl implements ActivityService {
     }
     @Override
     public void saveCaloriesOfDayFromApiInDB(ActivitiesCalories activitiesCalories, DeviceDto deviceDto) {
-        Device device = deviceRepository.getDeviceWith_LastPatientDevice_FetchTypeEAGER(deviceDto.getId());
-        PatientDevice patientDevice = device.getPatientDevices().get(0);
+        PatientDevice patientDevice = patientDeviceRepository.getByDeviceIdAndReturnedAtIsNull(deviceDto.getId());
         activitiesCalories.setPatientDevice(patientDevice);
         patientDevice.getActivitiesCalories().add(activitiesCalories);
-        deviceRepository.save(device);
+        patientDeviceRepository.save(patientDevice);
     }
 
     @Override
     public void saveDistanceOfDayFromApiInDB(ActivitiesDistance activitiesDistance, DeviceDto deviceDto) {
-        Device device = deviceRepository.getDeviceWith_LastPatientDevice_FetchTypeEAGER(deviceDto.getId());
-        PatientDevice patientDevice = device.getPatientDevices().get(0);
+        PatientDevice patientDevice = patientDeviceRepository.getByDeviceIdAndReturnedAtIsNull(deviceDto.getId());
         activitiesDistance.setPatientDevice(patientDevice);
         patientDevice.getActivitiesDistance().add(activitiesDistance);
-        deviceRepository.save(device);
+        patientDeviceRepository.save(patientDevice);
     }
 
     //*------------------------------------------------------------------------ 1day 2times 1min

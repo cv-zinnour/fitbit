@@ -165,17 +165,12 @@ public class DeviceController {
     @PostMapping("/notifications")
     public ResponseEntity<HttpStatus> getFitBitNotificationData(@RequestBody String responseFromAPI) {
         ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
-
         try {
             System.out.println(responseFromAPI);
-            System.out.println("////////////////////////111  getFitBitNotificationData");
             JSONArray jsonArray = new JSONArray(responseFromAPI);
             JSONObject obj = (JSONObject) jsonArray.get(0);
             String subscriptionId = obj.getString("subscriptionId");
-
-            executorService.schedule(() -> { deviceService.getDataFromAPIToDB(new DeviceDto(subscriptionId)); }, 22, TimeUnit.SECONDS);
-
-            System.out.println("////////////////////////222  getFitBitNotificationData");
+            executorService.schedule(() -> { deviceService.getDataFromAPIToDB(new DeviceDto(subscriptionId)); }, 10, TimeUnit.SECONDS);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }finally{
             executorService.shutdown();
