@@ -283,7 +283,7 @@ public class DeviceServiceImpl implements DeviceService {
             if (j > 0)
                 d2 = d1 + TimeUnit.MINUTES.toMillis(1439);
 
-            if (minutes > 0 && minutes < 1440) {
+            if (minutes > 1 && minutes < 1440) {
                 System.out.println("d1 =   "+new Date(d1 ).toLocalDate() +"   d2   "+ new Date(d2 ).toLocalDate());
                 System.out.println("d1 =   "+ new Time(d1).toString().substring(0,5)+"   d2   "+ new Time(d2).toString().substring(0,5));
                 activityService.getDataOfDayBetweenTwoTimesPerMinuteFromApi(
