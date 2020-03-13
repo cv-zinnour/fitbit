@@ -280,7 +280,7 @@ public class DeviceServiceImpl implements DeviceService {
             long minutes = TimeUnit.MILLISECONDS.toMinutes(cal.getTime().getTime() - d1 - TimeUnit.MINUTES.toMillis(240));
             int j = (int) (minutes/1440);
             long d2 = 0;
-            if (minutes > 0){
+            if (minutes > 1440){
                 d2 = d1 + TimeUnit.MINUTES.toMillis(1439);
             }
             for (int i = 0; i < j; i++) {
