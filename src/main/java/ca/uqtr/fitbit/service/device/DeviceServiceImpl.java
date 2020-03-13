@@ -57,6 +57,7 @@ public class DeviceServiceImpl implements DeviceService {
     @Override
     public Response createDevice(DeviceDto device) {
         try{
+            device.setAvailable(true);
             return new Response(modelMapper.map(deviceRepository.save(device.dtoToObj(modelMapper)), DeviceDto.class), null);
         } catch (Exception ex){
             LOGGER.log( Level.ALL, ex.getMessage());
