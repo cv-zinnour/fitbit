@@ -36,9 +36,9 @@ public class DeviceServiceImpl implements DeviceService {
     private static final Logger LOGGER = Logger.getLogger( TypeData.ClassName.class.getName() );
     private final static String COLLECTION_PATH = "activities";
 
+    private MessageSource messageSource;
     private DeviceRepository deviceRepository;
     private ModelMapper modelMapper;
-    private MessageSource messageSource;
     private AuthService authService;
     private FitbitApi fitbitApi;
     private ActivityService activityService;

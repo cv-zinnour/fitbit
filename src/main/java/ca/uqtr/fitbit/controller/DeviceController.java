@@ -1,15 +1,18 @@
 package ca.uqtr.fitbit.controller;
 
+import ca.uqtr.fitbit.api.FitbitApi;
 import ca.uqtr.fitbit.dto.DeviceDto;
 import ca.uqtr.fitbit.dto.Request;
 import ca.uqtr.fitbit.dto.Response;
+import ca.uqtr.fitbit.entity.FitbitSubscription;
 import ca.uqtr.fitbit.repository.DeviceRepository;
-import ca.uqtr.fitbit.service.activity.ActivityService;
+import ca.uqtr.fitbit.service.auth.AuthService;
 import ca.uqtr.fitbit.service.device.DeviceService;
 import ca.uqtr.fitbit.utils.JwtTokenUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,10 +34,13 @@ public class DeviceController {
     private String fitbitVerificationCode;
     private ObjectMapper mapper;
 
-    public DeviceController(DeviceService deviceService, ObjectMapper mapper, DeviceRepository deviceRepository) {
+    public DeviceController(DeviceService deviceService, ObjectMapper mapper, DeviceRepository deviceRepository, FitbitApi fitbitApi, ModelMapper modelMapper, AuthService authService) {
         this.deviceService = deviceService;
         this.mapper = mapper;
         this.deviceRepository = deviceRepository;
+        this.fitbitApi = fitbitApi;
+        this.modelMapper = modelMapper;
+        this.authService = authService;
     }
 
     @PostMapping(value = "/device")
@@ -185,6 +191,9 @@ public class DeviceController {
     }
 
 private DeviceRepository deviceRepository;
+    private FitbitApi fitbitApi;
+    private ModelMapper modelMapper;
+    private AuthService authService;
     @GetMapping("/test")
     public String test() {
         System.out.println("****************** test");
@@ -193,4 +202,12 @@ private DeviceRepository deviceRepository;
         deviceService.getDataFromAPIToDB(new DeviceDto("89873f09-aa05-4cff-988a-e57879de1df0"));
         return device;
     }
+    @GetMapping("/sub")
+    public Response sub() throws IOException {
+        System.out.println("****************** sub");
+        DeviceDto device = new DeviceDto("89873f09-aa05-4cff-988a-e57879de1df0");
+
+        return fitbitApi.addSubscription(new FitbitSubscription(device.getId().toString()), authService.getAccessToken(device.dtoToObj(modelMapper)), "activities");
+    }
+
 }
