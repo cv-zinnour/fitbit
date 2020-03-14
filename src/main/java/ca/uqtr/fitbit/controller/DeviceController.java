@@ -207,7 +207,10 @@ private DeviceRepository deviceRepository;
         System.out.println("****************** sub");
         DeviceDto device = new DeviceDto("89873f09-aa05-4cff-988a-e57879de1df0");
 
-        return fitbitApi.addSubscription(new FitbitSubscription(device.getId().toString()), authService.getAccessToken(device.dtoToObj(modelMapper)), "activities");
+        Response response = fitbitApi.addSubscription(new FitbitSubscription(device.getId().toString()), authService.getAccessToken(device.dtoToObj(modelMapper)), "activities");
+        System.out.println("****************** sub      "+response);
+
+        return fitbitApi.allSubscriptions(authService.getAccessToken(device.dtoToObj(modelMapper)), "activities");
     }
 
 }
