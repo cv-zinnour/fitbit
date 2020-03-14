@@ -205,7 +205,7 @@ private DeviceRepository deviceRepository;
     @GetMapping("/sub")
     public Response sub() throws IOException {
         System.out.println("****************** sub");
-        DeviceDto device = new DeviceDto("89873f09-aa05-4cff-988a-e57879de1df0");
+        DeviceDto device = new DeviceDto("c683d235-6e5b-460d-bb16-642825aef30e");
 
         Response response = fitbitApi.addSubscription(new FitbitSubscription(device.getId().toString()), authService.getAccessToken(device.dtoToObj(modelMapper)), "activities");
         System.out.println("****************** sub      "+response);
