@@ -277,6 +277,7 @@ public class DeviceServiceImpl implements DeviceService {
                 return new Response(null,
                         new Error(Integer.parseInt(messageSource.getMessage("error.null.id", null, Locale.US)),
                                 messageSource.getMessage("error.null.message", null, Locale.US)));
+            Timestamp syncTime = new Timestamp(cal.getTime().getTime());
             long d1 = device1.get().getLastSyncDate().getTime();
             //TODO Delete - TimeUnit.MINUTES.toMillis(240)
             long minutes = TimeUnit.MILLISECONDS.toMinutes(cal.getTime().getTime() - d1 - TimeUnit.MINUTES.toMillis(240));
@@ -294,6 +295,7 @@ public class DeviceServiceImpl implements DeviceService {
                         new Time(d1).toString().substring(0,5),
                         new Time(d2).toString().substring(0,5),
                         new Timestamp(d1), new Timestamp(d2),
+                        syncTime,
                         device);
             }
 
@@ -306,6 +308,7 @@ public class DeviceServiceImpl implements DeviceService {
                         new Time(d1).toString().substring(0,5),
                         new Time(d2).toString().substring(0,5),
                         new Timestamp(d1), new Timestamp(d2),
+                        syncTime,
                         device);
                 minutes -= 1440;
                 d1 = d2 + TimeUnit.MINUTES.toMillis(1);
@@ -321,6 +324,7 @@ public class DeviceServiceImpl implements DeviceService {
                             new Time(d1).toString().substring(0,5),
                             new Time(d2).toString().substring(0,5),
                             new Timestamp(d1), new Timestamp(d2),
+                            syncTime,
                             device);
                 }
             }

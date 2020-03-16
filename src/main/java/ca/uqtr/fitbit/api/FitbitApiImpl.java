@@ -199,6 +199,7 @@ public class FitbitApiImpl implements FitbitApi {
         }
     }
 
+
     @Override
     public Activities getActivities() {
         return activities;
