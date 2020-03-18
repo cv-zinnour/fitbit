@@ -20,6 +20,8 @@ public interface DeviceService {
     Response readAvailableDevices(DeviceDto device);
     Response readAvailableDevicesByInstitutionCode(DeviceDto device, String patientId);
     Response assignDevice(DeviceDto device);
+    Response updateFitbitProfile(DeviceDto device, String gender, String birthday, String height) throws IOException;
+    Response updateFitbitWeight(DeviceDto device, String weight) throws IOException;
     Response getBackDevice(DeviceDto device);
 
     Response addSubscription(DeviceDto deviceDto) throws IOException;

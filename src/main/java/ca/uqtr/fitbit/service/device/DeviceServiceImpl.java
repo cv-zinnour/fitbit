@@ -15,9 +15,13 @@ import javassist.bytecode.stackmap.TypeData;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 
 import java.io.IOException;
@@ -202,13 +206,34 @@ public class DeviceServiceImpl implements DeviceService {
             device1.setAvailable(false);
             device1.setLastSyncDate(new java.sql.Timestamp(Calendar.getInstance().getTime().getTime()));
             //device1.get().setLastSyncDate(new java.sql.Date(Calendar.getInstance().getTime().getTime()));
-            return new Response(modelMapper.map(deviceRepository.save(device1), DeviceDto.class), null);
+            return new Response(patientDevice.getMedicalFileId(), null);
         } catch (Exception ex){
             LOGGER.log( Level.ALL, ex.getMessage());
             return new Response(null,
                     new Error(Integer.parseInt(messageSource.getMessage("error.null.id", null, Locale.US)),
                             messageSource.getMessage("error.null.message", null, Locale.US)));
         }
+    }
+
+    @Override
+    public Response updateFitbitProfile(DeviceDto device, String gender, String birthday, String height) throws IOException {
+        return fitbitApi.updateProfile(
+                authService.getAccessToken(device.dtoToObj(modelMapper)),
+                gender,
+                birthday,
+                height);
+    }
+
+    @Override
+    public Response updateFitbitWeight(DeviceDto device, String weight) throws IOException {
+        Calendar cal = Calendar.getInstance();
+        //TODO Delete - TimeUnit.MINUTES.toMillis(240)
+        long date = cal.getTime().getTime() - TimeUnit.MINUTES.toMillis(240);
+        return fitbitApi.updateWeight(
+                authService.getAccessToken(device.dtoToObj(modelMapper)),
+                weight,
+                new Date(date).toLocalDate().toString(),
+                new Time(date).toString().substring(0,5));
     }
 
     @Override

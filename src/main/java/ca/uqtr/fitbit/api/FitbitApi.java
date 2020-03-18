@@ -7,10 +7,12 @@ import ca.uqtr.fitbit.api.data.activities.Activities;
 import ca.uqtr.fitbit.api.data.calories.Calories;
 import ca.uqtr.fitbit.api.data.distance.Distance;
 import ca.uqtr.fitbit.api.data.steps.Steps;
+import ca.uqtr.fitbit.dto.Response;
 import ca.uqtr.fitbit.entity.FitbitSubscription;
 import ca.uqtr.fitbit.entity.fitbit.Auth;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 
 public interface FitbitApi {
 
@@ -20,11 +22,15 @@ public interface FitbitApi {
 
     Auth refreshToken(String refreshToken, Auth auth) throws IOException ;
 
-    ca.uqtr.fitbit.dto.Response addSubscription(FitbitSubscription fitbitSubscription, String accessToken, String collectionPath) throws IOException;
+    Response updateProfile(String accessToken, String gender, String birthday, String height);
 
-    ca.uqtr.fitbit.dto.Response removeSubscription(FitbitSubscription fitbitSubscription, String accessToken, String collectionPath) throws IOException;
+    Response updateWeight(String accessToken, String weight, String date, String time) throws UnsupportedEncodingException;
 
-    ca.uqtr.fitbit.dto.Response allSubscriptions(String accessToken, String collectionPath) throws IOException;
+    Response addSubscription(FitbitSubscription fitbitSubscription, String accessToken, String collectionPath) throws IOException;
+
+    Response removeSubscription(FitbitSubscription fitbitSubscription, String accessToken, String collectionPath) throws IOException;
+
+    Response allSubscriptions(String accessToken, String collectionPath) throws IOException;
 
     Activities getActivities();
 
@@ -35,7 +41,6 @@ public interface FitbitApi {
     Distance geDistance();
 
     ActivitiesTypeData getActivitiesTypeData();
-
 
     String getFitbitProfileId(String accessToken);
 }

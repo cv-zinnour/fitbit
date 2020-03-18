@@ -18,6 +18,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.sql.Date;
@@ -121,6 +122,54 @@ public class FitbitApiImpl implements FitbitApi {
 
         }
         return auth;
+    }
+
+    @Override
+    public ca.uqtr.fitbit.dto.Response updateProfile(String accessToken, String gender, String birthday, String height) {
+        RequestBody requestBody  = new MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart("gender", gender)
+                .addFormDataPart("birthday", birthday)
+                .addFormDataPart("height", height)
+                .build();
+
+        Request request = new Request.Builder()
+                .url("https://api.fitbit.com/1/user/-/profile.json")
+                .post(requestBody)
+                .header("Authorization", "Bearer "+accessToken)
+                .addHeader("Content-Type", "multipart/form-data")
+                .build();
+        try (Response response = okHttpClient.newCall(request).execute()) {
+            int statusCode = response.code();
+            return new ca.uqtr.fitbit.dto.Response(statusCode, null);
+        } catch (Exception ex){
+            LOGGER.log( Level.WARNING, ex.getMessage());
+            return new ca.uqtr.fitbit.dto.Response(null,
+                    new Error(Integer.parseInt(messageSource.getMessage("error.profile.update.id", null, Locale.US)),
+                            messageSource.getMessage("error.profile.update.message", null, Locale.US)));
+
+        }
+    }
+
+    @Override
+    public ca.uqtr.fitbit.dto.Response updateWeight(String accessToken, String weight, String date, String time) throws UnsupportedEncodingException {
+        RequestBody body = RequestBody.create(MediaType.get("application/x-www-form-urlencoded; charset=utf-8"),
+                "weight="+weight+"&date="+date+"&time="+URLEncoder.encode(time, StandardCharsets.UTF_8.toString()));
+        Request request = new Request.Builder()
+                .url("https://api.fitbit.com/1/user/-/profile.json")
+                .post(body)
+                .header("Authorization", "Bearer "+accessToken)
+                .build();
+        try (Response response = okHttpClient.newCall(request).execute()) {
+            int statusCode = response.code();
+            return new ca.uqtr.fitbit.dto.Response(statusCode, null);
+        } catch (Exception ex){
+            LOGGER.log( Level.WARNING, ex.getMessage());
+            return new ca.uqtr.fitbit.dto.Response(null,
+                    new Error(Integer.parseInt(messageSource.getMessage("error.weight.update.id", null, Locale.US)),
+                            messageSource.getMessage("error.weight.update.message", null, Locale.US)));
+
+        }
     }
 
     @Override

@@ -14,6 +14,7 @@ import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.data.r2dbc.repository.config.EnableR2dbcRepositories;
 import org.springframework.retry.annotation.EnableRetry;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.web.reactive.function.client.WebClient;
 
 @Configuration
 @EnableR2dbcRepositories
@@ -26,6 +27,11 @@ public class Config {
         return new OkHttpClient.Builder()
                 .addInterceptor(new LoggingInterceptor())
                 .build();
+    }
+
+    @Bean
+    WebClient.Builder webClient(){
+        return WebClient.builder();
     }
 
     @Bean
@@ -48,5 +54,6 @@ public class Config {
     public ObjectMapper objectMapper() {
         return new ObjectMapper();
     }
+
 
 }

@@ -2,6 +2,8 @@ package ca.uqtr.fitbit.controller;
 
 import ca.uqtr.fitbit.api.FitbitApi;
 import ca.uqtr.fitbit.dto.DeviceDto;
+import ca.uqtr.fitbit.dto.Error;
+import ca.uqtr.fitbit.dto.ProfileDto;
 import ca.uqtr.fitbit.dto.Request;
 import ca.uqtr.fitbit.dto.Response;
 import ca.uqtr.fitbit.entity.FitbitSubscription;
@@ -14,12 +16,15 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.Locale;
 import java.util.UUID;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -33,10 +38,16 @@ public class DeviceController {
     @Value("${fitbit.subscription.verification-code}")
     private String fitbitVerificationCode;
     private ObjectMapper mapper;
+    private WebClient.Builder webClient;
+    @Value("${patient-service.get.profile-infos.url}")
+    private String PATIENT_SERVICE_GET_PROFILE_INFOS;
+    private MessageSource messageSource;
 
-    public DeviceController(DeviceService deviceService, ObjectMapper mapper, DeviceRepository deviceRepository, FitbitApi fitbitApi, ModelMapper modelMapper, AuthService authService) {
+    public DeviceController(DeviceService deviceService, ObjectMapper mapper, WebClient.Builder webClient, MessageSource messageSource, DeviceRepository deviceRepository, FitbitApi fitbitApi, ModelMapper modelMapper, AuthService authService) {
         this.deviceService = deviceService;
         this.mapper = mapper;
+        this.webClient = webClient;
+        this.messageSource = messageSource;
         this.deviceRepository = deviceRepository;
         this.fitbitApi = fitbitApi;
         this.modelMapper = modelMapper;
@@ -139,9 +150,37 @@ public class DeviceController {
 
     @PostMapping(value = "/device/assign")
     @ResponseBody
-    public Response assignDevice(@RequestBody Request request){
+    public Response assignDevice(@RequestBody Request request) throws IOException {
         DeviceDto deviceDto = mapper.convertValue(request.getObject(), DeviceDto.class);
-        return deviceService.assignDevice(deviceDto);
+        Response response = deviceService.assignDevice(deviceDto);
+        ProfileDto profileDto = webClient.build().get().uri(PATIENT_SERVICE_GET_PROFILE_INFOS+"?medicalFileId="+response.getObject().toString())
+                .retrieve()
+                .bodyToMono(ProfileDto.class)
+                .block();
+        if (profileDto == null )
+            return new Response(null,
+                    new Error(Integer.parseInt(messageSource.getMessage("error.null.id", null, Locale.US)),
+                            messageSource.getMessage("error.null.message", null, Locale.US)));
+        if (profileDto.getBirthday() == null)
+            return new Response(null,
+                    new Error(Integer.parseInt(messageSource.getMessage("error.patient.birthday.id", null, Locale.US)),
+                            messageSource.getMessage("error.patient.birthday.message", null, Locale.US)));
+        if (profileDto.getGender() == null)
+            return new Response(null,
+                    new Error(Integer.parseInt(messageSource.getMessage("error.patient.gender.id", null, Locale.US)),
+                            messageSource.getMessage("error.patient.gender.message", null, Locale.US)));
+        if (profileDto.getHeight() == null)
+            return new Response(null,
+                    new Error(Integer.parseInt(messageSource.getMessage("error.patient.height.id", null, Locale.US)),
+                            messageSource.getMessage("error.patient.height.message", null, Locale.US)));
+        if (profileDto.getWeight() == null)
+            return new Response(null,
+                    new Error(Integer.parseInt(messageSource.getMessage("error.patient.weight.id", null, Locale.US)),
+                            messageSource.getMessage("error.patient.weight.message", null, Locale.US)));
+
+        deviceService.updateFitbitWeight(deviceDto, profileDto.getWeight());
+        deviceService.updateFitbitProfile(deviceDto, profileDto.getGender(), profileDto.getBirthday(), profileDto.getHeight());
+        return response;
     }
 
     @PostMapping(value = "/profile/assigned")
