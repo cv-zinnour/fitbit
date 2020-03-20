@@ -206,7 +206,7 @@ public class DeviceServiceImpl implements DeviceService {
             device1.setAvailable(false);
             device1.setLastSyncDate(new java.sql.Timestamp(Calendar.getInstance().getTime().getTime()));
             //device1.get().setLastSyncDate(new java.sql.Date(Calendar.getInstance().getTime().getTime()));
-            return new Response(patientDevice.getMedicalFileId(), null);
+            return new Response(modelMapper.map(deviceRepository.save(device1), DeviceDto.class), null);
         } catch (Exception ex){
             LOGGER.log( Level.ALL, ex.getMessage());
             return new Response(null,

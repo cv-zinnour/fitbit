@@ -56,8 +56,8 @@ public class DeviceController {
 
     @PostMapping(value = "/device")
     @ResponseBody
-    public Response createDevice(@RequestBody Request request, HttpServletRequest HttpRequest){
-        String token = HttpRequest.getHeader("Authorization").replace("bearer ","");
+    public Response createDevice(@RequestBody Request request, HttpServletRequest HttpRequest) {
+        String token = HttpRequest.getHeader("Authorization").replace("bearer ", "");
         DeviceDto deviceDto = mapper.convertValue(request.getObject(), DeviceDto.class);
         deviceDto.setAdminId(JwtTokenUtil.getId(token));
         deviceDto.setInstitutionCode(JwtTokenUtil.getInstitutionCode(token));
@@ -67,8 +67,8 @@ public class DeviceController {
 
     @GetMapping(value = "/device")
     @ResponseBody
-    public Response readDevice(@RequestBody Request request, HttpServletRequest HttpRequest){
-        String token = HttpRequest.getHeader("Authorization").replace("bearer ","");
+    public Response readDevice(@RequestBody Request request, HttpServletRequest HttpRequest) {
+        String token = HttpRequest.getHeader("Authorization").replace("bearer ", "");
         DeviceDto deviceDto = mapper.convertValue(request.getObject(), DeviceDto.class);
         deviceDto.setAdminId(JwtTokenUtil.getId(token));
         return deviceService.readDevice(deviceDto);
@@ -82,7 +82,7 @@ public class DeviceController {
         /*Response response1 = deviceService.removeSubscription(deviceDto);
         if(response1 == null)
             return false;*/
-        System.out.println("+++++++++++++++++++++++++++++++++++++++ "+deviceService.allSubscriptions(deviceDto).getObject().toString());
+        System.out.println("+++++++++++++++++++++++++++++++++++++++ " + deviceService.allSubscriptions(deviceDto).getObject().toString());
 
         deviceService.deleteDevice(deviceDto);
         return true;
@@ -90,8 +90,8 @@ public class DeviceController {
 
     @PutMapping(value = "/device")
     @ResponseBody
-    public Response updateDevice(@RequestBody Request request, HttpServletRequest HttpRequest){
-        String token = HttpRequest.getHeader("Authorization").replace("bearer ","");
+    public Response updateDevice(@RequestBody Request request, HttpServletRequest HttpRequest) {
+        String token = HttpRequest.getHeader("Authorization").replace("bearer ", "");
         DeviceDto deviceDto = mapper.convertValue(request.getObject(), DeviceDto.class);
         deviceDto.setAdminId(JwtTokenUtil.getId(token));
         return deviceService.updateDevice(deviceDto);
@@ -99,8 +99,8 @@ public class DeviceController {
 
     @GetMapping(value = "/device/all")
     @ResponseBody
-    public Response readDevices(HttpServletRequest HttpRequest){
-        String token = HttpRequest.getHeader("Authorization").replace("bearer ","");
+    public Response readDevices(HttpServletRequest HttpRequest) {
+        String token = HttpRequest.getHeader("Authorization").replace("bearer ", "");
         DeviceDto deviceDto = new DeviceDto();
         deviceDto.setAdminId(JwtTokenUtil.getId(token));
         return deviceService.readDevices(deviceDto);
@@ -110,7 +110,7 @@ public class DeviceController {
     @GetMapping(value = "/device/authorization")
     @ResponseBody
     public Response authorizeDevice(@RequestParam String code, @RequestParam String deviceId, HttpServletRequest HttpRequest) throws IOException {
-        String token = HttpRequest.getHeader("Authorization").replace("bearer ","");
+        String token = HttpRequest.getHeader("Authorization").replace("bearer ", "");
         DeviceDto deviceDto = new DeviceDto(deviceId);
         deviceDto.setAdminId(JwtTokenUtil.getId(token));
         Response response = deviceService.authorizeDevice(deviceDto, code);
@@ -121,7 +121,7 @@ public class DeviceController {
     @GetMapping(value = "/device/unauthorization")
     @ResponseBody
     public Response unauthorizeDevice(@RequestBody Request request, HttpServletRequest HttpRequest) throws IOException {
-        String token = HttpRequest.getHeader("Authorization").replace("bearer ","");
+        String token = HttpRequest.getHeader("Authorization").replace("bearer ", "");
         DeviceDto deviceDto = mapper.convertValue(request.getObject(), DeviceDto.class);
         deviceDto.setAdminId(JwtTokenUtil.getId(token));
         Response response = deviceService.unauthorizeDevice(deviceDto);
@@ -132,8 +132,8 @@ public class DeviceController {
 
     @GetMapping(value = "/device/all/available")
     @ResponseBody
-    public Response readAvailableDevices(HttpServletRequest HttpRequest){
-        String token = HttpRequest.getHeader("Authorization").replace("bearer ","");
+    public Response readAvailableDevices(HttpServletRequest HttpRequest) {
+        String token = HttpRequest.getHeader("Authorization").replace("bearer ", "");
         DeviceDto deviceDto = new DeviceDto();
         deviceDto.setAdminId(JwtTokenUtil.getId(token));
         return deviceService.readAvailableDevices(deviceDto);
@@ -141,8 +141,8 @@ public class DeviceController {
 
     @GetMapping(value = "/device/all/available/institution")
     @ResponseBody
-    public Response readAvailableDevicesByInstitutionCode(@RequestParam String patientId, HttpServletRequest HttpRequest){
-        String token = HttpRequest.getHeader("Authorization").replace("bearer ","");
+    public Response readAvailableDevicesByInstitutionCode(@RequestParam String patientId, HttpServletRequest HttpRequest) {
+        String token = HttpRequest.getHeader("Authorization").replace("bearer ", "");
         DeviceDto deviceDto = new DeviceDto();
         deviceDto.setInstitutionCode(JwtTokenUtil.getInstitutionCode(token));
         return deviceService.readAvailableDevicesByInstitutionCode(deviceDto, patientId);
@@ -152,15 +152,15 @@ public class DeviceController {
     @ResponseBody
     public Response assignDevice(@RequestBody Request request) throws IOException {
         DeviceDto deviceDto = mapper.convertValue(request.getObject(), DeviceDto.class);
-        Response response = deviceService.assignDevice(deviceDto);
-        ProfileDto profileDto = webClient.build().get().uri(PATIENT_SERVICE_GET_PROFILE_INFOS+"?medicalFileId="+response.getObject().toString())
+        ProfileDto profileDto = webClient.build().get().uri(PATIENT_SERVICE_GET_PROFILE_INFOS + "?medicalFileId=" + deviceDto.getPatientDevices().get(0).getMedicalFileId().toString())
                 .retrieve()
                 .bodyToMono(ProfileDto.class)
                 .block();
-        if (profileDto == null )
+        if (profileDto == null)
             return new Response(null,
                     new Error(Integer.parseInt(messageSource.getMessage("error.null.id", null, Locale.US)),
                             messageSource.getMessage("error.null.message", null, Locale.US)));
+        System.out.println("------ 2 profile dto= "+ profileDto.toString());
         if (profileDto.getBirthday() == null)
             return new Response(null,
                     new Error(Integer.parseInt(messageSource.getMessage("error.patient.birthday.id", null, Locale.US)),
@@ -177,10 +177,16 @@ public class DeviceController {
             return new Response(null,
                     new Error(Integer.parseInt(messageSource.getMessage("error.patient.weight.id", null, Locale.US)),
                             messageSource.getMessage("error.patient.weight.message", null, Locale.US)));
+        try {
+            deviceService.updateFitbitWeight(deviceDto, profileDto.getWeight());
+            deviceService.updateFitbitProfile(deviceDto, profileDto.getGender(), profileDto.getBirthday(), profileDto.getHeight());
+            return deviceService.assignDevice(deviceDto);
+        } catch (Exception ex) {
+            return new Response(null,
+                    new Error(Integer.parseInt(messageSource.getMessage("error.null.id", null, Locale.US)),
+                            messageSource.getMessage("error.null.message", null, Locale.US)));
+        }
 
-        deviceService.updateFitbitWeight(deviceDto, profileDto.getWeight());
-        deviceService.updateFitbitProfile(deviceDto, profileDto.getGender(), profileDto.getBirthday(), profileDto.getHeight());
-        return response;
     }
 
     @PostMapping(value = "/profile/assigned")
@@ -192,8 +198,8 @@ public class DeviceController {
 
     @PostMapping(value = "/device/back")
     @ResponseBody
-    public Response getBackDevice(@RequestBody Request request, HttpServletRequest HttpRequest){
-        String token = HttpRequest.getHeader("Authorization").replace("bearer ","");
+    public Response getBackDevice(@RequestBody Request request, HttpServletRequest HttpRequest) {
+        String token = HttpRequest.getHeader("Authorization").replace("bearer ", "");
         DeviceDto deviceDto = mapper.convertValue(request.getObject(), DeviceDto.class);
         deviceDto.setAdminId(JwtTokenUtil.getId(token));
         return deviceService.getBackDevice(deviceDto);
@@ -208,12 +214,13 @@ public class DeviceController {
     @GetMapping("/notifications")
     public ResponseEntity<HttpStatus> getFitBitNotification(@RequestParam String verify) {
         System.out.println("////////////////////////  getFitBitNotification");
-        if(verify.equals(fitbitVerificationCode)) {
+        if (verify.equals(fitbitVerificationCode)) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
-   // @JsonInclude(JsonInclude.Include.NON_NULL)
+
+    // @JsonInclude(JsonInclude.Include.NON_NULL)
     @PostMapping("/notifications")
     public ResponseEntity<HttpStatus> getFitBitNotificationData(@RequestBody String responseFromAPI) {
         ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
@@ -222,17 +229,20 @@ public class DeviceController {
             JSONArray jsonArray = new JSONArray(responseFromAPI);
             JSONObject obj = (JSONObject) jsonArray.get(0);
             String subscriptionId = obj.getString("subscriptionId");
-            executorService.schedule(() -> { deviceService.getDataFromAPIToDB(new DeviceDto(subscriptionId)); }, 10, TimeUnit.SECONDS);
+            executorService.schedule(() -> {
+                deviceService.getDataFromAPIToDB(new DeviceDto(subscriptionId));
+            }, 10, TimeUnit.SECONDS);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }finally{
+        } finally {
             executorService.shutdown();
         }
     }
 
-private DeviceRepository deviceRepository;
+    private DeviceRepository deviceRepository;
     private FitbitApi fitbitApi;
     private ModelMapper modelMapper;
     private AuthService authService;
+
     @GetMapping("/test")
     public String test() {
         System.out.println("****************** test");
@@ -241,13 +251,14 @@ private DeviceRepository deviceRepository;
         deviceService.getDataFromAPIToDB(new DeviceDto("89873f09-aa05-4cff-988a-e57879de1df0"));
         return device;
     }
+
     @GetMapping("/sub")
     public Response sub() throws IOException {
         System.out.println("****************** sub");
         DeviceDto device = new DeviceDto("c683d235-6e5b-460d-bb16-642825aef30e");
 
         Response response = fitbitApi.addSubscription(new FitbitSubscription(device.getId().toString()), authService.getAccessToken(device.dtoToObj(modelMapper)), "activities");
-        System.out.println("****************** sub      "+response);
+        System.out.println("****************** sub      " + response);
 
         return fitbitApi.allSubscriptions(authService.getAccessToken(device.dtoToObj(modelMapper)), "activities");
     }
