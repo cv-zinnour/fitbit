@@ -152,7 +152,7 @@ public class DeviceController {
     @ResponseBody
     public Response assignDevice(@RequestBody Request request) throws IOException {
         DeviceDto deviceDto = mapper.convertValue(request.getObject(), DeviceDto.class);
-        ProfileDto profileDto = webClient.build().get().uri(PATIENT_SERVICE_GET_PROFILE_INFOS + "?medicalFileId=" + deviceDto.getPatientDevices().get(0).getMedicalFileId().toString())
+        /*ProfileDto profileDto = webClient.build().get().uri(PATIENT_SERVICE_GET_PROFILE_INFOS + "?medicalFileId=" + deviceDto.getPatientDevices().get(0).getMedicalFileId().toString())
                 .retrieve()
                 .bodyToMono(ProfileDto.class)
                 .block();
@@ -176,10 +176,10 @@ public class DeviceController {
         if (profileDto.getWeight() == null)
             return new Response(null,
                     new Error(Integer.parseInt(messageSource.getMessage("error.patient.weight.id", null, Locale.US)),
-                            messageSource.getMessage("error.patient.weight.message", null, Locale.US)));
+                            messageSource.getMessage("error.patient.weight.message", null, Locale.US)));*/
         try {
-            deviceService.updateFitbitWeight(deviceDto, profileDto.getWeight());
-            deviceService.updateFitbitProfile(deviceDto, profileDto.getGender(), profileDto.getBirthday(), profileDto.getHeight());
+//            deviceService.updateFitbitWeight(deviceDto, profileDto.getWeight());
+//            deviceService.updateFitbitProfile(deviceDto, profileDto.getGender(), profileDto.getBirthday(), profileDto.getHeight());
             return deviceService.assignDevice(deviceDto);
         } catch (Exception ex) {
             return new Response(null,
