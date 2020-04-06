@@ -23,7 +23,7 @@ public interface DeviceRepository extends CrudRepository<Device, UUID> {
     @Query("select d from Device d left join fetch d.fitbitSubscriptions fs where d.id = :id ORDER BY fs.id DESC ")
     Device  getDeviceWith_LastFitbitSubscription_FetchTypeEAGER(UUID id);
 
-    @Query("select d from Device d left join fetch d.patientDevices pd where pd.medicalFileId = :patientDevice AND pd.returnedAt IS NULL ORDER BY pd.id DESC")
+    @Query("select d from Device d left join fetch d.patientDevices pd where pd.medicalFileId = :medicalFileId AND pd.returnedAt IS NULL ORDER BY pd.id DESC")
     Device  isPatientHasDevice(String medicalFileId);
 
     @Query("select d from Device d left join fetch d.patientDevices pd where d.id = pd.device.id and pd.returnedAt IS NULL")
