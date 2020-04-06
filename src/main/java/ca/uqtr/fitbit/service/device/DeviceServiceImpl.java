@@ -12,6 +12,7 @@ import ca.uqtr.fitbit.repository.DeviceRepository;
 import ca.uqtr.fitbit.service.activity.ActivityService;
 import ca.uqtr.fitbit.service.auth.AuthService;
 import javassist.bytecode.stackmap.TypeData;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static javax.xml.crypto.dsig.DigestMethod.SHA3_256;
+
 @Service
 @Transactional
 public class DeviceServiceImpl implements DeviceService {
@@ -46,6 +49,8 @@ public class DeviceServiceImpl implements DeviceService {
     private AuthService authService;
     private FitbitApi fitbitApi;
     private ActivityService activityService;
+    @Value("${sha3-256.salt}")
+    private String SALT;
 
     @Autowired
     public DeviceServiceImpl(DeviceRepository deviceRepository, ModelMapper modelMapper, MessageSource messageSource, AuthService authService, FitbitApi fitbitApi, ActivityService activityService) {
@@ -174,7 +179,9 @@ public class DeviceServiceImpl implements DeviceService {
 
     @Override
     public Response readAvailableDevicesByInstitutionCode(DeviceDto device, String patientId) {
-            Device device1 = deviceRepository.isPatientHasDevice(UUID.fromString(patientId));
+        String patientIdSHA = new DigestUtils(SHA3_256).digestAsHex(patientId.concat(SALT));
+
+        Device device1 = deviceRepository.isPatientHasDevice(patientIdSHA);
             if (device1 != null){
                 return new Response(modelMapper.map(device1, DeviceDto.class), null);
             }

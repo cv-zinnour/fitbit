@@ -2,7 +2,6 @@ package ca.uqtr.fitbit.config;
 
 import ca.uqtr.fitbit.api.LoggingInterceptor;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.var;
 import okhttp3.OkHttpClient;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
