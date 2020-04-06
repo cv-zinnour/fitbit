@@ -174,7 +174,6 @@ public class DeviceServiceImpl implements DeviceService {
 
     @Override
     public Response readAvailableDevicesByInstitutionCode(DeviceDto device, String patientId) {
-        try{
             Device device1 = deviceRepository.isPatientHasDevice(UUID.fromString(patientId));
             if (device1 != null){
                 return new Response(modelMapper.map(device1, DeviceDto.class), null);
@@ -182,12 +181,7 @@ public class DeviceServiceImpl implements DeviceService {
             Type deviceDtoList = new TypeToken<List<DeviceDto>>() {}.getType();
             List<Device> devices = deviceRepository.findAllByInstitutionCodeAndAvailableAndAuthorized(device.getInstitutionCode(), true, true);
             return new Response(modelMapper.map(devices, deviceDtoList), null);
-        } catch (Exception ex){
-            LOGGER.log( Level.ALL, ex.getMessage());
-            return new Response(null,
-                    new Error(Integer.parseInt(messageSource.getMessage("error.null.id", null, Locale.US)),
-                            messageSource.getMessage("error.null.message", null, Locale.US)));
-        }
+
     }
 
     @Override
