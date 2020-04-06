@@ -177,15 +177,11 @@ public class DeviceController {
             return new Response(null,
                     new Error(Integer.parseInt(messageSource.getMessage("error.patient.weight.id", null, Locale.US)),
                             messageSource.getMessage("error.patient.weight.message", null, Locale.US)));*/
-        try {
+        
 //            deviceService.updateFitbitWeight(deviceDto, profileDto.getWeight());
 //            deviceService.updateFitbitProfile(deviceDto, profileDto.getGender(), profileDto.getBirthday(), profileDto.getHeight());
             return deviceService.assignDevice(deviceDto);
-        } catch (Exception ex) {
-            return new Response(null,
-                    new Error(Integer.parseInt(messageSource.getMessage("error.null.id", null, Locale.US)),
-                            messageSource.getMessage("error.null.message", null, Locale.US)));
-        }
+
 
     }
 
