@@ -41,10 +41,4 @@ public class PatientDeviceDto {
             return null;
     }
 
-    public UUID getMedicalFileId() {
-        if (this.medicalFileId != null)
-            return UUID.fromString(this.medicalFileId);
-        else
-            return null;
-    }
 }
