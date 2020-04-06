@@ -177,7 +177,7 @@ public class DeviceController {
             return new Response(null,
                     new Error(Integer.parseInt(messageSource.getMessage("error.patient.weight.id", null, Locale.US)),
                             messageSource.getMessage("error.patient.weight.message", null, Locale.US)));*/
-        
+
 //            deviceService.updateFitbitWeight(deviceDto, profileDto.getWeight());
 //            deviceService.updateFitbitProfile(deviceDto, profileDto.getGender(), profileDto.getBirthday(), profileDto.getHeight());
             return deviceService.assignDevice(deviceDto);
