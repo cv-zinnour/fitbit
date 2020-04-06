@@ -35,7 +35,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static javax.xml.crypto.dsig.DigestMethod.SHA3_256;
 
 @Service
 @Transactional
@@ -51,6 +50,7 @@ public class DeviceServiceImpl implements DeviceService {
     private ActivityService activityService;
     @Value("${sha3-256.salt}")
     private String SALT;
+    public static final String SHA3_256 = "SHA3-256";
 
     @Autowired
     public DeviceServiceImpl(DeviceRepository deviceRepository, ModelMapper modelMapper, MessageSource messageSource, AuthService authService, FitbitApi fitbitApi, ActivityService activityService) {
