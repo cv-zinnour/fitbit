@@ -192,7 +192,7 @@ public class DeviceServiceImpl implements DeviceService {
 
     @Override
     public Response assignDevice(DeviceDto device) {
-        try{
+
             Device device1 = deviceRepository.getDeviceById(device.getId());
             if (device1 == null)
                 return new Response(null,
@@ -207,12 +207,7 @@ public class DeviceServiceImpl implements DeviceService {
             device1.setLastSyncDate(new java.sql.Timestamp(Calendar.getInstance().getTime().getTime()));
             //device1.get().setLastSyncDate(new java.sql.Date(Calendar.getInstance().getTime().getTime()));
             return new Response(modelMapper.map(deviceRepository.save(device1), DeviceDto.class), null);
-        } catch (Exception ex){
-            LOGGER.log( Level.ALL, ex.getMessage());
-            return new Response(null,
-                    new Error(Integer.parseInt(messageSource.getMessage("error.null.id", null, Locale.US)),
-                            messageSource.getMessage("error.null.message", null, Locale.US)));
-        }
+        
     }
 
     @Override
