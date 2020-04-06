@@ -42,7 +42,7 @@ public class PatientDevice implements Serializable {
     @Column(name = "professional_id", nullable = false)
     private UUID professionalId;
     @Column(name = "medical_file_id", nullable = false)
-    private UUID medicalFileId;
+    private String medicalFileId;
     @Column(name = "patient_email", nullable = false)
     private String patientEmail;
     @Column(name = "returned_at", nullable = false)
