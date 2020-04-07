@@ -43,7 +43,7 @@ public class SynchronizationEmailListener implements
         DeviceDto device = event.getDevice();
         String recipientAddress = device.getPatientDevices().get(0).getPatientEmail();
         String subject = "Fitbit data synchronization";
-        Email from = new Email("app158992707@heroku.com");
+        Email from = new Email("app163028195@heroku.com");
         Email to = new Email(recipientAddress);
         String message = "Don't forget to synchronize your data.";
         Content content = new Content("text/plain", message);
