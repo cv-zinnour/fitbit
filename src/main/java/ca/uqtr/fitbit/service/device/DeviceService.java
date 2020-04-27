@@ -5,6 +5,7 @@ import ca.uqtr.fitbit.dto.Response;
 import reactor.core.publisher.Flux;
 
 import java.io.IOException;
+import java.text.ParseException;
 
 public interface DeviceService {
 
@@ -32,7 +33,7 @@ public interface DeviceService {
 
     Flux<DeviceDto> getDevicesNotReturned();
 
-    Response getDataFromAPIToDB(DeviceDto device);
+    Response getDataFromAPIToDB(DeviceDto device) throws IOException, ParseException;
 
     Response isFitbitProfileAssigned(DeviceDto deviceDto) throws IOException;
 }
