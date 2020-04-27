@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.sql.Date;
@@ -69,7 +70,7 @@ public class ActivitiesTypeDataImpl implements ActivitiesTypeData<Activities> {
         Serialization data = null;
         //https://api.fitbit.com/1/user/-/activities/steps/date/2020-01-20/1d/1min/time/08%3A00/12%3A00.json
         Request request = new Request.Builder()
-                .url("https://api.fitbit.com/1/user/-/activities/"+activityType+"/date/"+date+"/"+endDate+"/1min/time/"+URLEncoder.encode(startTime, StandardCharsets.UTF_8.toString())+"/"+URLEncoder.encode(endTime, StandardCharsets.UTF_8.toString())+".json")
+                .url("https://api.fitbit.com/1/user/-/activities/"+activityType+"/date/"+date+"/"+endDate+"/1min/time/"+ URLDecoder.decode(startTime, StandardCharsets.UTF_8.toString())+"/"+URLDecoder.decode(endTime, StandardCharsets.UTF_8.toString())+".json")
                 .get()
                 .header("Authorization", "Bearer "+accessToken)
                 .build();
