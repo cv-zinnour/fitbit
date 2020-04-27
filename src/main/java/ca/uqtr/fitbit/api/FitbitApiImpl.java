@@ -177,7 +177,7 @@ public class FitbitApiImpl implements FitbitApi {
         FitbitSubscription fitbitSubscriptionObj = new FitbitSubscription();
         RequestBody body = RequestBody.create(MediaType.get("application/json; charset=utf-8"), "");
         Request request = new Request.Builder()
-                .url("https://api.fitbit.com/1/user/-/"+collectionPath+"/apiSubscriptions/"+fitbitSubscription.getSubscriptionId()+".json")
+                .url("https://api.fitbit.com/1/user/-/"+collectionPath+"/apiSubscriptions/333.json")
                 .post(body)
                 .header("Authorization", "Bearer "+accessToken)
                 .build();
