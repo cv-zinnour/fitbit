@@ -305,11 +305,18 @@ public class DeviceServiceImpl implements DeviceService {
             }
             System.out.println("////////////////////////  not null   ");
             Timestamp syncTime = new Timestamp(cal.getTime().getTime());
+            System.out.println("//////////////////////// 1 ");
             long d1 = device1.get().getLastSyncDate().getTime();
+            System.out.println("//////////////////////// 2 ");
             //TODO Delete - TimeUnit.MINUTES.toMillis(240)
             long minutes = TimeUnit.MILLISECONDS.toMinutes(cal.getTime().getTime() - d1 - TimeUnit.MINUTES.toMillis(240));
+
+            System.out.println("//////////////////////// 3 ");
             int j = (int) (minutes/1440);
+            System.out.println("//////////////////////// 4 ");
             long d2 = cal.getTime().getTime() - TimeUnit.MINUTES.toMillis(1) - TimeUnit.MINUTES.toMillis(240);
+
+            System.out.println("//////////////////////// 5 ");
             if (j > 0)
                 d2 = d1 + TimeUnit.MINUTES.toMillis(1439);
 
