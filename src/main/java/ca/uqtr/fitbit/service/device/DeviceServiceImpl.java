@@ -292,14 +292,17 @@ public class DeviceServiceImpl implements DeviceService {
 
     @Override
     public Response getDataFromAPIToDB(DeviceDto device) {
-        System.out.println("////////////////////////  getDataFromAPIToDB");
+        System.out.println("////////////////////////  getDataFromAPIToDB   "+device.toString());
         Calendar cal = Calendar.getInstance();
         try{
             Optional<Device> device1 = deviceRepository.findById(device.getId());
-            if (!device1.isPresent())
+            if (!device1.isPresent()){
+                System.out.println("////////////////////////  null   ");
                 return new Response(null,
                         new Error(Integer.parseInt(messageSource.getMessage("error.null.id", null, Locale.US)),
                                 messageSource.getMessage("error.null.message", null, Locale.US)));
+
+            }
             Timestamp syncTime = new Timestamp(cal.getTime().getTime());
             long d1 = device1.get().getLastSyncDate().getTime();
             //TODO Delete - TimeUnit.MINUTES.toMillis(240)
