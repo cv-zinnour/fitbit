@@ -11,6 +11,7 @@ import ca.uqtr.fitbit.entity.fitbit.Auth;
 import ca.uqtr.fitbit.repository.DeviceRepository;
 import ca.uqtr.fitbit.service.activity.ActivityService;
 import ca.uqtr.fitbit.service.auth.AuthService;
+import com.sun.xml.internal.bind.v2.TODO;
 import javassist.bytecode.stackmap.TypeData;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.modelmapper.ModelMapper;
@@ -206,7 +207,7 @@ public class DeviceServiceImpl implements DeviceService {
             patientDevice.setDevice(device1);
             patientDevices.add(patientDevice);
             device1.setAvailable(false);
-            device1.setLastSyncDate(new java.sql.Timestamp(Calendar.getInstance().getTime().getTime() - TimeUnit.MINUTES.toMillis(240)));
+            device1.setLastSyncDate(new java.sql.Timestamp(Calendar.getInstance().getTime().getTime()));
             //device1.get().setLastSyncDate(new java.sql.Date(Calendar.getInstance().getTime().getTime()));
             return new Response(modelMapper.map(deviceRepository.save(device1), DeviceDto.class), null);
 
@@ -314,6 +315,7 @@ public class DeviceServiceImpl implements DeviceService {
             System.out.println("//////////////////////// 3 ");
             int j = (int) (minutes/1440);
             System.out.println("//////////////////////// 4 ");
+            //TODO Delete - TimeUnit.MINUTES.toMillis(240)
             long d2 = cal.getTime().getTime() - TimeUnit.MINUTES.toMillis(1) - TimeUnit.MINUTES.toMillis(240);
 
             System.out.println("//////////////////////// 5 ");
@@ -367,6 +369,7 @@ public class DeviceServiceImpl implements DeviceService {
             }
             if (minutes > 0 ) {
                 System.out.println("------------- minutes");
+                //TODO Delete - TimeUnit.MINUTES.toMillis(240)
                 device1.get().setLastSyncDate(new Timestamp(d2 + TimeUnit.MINUTES.toMillis(1) - TimeUnit.MINUTES.toMillis(240)));
                 deviceRepository.save(device1.get());
             }
