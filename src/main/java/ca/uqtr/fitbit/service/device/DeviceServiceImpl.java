@@ -11,7 +11,6 @@ import ca.uqtr.fitbit.entity.fitbit.Auth;
 import ca.uqtr.fitbit.repository.DeviceRepository;
 import ca.uqtr.fitbit.service.activity.ActivityService;
 import ca.uqtr.fitbit.service.auth.AuthService;
-import com.sun.xml.internal.bind.v2.TODO;
 import javassist.bytecode.stackmap.TypeData;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.modelmapper.ModelMapper;
