@@ -303,6 +303,7 @@ public class DeviceServiceImpl implements DeviceService {
                                 messageSource.getMessage("error.null.message", null, Locale.US)));
 
             }
+            System.out.println("////////////////////////  not null   ");
             Timestamp syncTime = new Timestamp(cal.getTime().getTime());
             long d1 = device1.get().getLastSyncDate().getTime();
             //TODO Delete - TimeUnit.MINUTES.toMillis(240)
