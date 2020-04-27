@@ -219,9 +219,10 @@ public class DeviceController {
     // @JsonInclude(JsonInclude.Include.NON_NULL)
     @PostMapping("/notifications")
     public ResponseEntity<HttpStatus> getFitBitNotificationData(@RequestBody String responseFromAPI) {
+        System.out.println("////////////////////////  getFitBitNotificationData");
         ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
         try {
-            System.out.println(responseFromAPI);
+            System.out.println("+++++++++  "+responseFromAPI);
             JSONArray jsonArray = new JSONArray(responseFromAPI);
             JSONObject obj = (JSONObject) jsonArray.get(0);
             String subscriptionId = obj.getString("subscriptionId");

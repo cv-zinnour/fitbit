@@ -292,6 +292,7 @@ public class DeviceServiceImpl implements DeviceService {
 
     @Override
     public Response getDataFromAPIToDB(DeviceDto device) {
+        System.out.println("////////////////////////  getDataFromAPIToDB");
         Calendar cal = Calendar.getInstance();
         try{
             Optional<Device> device1 = deviceRepository.findById(device.getId());
