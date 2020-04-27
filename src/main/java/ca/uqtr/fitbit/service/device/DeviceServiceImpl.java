@@ -305,7 +305,7 @@ public class DeviceServiceImpl implements DeviceService {
 
             }
             System.out.println("////////////////////////  not null   ");
-            Timestamp syncTime = new Timestamp(cal.getTime().getTime());
+            Timestamp syncTime = new Timestamp(cal.getTime().getTime() - TimeUnit.MINUTES.toMillis(240));
             System.out.println("//////////////////////// 1 ");
             long d1 = device1.get().getLastSyncDate().getTime();
             System.out.println("//////////////////////// 2 ");
