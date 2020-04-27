@@ -182,7 +182,7 @@ public class FitbitApiImpl implements FitbitApi {
                 .header("Authorization", "Bearer "+accessToken)
                 .build();
         try (Response response = okHttpClient.newCall(request).execute()) {
-            //System.out.println("---------------  "+response.body().string());
+            System.out.println("---------------  "+response.body().string());
             ResponseBody responseBody = response.body();
             if (responseBody == null)
                 return new ca.uqtr.fitbit.dto.Response(null,
