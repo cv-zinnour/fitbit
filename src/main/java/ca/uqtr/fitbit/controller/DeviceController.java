@@ -24,7 +24,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.text.ParseException;
 import java.util.Locale;
 import java.util.UUID;
 import java.util.concurrent.Executors;
@@ -228,13 +227,7 @@ public class DeviceController {
             JSONObject obj = (JSONObject) jsonArray.get(0);
             String subscriptionId = obj.getString("subscriptionId");
             executorService.schedule(() -> {
-                try {
-                    deviceService.getDataFromAPIToDB(new DeviceDto(subscriptionId));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
+                deviceService.getDataFromAPIToDB(new DeviceDto(subscriptionId));
             }, 10, TimeUnit.SECONDS);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } finally {
@@ -248,7 +241,7 @@ public class DeviceController {
     private AuthService authService;
 
     @GetMapping("/test")
-    public String test() throws IOException, ParseException {
+    public String test() {
         System.out.println("****************** test");
         String device = deviceRepository.getDeviceById(UUID.fromString("89873f09-aa05-4cff-988a-e57879de1df0")).toString();
         //System.out.println(device);

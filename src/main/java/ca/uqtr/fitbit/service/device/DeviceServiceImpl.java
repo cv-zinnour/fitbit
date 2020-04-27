@@ -30,7 +30,6 @@ import java.lang.reflect.Type;
 import java.sql.Date;
 import java.sql.Time;
 import java.sql.Timestamp;
-import java.text.ParseException;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
@@ -292,11 +291,15 @@ public class DeviceServiceImpl implements DeviceService {
     }
 
     @Override
-    public Response getDataFromAPIToDB(DeviceDto device) throws IOException, ParseException {
+    public Response getDataFromAPIToDB(DeviceDto device) {
         System.out.println("////////////////////////  getDataFromAPIToDB");
         Calendar cal = Calendar.getInstance();
+        try{
             Optional<Device> device1 = deviceRepository.findById(device.getId());
-
+            if (!device1.isPresent())
+                return new Response(null,
+                        new Error(Integer.parseInt(messageSource.getMessage("error.null.id", null, Locale.US)),
+                                messageSource.getMessage("error.null.message", null, Locale.US)));
             Timestamp syncTime = new Timestamp(cal.getTime().getTime());
             long d1 = device1.get().getLastSyncDate().getTime();
             //TODO Delete - TimeUnit.MINUTES.toMillis(240)
@@ -306,7 +309,9 @@ public class DeviceServiceImpl implements DeviceService {
             if (j > 0)
                 d2 = d1 + TimeUnit.MINUTES.toMillis(1439);
 
+            System.out.println("------------- j =  "+j);
             if (minutes > 0 && minutes < 1440) {
+                System.out.println("------------- if 1");
                 System.out.println("d1 =   "+new Date(d1 ).toLocalDate() +"   d2   "+ new Date(d2 ).toLocalDate());
                 System.out.println("d1 =   "+ new Time(d1).toString().substring(0,5)+"   d2   "+ new Time(d2).toString().substring(0,5));
                 activityService.getDataOfDayBetweenTwoTimesPerMinuteFromApi(
@@ -349,11 +354,17 @@ public class DeviceServiceImpl implements DeviceService {
                 }
             }
             if (minutes > 0 ) {
+                System.out.println("------------- minutes");
                 device1.get().setLastSyncDate(new Timestamp(d2 + TimeUnit.MINUTES.toMillis(1)));
                 deviceRepository.save(device1.get());
             }
             return new Response(device, null);
-
+        } catch (Exception ex){
+            LOGGER.log( Level.ALL, ex.getMessage());
+            return new Response(null,
+                    new Error(Integer.parseInt(messageSource.getMessage("error.null.id", null, Locale.US)),
+                            messageSource.getMessage("error.null.message", null, Locale.US)));
+        }
 
     }
 
