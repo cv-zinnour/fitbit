@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.sql.Date;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.List;
@@ -206,6 +207,16 @@ public class ActivityServiceImpl implements ActivityService {
 
     @Override
     public Response getActivitiesBetween2DatesFromDB(String date1, String date2, DeviceDto deviceDto) throws IOException, ParseException {
+        return null;
+    }
+
+    @Override
+    public Response getStepsPerVisits(String medicalFileId, List<Date> dates) {
+        return null;
+    }
+
+    @Override
+    public Response getActiveMinutesPerVisits(String medicalFileId, List<Date> dates) {
         return null;
     }
 

@@ -260,4 +260,6 @@ public class DeviceController {
         return fitbitApi.allSubscriptions(authService.getAccessToken(device.dtoToObj(modelMapper)), "activities");
     }
 
+
+
 }

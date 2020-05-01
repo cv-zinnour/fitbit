@@ -9,6 +9,7 @@ import ca.uqtr.fitbit.entity.fitbit.ActivitiesSteps;
 import ca.uqtr.fitbit.entity.fitbit.Activity;
 
 import java.io.IOException;
+import java.sql.Date;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.List;
@@ -38,6 +39,9 @@ public interface ActivityService{
     Response getStepsOfDayBetweenTwoTimesPerMinuteFromDB(String date, String startTime, String endTime, DeviceDto deviceDto) throws IOException;
     Response getCaloriesOfDayBetweenTwoTimesPerMinuteFromDB(String date, String startTime, String endTime, DeviceDto deviceDto) throws IOException;
     Response getActivitiesBetween2DatesFromDB(String date1, String date2, DeviceDto deviceDto) throws IOException, ParseException;
+
+    Response getStepsPerVisits(String medicalFileId, List<Date> dates);
+    Response getActiveMinutesPerVisits(String medicalFileId, List<Date> dates);
 
 }
 
