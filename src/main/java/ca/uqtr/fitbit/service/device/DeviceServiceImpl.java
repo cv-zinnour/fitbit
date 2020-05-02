@@ -12,6 +12,7 @@ import ca.uqtr.fitbit.repository.DeviceRepository;
 import ca.uqtr.fitbit.service.activity.ActivityService;
 import ca.uqtr.fitbit.service.auth.AuthService;
 import javassist.bytecode.stackmap.TypeData;
+import lombok.SneakyThrows;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -31,6 +32,8 @@ import java.lang.reflect.Type;
 import java.sql.Date;
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
@@ -196,13 +199,14 @@ public class DeviceServiceImpl implements DeviceService {
 
     }
 
+    @SneakyThrows
     @Transactional
     @Override
     public Response assignDevice(DeviceDto device) {
         System.out.println("-----------  "+entityManager.createQuery("select sum(steps.value) from PatientDevice pd left join pd.activitiesSteps steps where pd.id = steps.patientDevice.id and pd.medicalFileId = :medicalFileId and steps.dateTime between :date1 and :date2 group by steps.dateTime")
                 .setParameter("medicalFileId", "f9e46ede87e28d7e758b180d5e9318465e23468dabfd83a0aecdef8e09d70312")
-                .setParameter("date1", "2020-04-27")
-                .setParameter("date2", "2020-04-27")
+                .setParameter("date1", Timestamp.valueOf("2020-04-27 00:00:00"))
+                .setParameter("date2", Timestamp.valueOf("2020-04-28 00:00:00"))
                 .getFirstResult());
             Device device1 = deviceRepository.getDeviceById(device.getId());
             if (device1 == null)
