@@ -77,7 +77,7 @@ public class ActivitiesTypeDataImpl implements ActivitiesTypeData<Activities> {
                 .build();
         try {
             response = okHttpClient.newCall(request).execute();
-            System.out.println(response.body().string());
+            //System.out.println(response.body().string());
             data = this.deserialization(response.body().string(), activityType);
         }catch (Exception e) {
             e.printStackTrace();
@@ -111,6 +111,8 @@ public class ActivitiesTypeDataImpl implements ActivitiesTypeData<Activities> {
             }
         }
         int datasetInterval = activities_type_intraday.getInt("datasetInterval");
+
+        System.out.println("-----------  "+ value);
         return new Serialization(dateTime, value, jsonArray.toString(), datasetInterval);
     }
 
