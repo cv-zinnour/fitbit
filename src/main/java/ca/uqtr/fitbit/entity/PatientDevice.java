@@ -47,7 +47,7 @@ public class PatientDevice implements Serializable {
     @Column(name = "patient_email", nullable = false)
     private String patientEmail;
     @Column(name = "returned_at", nullable = false)
-    private Date returnedAt;
+    private Timestamp returnedAt;
     @JsonManagedReference
     @OneToMany(mappedBy = "patientDevice", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ActivitiesCalories> activitiesCalories = new ArrayList<>();

@@ -243,7 +243,7 @@ public class DeviceServiceImpl implements DeviceService {
                         new Error(Integer.parseInt(messageSource.getMessage("error.null.id", null, Locale.US)),
                                 messageSource.getMessage("error.null.message", null, Locale.US)));
             device2.setAvailable(true);
-            device2.getPatientDevices().get(0).setReturnedAt(new java.sql.Date(Calendar.getInstance().getTime().getTime()));
+            device2.getPatientDevices().get(0).setReturnedAt(new java.sql.Timestamp(Calendar.getInstance().getTime().getTime()));
             return new Response(modelMapper.map(deviceRepository.save(device2), DeviceDto.class), null);
         } catch (Exception ex){
             LOGGER.log( Level.ALL, ex.getMessage());
@@ -307,7 +307,7 @@ public class DeviceServiceImpl implements DeviceService {
             System.out.println("////////////////////////  not null   ");
             Timestamp syncTime = new Timestamp(cal.getTime().getTime() - TimeUnit.MINUTES.toMillis(240));
             System.out.println("//////////////////////// 1 ");
-            long d1 = device1.get().getLastSyncDate().getTime();
+            long d1 = device1.get().getPatientDevices().get(device1.get().getPatientDevices().size() - 1).getInitDate().getTime();
             System.out.println("//////////////////////// 2 ");
             //TODO Delete - TimeUnit.MINUTES.toMillis(240)
             long minutes = TimeUnit.MILLISECONDS.toMinutes(cal.getTime().getTime() - d1 - TimeUnit.MINUTES.toMillis(240));
