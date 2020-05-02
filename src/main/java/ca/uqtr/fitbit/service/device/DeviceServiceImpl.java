@@ -207,7 +207,7 @@ public class DeviceServiceImpl implements DeviceService {
                 .setParameter("medicalFileId", "f9e46ede87e28d7e758b180d5e9318465e23468dabfd83a0aecdef8e09d70312")
                 .setParameter("date1", Timestamp.valueOf("2020-04-27 00:00:00"))
                 .setParameter("date2", Timestamp.valueOf("2020-05-27 00:00:00"))
-                .getFirstResult());
+                .getSingleResult());
             Device device1 = deviceRepository.getDeviceById(device.getId());
             if (device1 == null)
                 return new Response(null,
