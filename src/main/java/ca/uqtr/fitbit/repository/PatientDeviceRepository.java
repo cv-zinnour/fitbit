@@ -17,7 +17,7 @@ public interface PatientDeviceRepository extends CrudRepository<PatientDevice, U
 
 /*
     @Query("select sum(steps.value) from PatientDevice pd left join fetch pd.activitiesSteps steps where pd.id = steps.patientDevice.id and pd.medicalFileId = :medicalFileId and steps.dateTime between :date1 and :date2 group by steps.dateTime")
-    List<Integer> getStepsBetweenTwoVisits(String medicalFileId, Date date1, Date date2);
+    int getStepsBetweenTwoVisits(String medicalFileId, Date date1, Date date2);
 */
 
 }
