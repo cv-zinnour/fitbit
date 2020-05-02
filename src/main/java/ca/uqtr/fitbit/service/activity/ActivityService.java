@@ -20,25 +20,25 @@ public interface ActivityService{
     void getDataOfDayBetweenTwoTimesPerMinuteFromApi(String date, String endDate, String startTime, String endTime, Timestamp t1, Timestamp t2, Timestamp syncTime, DeviceDto deviceDto) throws IOException, ParseException;
 
 
-    Response getStepsOfDayPerMinuteFromApi(String date, DeviceDto deviceDto) throws IOException;
+    Response getStepsOfDayPerMinuteFromApi(String date, DeviceDto deviceDto) ;
     void saveStepsOfDayFromApiInDB(ActivitiesSteps activitiesSteps, DeviceDto deviceDto);
-    Response getCaloriesOfDayPerMinuteFromApi(String date, DeviceDto deviceDto) throws IOException, ParseException;
+    Response getCaloriesOfDayPerMinuteFromApi(String date, DeviceDto deviceDto) ;
     void saveCaloriesOfDayFromApiInDB(ActivitiesCalories activitiesCalories, DeviceDto deviceDto);
     void saveDistanceOfDayFromApiInDB(ActivitiesDistance activitiesDistance, DeviceDto deviceDto);
 
 
-    Response getStepsOfDayBetweenTwoTimesPerMinuteFromApi(String date, String startTime, String endTime, DeviceDto deviceDto) throws IOException;
-    Response getCaloriesOfDayBetweenTwoTimesPerMinuteFromApi(String date, String startTime, String endTime, DeviceDto deviceDto) throws IOException;
-    Response getActivitiesBetween2DatesFromApi(String date1, String date2, DeviceDto deviceDto) throws IOException, ParseException;
+    Response getStepsOfDayBetweenTwoTimesPerMinuteFromApi(String date, String startTime, String endTime, DeviceDto deviceDto) ;
+    Response getCaloriesOfDayBetweenTwoTimesPerMinuteFromApi(String date, String startTime, String endTime, DeviceDto deviceDto);
+    Response getActivitiesBetween2DatesFromApi(String date1, String date2, DeviceDto deviceDto);
     Iterable<Activity> saveActivitiesBetween2DatesFromApiInDB(List<Activity> activities, DeviceDto deviceDto);
 
 
-    Response getStepsOfDayPerMinuteFromDB(String date, DeviceDto deviceDto) throws IOException;
-    Response getCaloriesOfDayPerMinuteFromDB(String date, DeviceDto deviceDto) throws IOException, ParseException;
+    Response getStepsOfDayPerMinuteFromDB(String date, DeviceDto deviceDto) ;
+    Response getCaloriesOfDayPerMinuteFromDB(String date, DeviceDto deviceDto) ;
 
-    Response getStepsOfDayBetweenTwoTimesPerMinuteFromDB(String date, String startTime, String endTime, DeviceDto deviceDto) throws IOException;
-    Response getCaloriesOfDayBetweenTwoTimesPerMinuteFromDB(String date, String startTime, String endTime, DeviceDto deviceDto) throws IOException;
-    Response getActivitiesBetween2DatesFromDB(String date1, String date2, DeviceDto deviceDto) throws IOException, ParseException;
+    Response getStepsOfDayBetweenTwoTimesPerMinuteFromDB(String date, String startTime, String endTime, DeviceDto deviceDto) ;
+    Response getCaloriesOfDayBetweenTwoTimesPerMinuteFromDB(String date, String startTime, String endTime, DeviceDto deviceDto) ;
+    Response getActivitiesBetween2DatesFromDB(String date1, String date2, DeviceDto deviceDto) ;
 
     Response getStepsPerVisits(String medicalFileId, List<Timestamp> dates);
     Response getActiveMinutesPerVisits(String medicalFileId, List<Timestamp> dates);

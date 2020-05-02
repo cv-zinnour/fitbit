@@ -56,7 +56,6 @@ public class AuthServiceImpl  implements AuthService {
         System.out.println("is token expired : "+isExpired);
         if (isExpired){
             Auth authWithNewRefreshToken = fitbitApi.refreshToken(auth.getRefreshToken(), auth);
-            System.out.println("TokenExpired");
             System.out.println("new Access token : "+authWithNewRefreshToken.getAccessToken());
             return this.authRepository.save(authWithNewRefreshToken).getAccessToken();
         }else{
