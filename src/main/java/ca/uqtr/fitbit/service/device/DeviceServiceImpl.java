@@ -18,13 +18,10 @@ import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 
 import javax.persistence.EntityManager;
@@ -55,15 +52,18 @@ public class DeviceServiceImpl implements DeviceService {
     @Value("${sha3-256.salt}")
     private String SALT;
     public static final String SHA3_256 = "SHA3-256";
+    @PersistenceContext
+    private final EntityManager entityManager;
 
     @Autowired
-    public DeviceServiceImpl(DeviceRepository deviceRepository, ModelMapper modelMapper, MessageSource messageSource, AuthService authService, FitbitApi fitbitApi, ActivityService activityService) {
+    public DeviceServiceImpl(DeviceRepository deviceRepository, ModelMapper modelMapper, MessageSource messageSource, AuthService authService, FitbitApi fitbitApi, ActivityService activityService, EntityManager entityManager) {
         this.deviceRepository = deviceRepository;
         this.modelMapper = modelMapper;
         this.messageSource = messageSource;
         this.authService = authService;
         this.fitbitApi = fitbitApi;
         this.activityService = activityService;
+        this.entityManager = entityManager;
     }
 
     @Override
@@ -199,6 +199,11 @@ public class DeviceServiceImpl implements DeviceService {
     @Transactional
     @Override
     public Response assignDevice(DeviceDto device) {
+        System.out.println("-----------  "+entityManager.createQuery("select sum(steps.value) from PatientDevice pd left join pd.activitiesSteps steps where pd.id = steps.patientDevice.id and pd.medicalFileId = :medicalFileId and steps.dateTime between :date1 and :date2 group by steps.dateTime")
+                .setParameter("medicalFileId", "f9e46ede87e28d7e758b180d5e9318465e23468dabfd83a0aecdef8e09d70312")
+                .setParameter("date1", "2020-04-27")
+                .setParameter("date2", "2020-04-27")
+                .getFirstResult());
             Device device1 = deviceRepository.getDeviceById(device.getId());
             if (device1 == null)
                 return new Response(null,
