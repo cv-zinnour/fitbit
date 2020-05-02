@@ -70,6 +70,7 @@ public class ActivityServiceImpl implements ActivityService {
     @Override
     public void getDataOfDayBetweenTwoTimesPerMinuteFromApi(String date, String endDate, String startTime, String endTime, Timestamp t1, Timestamp t2, Timestamp syncTime, DeviceDto deviceDto) throws IOException, ParseException {
         ActivitiesSteps activitiesSteps = modelMapper.map(api.getActivitiesTypeData().getDataOfDayBetweenTwoTimePerMinute("steps",date,endDate,startTime,endTime, authService.getAccessToken(deviceDto.dtoToObj(modelMapper))), ActivitiesSteps.class);
+        System.out.println("+++++++++  "+activitiesSteps.toString());
         activitiesSteps.setTimeStart(t1);
         activitiesSteps.setTimeEnd(t2);
         activitiesSteps.setSyncTime(syncTime);
