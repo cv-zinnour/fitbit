@@ -203,7 +203,7 @@ public class DeviceServiceImpl implements DeviceService {
     @Transactional
     @Override
     public Response assignDevice(DeviceDto device) {
-        System.out.println("-----------  "+entityManager.createQuery("select pd from PatientDevice pd left join fetch pd.activitiesSteps steps where pd.id = steps.patientDevice.id and pd.medicalFileId = :medicalFileId and steps.dateTime between :date1 and :date2 group by (pd.id = steps.patientDevice.id) ")
+        System.out.println("-----------  "+entityManager.createQuery("select pd from PatientDevice pd left join fetch pd.activitiesSteps steps where pd.id = steps.patientDevice.id and pd.medicalFileId = :medicalFileId and steps.dateTime between :date1 and :date2 ")
                 .setParameter("medicalFileId", "f9e46ede87e28d7e758b180d5e9318465e23468dabfd83a0aecdef8e09d70312")
                 .setParameter("date1", Timestamp.valueOf("2020-04-27 00:00:00"))
                 .setParameter("date2", Timestamp.valueOf("2020-05-27 00:00:00"))
