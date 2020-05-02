@@ -15,6 +15,7 @@ import org.hibernate.annotations.JoinFormula;
 import javax.persistence.*;
 import javax.persistence.Version;
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.sql.Date;
 import java.util.List;
@@ -36,7 +37,7 @@ public class PatientDevice implements Serializable {
     @Column(name = "version", nullable = false)
     private int version;
     @Column(name = "init_date", nullable = false)
-    private Date initDate;
+    private Timestamp initDate;
     @Column(name = "return_date", nullable = false)
     private Date returnDate;
     @Column(name = "professional_id", nullable = false)

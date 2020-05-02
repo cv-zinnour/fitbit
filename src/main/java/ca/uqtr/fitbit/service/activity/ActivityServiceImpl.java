@@ -26,8 +26,10 @@ import java.lang.reflect.Type;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.text.ParseException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -212,6 +214,12 @@ public class ActivityServiceImpl implements ActivityService {
 
     @Override
     public Response getStepsPerVisits(String medicalFileId, List<Date> dates) {
+        Date creationDate = dates.remove(0);
+        List<Date> visits = dates;
+        Map<String, Integer> steps = new HashMap<>();
+
+        visits.forEach(item ->{  });
+
         return null;
     }
 

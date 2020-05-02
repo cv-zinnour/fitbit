@@ -37,6 +37,8 @@ public class Device extends BaseEntity {
     private boolean available;
     @Column(name = "institution_code", nullable = false)
     private UUID institutionCode;
+    @Column(name = "fitbit_profile_name", nullable = false)
+    private String fitbitProfileName;
     @JsonManagedReference
     @OneToOne(mappedBy="device", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Auth auth;
@@ -47,9 +49,5 @@ public class Device extends BaseEntity {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "device_id")
     private List<FitbitSubscription> fitbitSubscriptions;
-    @ToString.Exclude
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "device_id")
-    private List<Synchronization> synchronizations;
 
 }
