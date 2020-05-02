@@ -44,8 +44,6 @@ public class ActivitiesSteps extends Activities {
     private Timestamp timeEnd;
     @Column(name = "sync_time")
     private Timestamp SyncTime;
-    @ToString.Exclude
-    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     private PatientDevice patientDevice;
 
