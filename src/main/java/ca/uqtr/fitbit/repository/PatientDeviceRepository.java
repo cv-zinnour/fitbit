@@ -7,7 +7,6 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 
 @Repository
@@ -15,9 +14,7 @@ public interface PatientDeviceRepository extends CrudRepository<PatientDevice, U
     @Query("select pd from PatientDevice pd where pd.device.id = :deviceId and pd.returnedAt is null")
     PatientDevice getByDeviceIdAndReturnedAtIsNull(UUID deviceId);
 
-/*
-    @Query("select sum(steps.value) from PatientDevice pd left join fetch pd.activitiesSteps steps where pd.id = steps.patientDevice.id and pd.medicalFileId = :medicalFileId and steps.dateTime between :date1 and :date2 group by steps.dateTime")
+    @Query("select sum(steps.value) from PatientDevice pd left join pd.activitiesSteps steps where pd.id = steps.patientDevice.id and pd.medicalFileId = :medicalFileId and steps.dateTime between :date1 and :date2 group by steps.dateTime")
     int getStepsBetweenTwoVisits(String medicalFileId, Date date1, Date date2);
-*/
 
 }
