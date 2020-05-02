@@ -9,7 +9,10 @@ import lombok.SneakyThrows;
 import org.json.JSONObject;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -28,11 +31,13 @@ public class AuthServiceImpl  implements AuthService {
         this.modelMapper = modelMapper;
     }
 
+    @Transactional( readOnly = true )
     @Override
     public Auth findByAccessToken(String accessToken) {
         return authRepository.findByAccessToken(accessToken);
     }
 
+    @Transactional( readOnly = true )
     @Override
     public void updateAuthorizationCode(String authorizationCode) {
         authRepository.findTopByOrderByIdDesc().setAuthorizationCode(authorizationCode);
@@ -60,6 +65,7 @@ public class AuthServiceImpl  implements AuthService {
         }
     }
 
+    @Transactional
     @Override
     public int deleteByAccessToken(String accessToken) {
         return authRepository.deleteByAccessToken(accessToken);
@@ -70,12 +76,14 @@ public class AuthServiceImpl  implements AuthService {
         authRepository.deleteById(id);
     }
 
-
     @Override
     public long count() {
         return authRepository.count();
     }
 
+    @Retryable(
+            value = { Exception.class },
+            backoff = @Backoff(delay = 3000))
     @SneakyThrows
     @Override
     public Auth authorizationCode2AccessAndRefreshToken(String authorizationCode, Device device) {
@@ -91,7 +99,9 @@ public class AuthServiceImpl  implements AuthService {
         auth.setDevice(device);
         return authRepository.save(auth);
     }
-
+    @Retryable(
+            value = { Exception.class },
+            backoff = @Backoff(delay = 3000))
     @Override
     public String getFitbitProfileId(Device device) throws IOException {
         return fitbitApi.getFitbitProfileId(getAccessToken(device));

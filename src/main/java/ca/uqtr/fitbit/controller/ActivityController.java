@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.List;
 
@@ -72,7 +73,7 @@ public class ActivityController {
     @ResponseBody
     public Response getStepsPerVisits(@RequestParam String medicalFileId,
                                      @RequestBody Request request) throws IOException {
-        List<Date> dates = mapper.readValue(String.valueOf(request.getObject()), new TypeReference<List<Date>>(){});
+        List<Timestamp> dates = mapper.readValue(String.valueOf(request.getObject()), new TypeReference<List<Date>>(){});
         return activityService.getStepsPerVisits(medicalFileId, dates);
     }
 
@@ -80,7 +81,7 @@ public class ActivityController {
     @ResponseBody
     public Response getActiveMinutesPerVisits(@RequestParam String medicalFileId,
                                        @RequestBody Request request) throws IOException {
-        List<Date> dates = mapper.readValue(String.valueOf(request.getObject()), new TypeReference<List<Date>>(){});
+        List<Timestamp> dates = mapper.readValue(String.valueOf(request.getObject()), new TypeReference<List<Date>>(){});
         return activityService.getActiveMinutesPerVisits(medicalFileId, dates);
     }
 

@@ -20,6 +20,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -107,7 +109,7 @@ public class DeviceServiceImpl implements DeviceService {
                             messageSource.getMessage("error.null.message", null, Locale.US)));
         }
     }
-
+    @Transactional( readOnly = true )
     @Override
     public Response readDevices(DeviceDto device) {
         try{
@@ -163,7 +165,7 @@ public class DeviceServiceImpl implements DeviceService {
                             messageSource.getMessage("error.null.message", null, Locale.US)));
         }
     }
-
+    @Transactional( readOnly = true )
     @Override
     public Response readAvailableDevices(DeviceDto device) {
         try{
@@ -177,6 +179,7 @@ public class DeviceServiceImpl implements DeviceService {
         }
     }
 
+    @Transactional( readOnly = true )
     @Override
     public Response readAvailableDevicesByInstitutionCode(DeviceDto device, String patientId) {
         String patientIdSHA = new DigestUtils(SHA3_256).digestAsHex(patientId.concat(SALT));
@@ -191,6 +194,7 @@ public class DeviceServiceImpl implements DeviceService {
 
     }
 
+    @Transactional
     @Override
     public Response assignDevice(DeviceDto device) {
 
@@ -211,9 +215,11 @@ public class DeviceServiceImpl implements DeviceService {
         device1.setLastSyncDate(new java.sql.Timestamp(Calendar.getInstance().getTime().getTime() - TimeUnit.MINUTES.toMillis(240)));
         // device1.setLastSyncDate(new java.sql.Timestamp(Calendar.getInstance().getTime().getTime()));
             return new Response(modelMapper.map(deviceRepository.save(device1), DeviceDto.class), null);
-
     }
 
+    @Retryable(
+            value = { Exception.class },
+            backoff = @Backoff(delay = 3000))
     @Override
     public Response updateFitbitProfile(DeviceDto device, String gender, String birthday, String height) throws IOException {
         return fitbitApi.updateProfile(
@@ -223,6 +229,9 @@ public class DeviceServiceImpl implements DeviceService {
                 height);
     }
 
+    @Retryable(
+            value = { Exception.class },
+            backoff = @Backoff(delay = 3000))
     @Override
     public Response updateFitbitWeight(DeviceDto device, String weight) throws IOException {
         Calendar cal = Calendar.getInstance();
@@ -235,6 +244,7 @@ public class DeviceServiceImpl implements DeviceService {
                 new Time(date).toString().substring(0,5));
     }
 
+    @Transactional
     @Override
     public Response getBackDevice(DeviceDto device) {
         try{
@@ -254,6 +264,9 @@ public class DeviceServiceImpl implements DeviceService {
         }
     }
 
+    @Retryable(
+            value = { Exception.class },
+            backoff = @Backoff(delay = 3000))
     @Override
     public Response addSubscription(DeviceDto device) throws IOException {
 
@@ -269,12 +282,19 @@ public class DeviceServiceImpl implements DeviceService {
         return new Response(modelMapper.map(deviceRepository.save(device1.get()), DeviceDto.class), null);
     }
 
+    @Retryable(
+            value = { Exception.class },
+            backoff = @Backoff(delay = 3000))
     @Override
     public Response allSubscriptions(DeviceDto device) throws IOException {
 
         return fitbitApi.allSubscriptions(authService.getAccessToken(device.dtoToObj(modelMapper)), COLLECTION_PATH);
     }
 
+    @Retryable(
+            value = { Exception.class },
+            backoff = @Backoff(delay = 3000))
+    @Transactional( readOnly = true )
     @Override
     public Response removeSubscription(DeviceDto device) throws IOException {
         Device device1 = deviceRepository.getDeviceWith_LastFitbitSubscription_FetchTypeEAGER(device.getId());
