@@ -293,39 +293,32 @@ public class DeviceServiceImpl implements DeviceService {
 
     @Override
     public Response getDataFromAPIToDB(DeviceDto device) {
-        System.out.println("////////////////////////  getDataFromAPIToDB   "+device.toString());
         Calendar cal = Calendar.getInstance();
         try{
             Optional<Device> device1 = deviceRepository.findById(device.getId());
             if (!device1.isPresent()){
-                System.out.println("////////////////////////  null   ");
                 return new Response(null,
                         new Error(Integer.parseInt(messageSource.getMessage("error.null.id", null, Locale.US)),
                                 messageSource.getMessage("error.null.message", null, Locale.US)));
 
             }
-            System.out.println("////////////////////////  not null   ");
             Timestamp syncTime = new Timestamp(cal.getTime().getTime() - TimeUnit.MINUTES.toMillis(240));
-            System.out.println("//////////////////////// 1 ");
-            long d1 = device1.get().getPatientDevices().get(device1.get().getPatientDevices().size() - 1).getInitDate().getTime();
-            System.out.println("//////////////////////// 2 ");
+            long d1 = 0;
+            if (device1.get().getLastSyncDate() == null)
+                d1 = device1.get().getLastSyncDate().getTime();
+            else
+                d1 = device1.get().getPatientDevices().get(device1.get().getPatientDevices().size() - 1).getInitDate().getTime();
             //TODO Delete - TimeUnit.MINUTES.toMillis(240)
             long minutes = TimeUnit.MILLISECONDS.toMinutes(cal.getTime().getTime() - d1 - TimeUnit.MINUTES.toMillis(240));
 
-            System.out.println("//////////////////////// 3 ");
             int j = (int) (minutes/1440);
-            System.out.println("//////////////////////// 4 ");
             //TODO Delete - TimeUnit.MINUTES.toMillis(240)
             long d2 = cal.getTime().getTime() - TimeUnit.MINUTES.toMillis(1) - TimeUnit.MINUTES.toMillis(240);
-
-            System.out.println("//////////////////////// 5 ");
             if (j > 0)
                 d2 = d1 + TimeUnit.MINUTES.toMillis(1439);
 
             System.out.println("//////////////////////// minutes= "+minutes);
-            System.out.println("------------- j =  "+j);
             if (minutes > 0 && minutes < 1440) {
-                System.out.println("------------- if 1");
                 System.out.println("d1 =   "+new Date(d1 ).toLocalDate() +"   d2   "+ new Date(d2 ).toLocalDate());
                 System.out.println("d1 =   "+ new Time(d1).toString().substring(0,5)+"   d2   "+ new Time(d2).toString().substring(0,5));
                 activityService.getDataOfDayBetweenTwoTimesPerMinuteFromApi(
