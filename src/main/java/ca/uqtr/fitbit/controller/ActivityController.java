@@ -68,7 +68,6 @@ public class ActivityController {
         return activityService.getCaloriesOfDayBetweenTwoTimesPerMinuteFromApi(date, startTime, endTime, deviceDto);
     }
 
-
     @GetMapping(value = "/activity/steps")
     @ResponseBody
     public Response getStepsPerVisits(@RequestParam String medicalFileId,
