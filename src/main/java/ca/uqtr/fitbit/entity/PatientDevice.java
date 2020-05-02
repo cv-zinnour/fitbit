@@ -51,7 +51,8 @@ public class PatientDevice implements Serializable {
     @JsonManagedReference
     @OneToMany(mappedBy = "patientDevice", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ActivitiesCalories> activitiesCalories = new ArrayList<>();
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "patientDevice", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    @OneToMany(mappedBy = "patientDevice", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ActivitiesSteps> activitiesSteps = new ArrayList<>();
     @JsonManagedReference
     @OneToMany(mappedBy = "patientDevice", cascade = CascadeType.ALL, orphanRemoval = true)
