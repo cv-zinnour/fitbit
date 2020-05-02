@@ -31,7 +31,7 @@ public class ActivitiesDistance extends Activities{
     @Column(name = "version", nullable = false)
     private int version;
     @Column(name = "date")
-    private Date dateTime;
+    private Timestamp dateTime;
     @Column(name = "value")
     private double value;
     @Type(type = "jsonb")
@@ -50,7 +50,7 @@ public class ActivitiesDistance extends Activities{
     @ManyToOne(fetch = FetchType.LAZY)
     private PatientDevice patientDevice;
 
-    public ActivitiesDistance(Date dateTime, double value, String dataset, int datasetInterval) {
+    public ActivitiesDistance(Timestamp dateTime, double value, String dataset, int datasetInterval) {
         this.dateTime = dateTime;
         this.value = value;
         this.dataset = dataset;

@@ -33,7 +33,7 @@ public class ActivitiesCalories extends Activities{
     @Column(name = "version", nullable = false)
     private int version;
     @Column(name = "date")
-    private Date dateTime;
+    private Timestamp dateTime;
     @Column(name = "value")
     private double value;
     @Type(type = "jsonb")
@@ -54,7 +54,7 @@ public class ActivitiesCalories extends Activities{
 
 
 
-    public ActivitiesCalories(Date dateTime, double value, String dataset, int datasetInterval) {
+    public ActivitiesCalories(Timestamp dateTime, double value, String dataset, int datasetInterval) {
         this.dateTime = dateTime;
         this.value = value;
         this.dataset = dataset;

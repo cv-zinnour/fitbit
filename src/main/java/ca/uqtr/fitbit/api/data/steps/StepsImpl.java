@@ -64,7 +64,7 @@ public class StepsImpl implements Steps {
             }
         }
 
-        return new ActivitiesSteps(new Date(new SimpleDateFormat("yyyy-MM-dd").parse(dateTime).getTime()), stepsValue, jsonArray.toString(), datasetInterval);
+        return new ActivitiesSteps(new Timestamp(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(dateTime).getTime()), stepsValue, jsonArray.toString(), datasetInterval);
 
     }
 
@@ -103,7 +103,7 @@ public class StepsImpl implements Steps {
             }
         }
 
-        return new ActivitiesSteps(new Date(new SimpleDateFormat("yyyy-MM-dd").parse(dateTime).getTime()), stepsValue, jsonArray.toString(), datasetInterval);
+        return new ActivitiesSteps(new Timestamp(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(dateTime).getTime()), stepsValue, jsonArray.toString(), datasetInterval);
 
     }
 }

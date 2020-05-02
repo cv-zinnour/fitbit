@@ -65,7 +65,7 @@ public class CaloriesImpl implements Calories {
             }
         }
 
-        return new ActivitiesCalories(new Date(new SimpleDateFormat("yyyy-MM-dd").parse(dateTime).getTime()), caloriesValue, jsonArray.toString(), datasetInterval);
+        return new ActivitiesCalories(new Timestamp(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(dateTime).getTime()), caloriesValue, jsonArray.toString(), datasetInterval);
     }
 
     @Override
@@ -102,7 +102,7 @@ public class CaloriesImpl implements Calories {
             }
         }
 
-        return new ActivitiesCalories(new Date(new SimpleDateFormat("yyyy-MM-dd").parse(dateTime).getTime()), caloriesValue, jsonArray.toString(), datasetInterval);
+        return new ActivitiesCalories(new Timestamp(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(dateTime).getTime()), caloriesValue, jsonArray.toString(), datasetInterval);
 
     }
 }
