@@ -30,7 +30,7 @@ public class ActivitiesSteps extends Activities {
     @Column(name = "version", nullable = false)
     private int version;
     @Column(name = "date")
-    private Timestamp dateTime;
+    private Date dateTime;
     @Column(name = "value")
     private double value;
     @Type(type = "jsonb")
@@ -52,7 +52,7 @@ public class ActivitiesSteps extends Activities {
     public ActivitiesSteps() {
     }
 
-    public ActivitiesSteps(Timestamp dateTime, double value, String dataset, int datasetInterval) {
+    public ActivitiesSteps(Date dateTime, double value, String dataset, int datasetInterval) {
         this.dateTime = dateTime;
         this.value = value;
         this.dataset = dataset;

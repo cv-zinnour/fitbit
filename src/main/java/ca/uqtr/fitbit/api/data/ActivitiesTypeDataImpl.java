@@ -58,7 +58,7 @@ public class ActivitiesTypeDataImpl implements ActivitiesTypeData<Activities> {
                 response.close();
             }
         }
-        return new Activities(new Timestamp(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(data.getDateTime()).getTime()), data.getValue(), data.getDataset(), data.getDatasetInterval());
+        return new Activities(new Date(new SimpleDateFormat("yyyy-MM-dd").parse(data.getDateTime()).getTime()), data.getValue(), data.getDataset(), data.getDatasetInterval());
     }
 
     @Override
@@ -87,7 +87,7 @@ public class ActivitiesTypeDataImpl implements ActivitiesTypeData<Activities> {
             }
         }
         //System.out.println(data.toString());
-        return new Activities(new Timestamp(new SimpleDateFormat("yyyy-MM-dd").parse(data.getDateTime()).getTime()), data.getValue(), data.getDataset(), data.getDatasetInterval());
+        return new Activities(new Date(new SimpleDateFormat("yyyy-MM-dd").parse(data.getDateTime()).getTime()), data.getValue(), data.getDataset(), data.getDatasetInterval());
     }
 
     @Override
@@ -111,8 +111,6 @@ public class ActivitiesTypeDataImpl implements ActivitiesTypeData<Activities> {
             }
         }
         int datasetInterval = activities_type_intraday.getInt("datasetInterval");
-
-        System.out.println("-----------  "+ value);
         return new Serialization(dateTime, value, jsonArray.toString(), datasetInterval);
     }
 

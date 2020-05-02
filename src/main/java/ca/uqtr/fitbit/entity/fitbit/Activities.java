@@ -11,7 +11,7 @@ import java.sql.Timestamp;
 @Setter
 public class Activities {
 
-    private Timestamp dateTime;
+    private Date dateTime;
     private double value;
     private String dataset;
     private int datasetInterval;
@@ -21,7 +21,7 @@ public class Activities {
     public Activities() {
     }
 
-    public Activities(Timestamp dateTime, double value, String dataset, int datasetInterval) {
+    public Activities(Date dateTime, double value, String dataset, int datasetInterval) {
         this.dateTime = dateTime;
         this.value = value;
         this.dataset = dataset;

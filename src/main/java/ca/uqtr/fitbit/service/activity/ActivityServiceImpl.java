@@ -58,6 +58,9 @@ public class ActivityServiceImpl implements ActivityService {
         this.deviceRepository = deviceRepository;
     }
 
+    @Retryable(
+            value = { Exception.class },
+            backoff = @Backoff(delay = 3000))
     @Override
     public void getDataOfDayPerMinuteFromApi(String date, DeviceDto deviceDto) throws IOException, ParseException {
         ActivitiesSteps activitiesSteps = modelMapper.map(api.getActivitiesTypeData().getDataOfDayPerMinute("steps",date, authService.getAccessToken(deviceDto.dtoToObj(modelMapper))), ActivitiesSteps.class);
@@ -67,6 +70,9 @@ public class ActivityServiceImpl implements ActivityService {
         this.saveCaloriesOfDayFromApiInDB(activitiesCalories, deviceDto);
         this.saveDistanceOfDayFromApiInDB(activitiesDistance, deviceDto);
     }
+    @Retryable(
+            value = { Exception.class },
+            backoff = @Backoff(delay = 3000))
     @Override
     public void getDataOfDayBetweenTwoTimesPerMinuteFromApi(String date, String endDate, String startTime, String endTime, Timestamp t1, Timestamp t2, Timestamp syncTime, DeviceDto deviceDto) throws IOException, ParseException {
         ActivitiesSteps activitiesSteps = modelMapper.map(api.getActivitiesTypeData().getDataOfDayBetweenTwoTimePerMinute("steps",date,endDate,startTime,endTime, authService.getAccessToken(deviceDto.dtoToObj(modelMapper))), ActivitiesSteps.class);
@@ -88,6 +94,9 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
     //------------------------------------------------------------------- 1day 1min
+    @Retryable(
+            value = { Exception.class },
+            backoff = @Backoff(delay = 3000))
     @Override//----------------------------- steps
     public Response getStepsOfDayPerMinuteFromApi(String date, DeviceDto deviceDto) {
         try {
@@ -113,6 +122,9 @@ public class ActivityServiceImpl implements ActivityService {
         patientDevice.getActivitiesSteps().add(activitiesSteps);
         patientDeviceRepository.save(patientDevice);
     }
+    @Retryable(
+            value = { Exception.class },
+            backoff = @Backoff(delay = 3000))
     @Override//----------------------------- calories
     public Response getCaloriesOfDayPerMinuteFromApi(String date, DeviceDto deviceDto) {
         try {
@@ -144,6 +156,9 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
     //*------------------------------------------------------------------------ 1day 2times 1min
+    @Retryable(
+            value = { Exception.class },
+            backoff = @Backoff(delay = 3000))
     @Override
     public Response getStepsOfDayBetweenTwoTimesPerMinuteFromApi(String date, String startTime, String endTime, DeviceDto deviceDto) {
         try {
@@ -157,6 +172,9 @@ public class ActivityServiceImpl implements ActivityService {
                             messageSource.getMessage("error.null.message", null, Locale.US)));
         }
     }
+    @Retryable(
+            value = { Exception.class },
+            backoff = @Backoff(delay = 3000))
     @Override
     public Response getCaloriesOfDayBetweenTwoTimesPerMinuteFromApi(String date, String startTime, String endTime, DeviceDto deviceDto) {
         try {
@@ -171,6 +189,9 @@ public class ActivityServiceImpl implements ActivityService {
         }
     }
 //---------------------------------------------------------- not intraday data (!1min)
+@Retryable(
+        value = { Exception.class },
+        backoff = @Backoff(delay = 3000))
     @Override
     public Response getActivitiesBetween2DatesFromApi(String date1, String date2, DeviceDto deviceDto) {
         try {
