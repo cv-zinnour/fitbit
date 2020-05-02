@@ -207,8 +207,8 @@ public class DeviceServiceImpl implements DeviceService {
             patientDevices.add(patientDevice);
             device1.setAvailable(false);
         //TODO Delete - TimeUnit.MINUTES.toMillis(240)
-            device1.setLastSyncDate(new java.sql.Timestamp(Calendar.getInstance().getTime().getTime() - TimeUnit.MINUTES.toMillis(240)));
-            //device1.get().setLastSyncDate(new java.sql.Date(Calendar.getInstance().getTime().getTime()));
+        //device1.setLastSyncDate(new java.sql.Timestamp(Calendar.getInstance().getTime().getTime() - TimeUnit.MINUTES.toMillis(240)));
+            device1.setLastSyncDate(new java.sql.Timestamp(Calendar.getInstance().getTime().getTime()));
             return new Response(modelMapper.map(deviceRepository.save(device1), DeviceDto.class), null);
 
     }
