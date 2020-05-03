@@ -42,6 +42,7 @@ public class ScheduledNotification {
             for (Device device: devices) {
                 long time = cal.getTime().getTime() - (device.getLastSyncDate().getTime() + TimeUnit.DAYS.toMillis(5));
                 if (time <= 0){
+                    System.out.println("++++++++++++ // "+ time);
                     eventPublisher.publishEvent(new OnSynchronizationEmailEvent(modelMapper.map(device, DeviceDto.class)));
                 }
             }
