@@ -204,7 +204,7 @@ public class DeviceServiceImpl implements DeviceService {
     @Transactional
     @Override
     public Response assignDevice(DeviceDto device) {
-        System.out.println(stepsRepository.findById(1));
+        System.out.println(stepsRepository.findById(1).get().toString());
 
             Device device1 = deviceRepository.getDeviceById(device.getId());
             if (device1 == null)

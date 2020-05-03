@@ -1,13 +1,18 @@
 package ca.uqtr.fitbit.entity.view;
 
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Immutable;
 
 import javax.persistence.*;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
-
+@Data
+@NoArgsConstructor
+@EqualsAndHashCode(callSuper = false)
 @Entity
 @Immutable
 @Table(name = "steps_view")
