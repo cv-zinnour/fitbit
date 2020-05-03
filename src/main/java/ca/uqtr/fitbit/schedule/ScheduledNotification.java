@@ -34,7 +34,7 @@ public class ScheduledNotification {
         return cronRepo.findOne("cron").getCronValue();
     }, cron="#{@getCronValue}"*/
 
-    @Scheduled(fixedDelay = 43200000, initialDelay = 60000)
+    @Scheduled(fixedDelay = 43200000)
     public void scheduleFixedRateTaskAsync() {
         Calendar cal = Calendar.getInstance();
         List<Device> devices = deviceRepository.devicesNotReturned();
@@ -43,6 +43,7 @@ public class ScheduledNotification {
                 long time = cal.getTime().getTime() - (device.getLastSyncDate().getTime() + TimeUnit.DAYS.toMillis(5));
                 if (time <= 0){
                     System.out.println("++++++++++++ // "+ time);
+                    System.out.println("++++++++++++ // "+ cal.getTime().getTime());
                     System.out.println("++++++++++++ // "+ device.getLastSyncDate());
                     System.out.println("++++++++++++ // "+ device.getLastSyncDate().getTime());
                     eventPublisher.publishEvent(new OnSynchronizationEmailEvent(modelMapper.map(device, DeviceDto.class)));
