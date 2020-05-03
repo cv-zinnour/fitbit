@@ -9,6 +9,7 @@ import ca.uqtr.fitbit.entity.FitbitSubscription;
 import ca.uqtr.fitbit.entity.PatientDevice;
 import ca.uqtr.fitbit.entity.fitbit.Auth;
 import ca.uqtr.fitbit.repository.DeviceRepository;
+import ca.uqtr.fitbit.repository.StepsRepository;
 import ca.uqtr.fitbit.service.activity.ActivityService;
 import ca.uqtr.fitbit.service.auth.AuthService;
 import javassist.bytecode.stackmap.TypeData;
@@ -32,8 +33,6 @@ import java.lang.reflect.Type;
 import java.sql.Date;
 import java.sql.Time;
 import java.sql.Timestamp;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
@@ -57,9 +56,10 @@ public class DeviceServiceImpl implements DeviceService {
     public static final String SHA3_256 = "SHA3-256";
     @PersistenceContext
     private final EntityManager entityManager;
+    private final StepsRepository stepsRepository;
 
     @Autowired
-    public DeviceServiceImpl(DeviceRepository deviceRepository, ModelMapper modelMapper, MessageSource messageSource, AuthService authService, FitbitApi fitbitApi, ActivityService activityService, EntityManager entityManager) {
+    public DeviceServiceImpl(DeviceRepository deviceRepository, ModelMapper modelMapper, MessageSource messageSource, AuthService authService, FitbitApi fitbitApi, ActivityService activityService, EntityManager entityManager, StepsRepository stepsRepository) {
         this.deviceRepository = deviceRepository;
         this.modelMapper = modelMapper;
         this.messageSource = messageSource;
@@ -67,6 +67,7 @@ public class DeviceServiceImpl implements DeviceService {
         this.fitbitApi = fitbitApi;
         this.activityService = activityService;
         this.entityManager = entityManager;
+        this.stepsRepository = stepsRepository;
     }
 
     @Override
@@ -203,6 +204,8 @@ public class DeviceServiceImpl implements DeviceService {
     @Transactional
     @Override
     public Response assignDevice(DeviceDto device) {
+        System.out.println(stepsRepository.findById(1));
+
             Device device1 = deviceRepository.getDeviceById(device.getId());
             if (device1 == null)
                 return new Response(null,
