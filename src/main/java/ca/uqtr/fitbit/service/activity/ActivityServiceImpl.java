@@ -238,7 +238,8 @@ public class ActivityServiceImpl implements ActivityService {
     @Transactional( readOnly = true )
     @Override
     public Response getStepsPerVisits(String medicalFileId, List<Timestamp> dates) {
-        /*Timestamp creationDate = dates.remove(0);
+/*
+        Timestamp creationDate = dates.remove(0);
         List<Timestamp> visits = dates;
         Map<String, Integer> steps = new HashMap<>();
         int i = 0;
@@ -249,7 +250,8 @@ public class ActivityServiceImpl implements ActivityService {
                 return;
             patientDeviceRepository.getStepsBetweenTwoVisits(medicalFileId, )
 
-        });*/
+        });
+*/
 
         return null;
     }
