@@ -18,7 +18,7 @@ public class main {
         long c = cal.getTime().getTime();
         long d = c - a + b;
         System.out.println(d);
-        System.out.println();
+        System.out.println(TimeUnit.DAYS.toMillis(5));
     }
 
 

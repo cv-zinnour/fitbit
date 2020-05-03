@@ -41,7 +41,7 @@ public class ScheduledNotification {
         if (devices != null && !devices.isEmpty()){
             for (Device device: devices) {
                 long time = cal.getTime().getTime() - (device.getLastSyncDate().getTime() + TimeUnit.DAYS.toMillis(5));
-                if (time <= 0){
+                if (time >= 0){
                     System.out.println("++++++++++++ // "+ time);
                     System.out.println("++++++++++++ // "+ cal.getTime().getTime());
                     System.out.println("++++++++++++ // "+ device.getLastSyncDate());
