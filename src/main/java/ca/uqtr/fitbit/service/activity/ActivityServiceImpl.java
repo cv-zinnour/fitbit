@@ -2,6 +2,7 @@ package ca.uqtr.fitbit.service.activity;
 
 
 import ca.uqtr.fitbit.api.FitbitApi;
+import ca.uqtr.fitbit.api.data.steps.Steps;
 import ca.uqtr.fitbit.dto.ActivityDto;
 import ca.uqtr.fitbit.dto.DeviceDto;
 import ca.uqtr.fitbit.dto.Error;
@@ -30,7 +31,10 @@ import java.sql.Date;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.ParseException;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -238,20 +242,19 @@ public class ActivityServiceImpl implements ActivityService {
     @Transactional( readOnly = true )
     @Override
     public Response getStepsPerVisits(String medicalFileId, List<Timestamp> dates) {
-/*
-        Timestamp creationDate = dates.remove(0);
-        List<Timestamp> visits = dates;
-        Map<String, Integer> steps = new HashMap<>();
-        int i = 0;
-        if (dates.isEmpty())
-            steps.put(, patientDeviceRepository.getStepsBetweenTwoVisits(medicalFileId, creationDate, new java.sql.Timestamp(Calendar.getInstance().getTime().getTime())));
-        visits.forEach(item ->{
-            if (i == steps.size())
-                return;
-            patientDeviceRepository.getStepsBetweenTwoVisits(medicalFileId, )
+        List<Steps> steps = new ArrayList<>();
+        Timestamp initDate = patientDeviceRepository.getByMedicalFileIdAndReturnedAtIsNull(medicalFileId).getInitDate();
+        if (dates.isEmpty()){
+            //TODO Delete - TimeUnit.MINUTES.toMillis(240)
+            long days = ChronoUnit.DAYS.between(initDate.toLocalDateTime().toLocalDate() , new java.sql.Timestamp(Calendar.getInstance().getTime().getTime() - TimeUnit.MINUTES.toMillis(240)).toLocalDateTime().toLocalDate());
+            System.out.println("---- days = "+days);
 
-        });
-*/
+
+
+        } else {
+
+        }
+
 
         return null;
     }
