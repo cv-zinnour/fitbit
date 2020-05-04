@@ -54,20 +54,15 @@ public class DeviceServiceImpl implements DeviceService {
     @Value("${sha3-256.salt}")
     private String SALT;
     public static final String SHA3_256 = "SHA3-256";
-    @PersistenceContext
-    private final EntityManager entityManager;
-    private final StepsRepository stepsRepository;
 
     @Autowired
-    public DeviceServiceImpl(DeviceRepository deviceRepository, ModelMapper modelMapper, MessageSource messageSource, AuthService authService, FitbitApi fitbitApi, ActivityService activityService, EntityManager entityManager, StepsRepository stepsRepository) {
+    public DeviceServiceImpl(DeviceRepository deviceRepository, ModelMapper modelMapper, MessageSource messageSource, AuthService authService, FitbitApi fitbitApi, ActivityService activityService) {
         this.deviceRepository = deviceRepository;
         this.modelMapper = modelMapper;
         this.messageSource = messageSource;
         this.authService = authService;
         this.fitbitApi = fitbitApi;
         this.activityService = activityService;
-        this.entityManager = entityManager;
-        this.stepsRepository = stepsRepository;
     }
 
     @Override

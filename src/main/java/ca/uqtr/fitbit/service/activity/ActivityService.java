@@ -40,8 +40,8 @@ public interface ActivityService{
     Response getCaloriesOfDayBetweenTwoTimesPerMinuteFromDB(String date, String startTime, String endTime, DeviceDto deviceDto) ;
     Response getActivitiesBetween2DatesFromDB(String date1, String date2, DeviceDto deviceDto) ;
 
-    Response getStepsPerVisits(String medicalFileId, List<Timestamp> dates);
-    Response getActiveMinutesPerVisits(String medicalFileId, List<Timestamp> dates);
+    Response getStepsPerVisits(String medicalFileId, List<Date> dates);
+    Response getActiveMinutesPerVisits(String medicalFileId, List<Date> dates);
 
 }
 

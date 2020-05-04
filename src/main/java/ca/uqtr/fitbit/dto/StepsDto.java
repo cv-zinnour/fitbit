@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.modelmapper.ModelMapper;
 
 import javax.persistence.Column;
+import java.sql.Date;
 import java.sql.Timestamp;
 @Data
 @NoArgsConstructor
@@ -15,7 +16,7 @@ import java.sql.Timestamp;
 public class StepsDto {
 
     private String medicalFileId;
-    private Timestamp date;
+    private Date date;
     private Double steps;
 
     public Steps dtoToObj(ModelMapper modelMapper) {

@@ -3,11 +3,8 @@ package ca.uqtr.fitbit.service.activity;
 
 import ca.uqtr.fitbit.api.FitbitApi;
 import ca.uqtr.fitbit.api.data.steps.Steps;
-import ca.uqtr.fitbit.dto.ActivityDto;
-import ca.uqtr.fitbit.dto.DeviceDto;
+import ca.uqtr.fitbit.dto.*;
 import ca.uqtr.fitbit.dto.Error;
-import ca.uqtr.fitbit.dto.Response;
-import ca.uqtr.fitbit.entity.Device;
 import ca.uqtr.fitbit.entity.PatientDevice;
 import ca.uqtr.fitbit.entity.fitbit.ActivitiesCalories;
 import ca.uqtr.fitbit.entity.fitbit.ActivitiesDistance;
@@ -28,10 +25,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.sql.Date;
-import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.ParseException;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -41,7 +37,7 @@ import java.util.logging.Logger;
 
 @Service
 public class ActivityServiceImpl implements ActivityService {
-    private static final Logger LOGGER = Logger.getLogger( TypeData.ClassName.class.getName() );
+    private static final Logger LOGGER = Logger.getLogger(TypeData.ClassName.class.getName());
 
     private AuthService authService;
     private FitbitApi api;
@@ -50,9 +46,10 @@ public class ActivityServiceImpl implements ActivityService {
     private ModelMapper modelMapper;
     private MessageSource messageSource;
     private DeviceRepository deviceRepository;
+    private StepsRepository stepsRepository;
 
     @Autowired
-    public ActivityServiceImpl(AuthService authService, FitbitApi api, ActivityRepository activityRepository, PatientDeviceRepository patientDeviceRepository, ModelMapper modelMapper, MessageSource messageSource, DeviceRepository deviceRepository) {
+    public ActivityServiceImpl(AuthService authService, FitbitApi api, ActivityRepository activityRepository, PatientDeviceRepository patientDeviceRepository, ModelMapper modelMapper, MessageSource messageSource, DeviceRepository deviceRepository, StepsRepository stepsRepository) {
         this.authService = authService;
         this.api = api;
         this.activityRepository = activityRepository;
@@ -60,37 +57,39 @@ public class ActivityServiceImpl implements ActivityService {
         this.modelMapper = modelMapper;
         this.messageSource = messageSource;
         this.deviceRepository = deviceRepository;
+        this.stepsRepository = stepsRepository;
     }
 
     @Retryable(
-            value = { Exception.class },
+            value = {Exception.class},
             backoff = @Backoff(delay = 3000))
     @Override
     public void getDataOfDayPerMinuteFromApi(String date, DeviceDto deviceDto) throws IOException, ParseException {
-        ActivitiesSteps activitiesSteps = modelMapper.map(api.getActivitiesTypeData().getDataOfDayPerMinute("steps",date, authService.getAccessToken(deviceDto.dtoToObj(modelMapper))), ActivitiesSteps.class);
-        ActivitiesCalories activitiesCalories = modelMapper.map(api.getActivitiesTypeData().getDataOfDayPerMinute("calories",date, authService.getAccessToken(deviceDto.dtoToObj(modelMapper))), ActivitiesCalories.class);
-        ActivitiesDistance activitiesDistance = modelMapper.map(api.getActivitiesTypeData().getDataOfDayPerMinute("distance",date, authService.getAccessToken(deviceDto.dtoToObj(modelMapper))), ActivitiesDistance.class);
+        ActivitiesSteps activitiesSteps = modelMapper.map(api.getActivitiesTypeData().getDataOfDayPerMinute("steps", date, authService.getAccessToken(deviceDto.dtoToObj(modelMapper))), ActivitiesSteps.class);
+        ActivitiesCalories activitiesCalories = modelMapper.map(api.getActivitiesTypeData().getDataOfDayPerMinute("calories", date, authService.getAccessToken(deviceDto.dtoToObj(modelMapper))), ActivitiesCalories.class);
+        ActivitiesDistance activitiesDistance = modelMapper.map(api.getActivitiesTypeData().getDataOfDayPerMinute("distance", date, authService.getAccessToken(deviceDto.dtoToObj(modelMapper))), ActivitiesDistance.class);
         this.saveStepsOfDayFromApiInDB(activitiesSteps, deviceDto);
         this.saveCaloriesOfDayFromApiInDB(activitiesCalories, deviceDto);
         this.saveDistanceOfDayFromApiInDB(activitiesDistance, deviceDto);
     }
+
     @Retryable(
-            value = { Exception.class },
+            value = {Exception.class},
             backoff = @Backoff(delay = 3000))
     @Override
     public void getDataOfDayBetweenTwoTimesPerMinuteFromApi(String date, String endDate, String startTime, String endTime, Timestamp t1, Timestamp t2, Timestamp syncTime, DeviceDto deviceDto) throws IOException, ParseException {
-        ActivitiesSteps activitiesSteps = modelMapper.map(api.getActivitiesTypeData().getDataOfDayBetweenTwoTimePerMinute("steps",date,endDate,startTime,endTime, authService.getAccessToken(deviceDto.dtoToObj(modelMapper))), ActivitiesSteps.class);
-        System.out.println("+++++++++  "+activitiesSteps.toString());
+        ActivitiesSteps activitiesSteps = modelMapper.map(api.getActivitiesTypeData().getDataOfDayBetweenTwoTimePerMinute("steps", date, endDate, startTime, endTime, authService.getAccessToken(deviceDto.dtoToObj(modelMapper))), ActivitiesSteps.class);
+        System.out.println("+++++++++  " + activitiesSteps.toString());
         activitiesSteps.setTimeStart(t1);
         activitiesSteps.setTimeEnd(t2);
         activitiesSteps.setSyncTime(syncTime);
         saveStepsOfDayFromApiInDB(activitiesSteps, deviceDto);
-        ActivitiesCalories activitiesCalories = modelMapper.map(api.getActivitiesTypeData().getDataOfDayBetweenTwoTimePerMinute("calories",date,endDate,startTime,endTime, authService.getAccessToken(deviceDto.dtoToObj(modelMapper))), ActivitiesCalories.class);
+        ActivitiesCalories activitiesCalories = modelMapper.map(api.getActivitiesTypeData().getDataOfDayBetweenTwoTimePerMinute("calories", date, endDate, startTime, endTime, authService.getAccessToken(deviceDto.dtoToObj(modelMapper))), ActivitiesCalories.class);
         activitiesCalories.setTimeStart(t1);
         activitiesCalories.setTimeEnd(t2);
         activitiesCalories.setSyncTime(syncTime);
         saveCaloriesOfDayFromApiInDB(activitiesCalories, deviceDto);
-        ActivitiesDistance activitiesDistance = modelMapper.map(api.getActivitiesTypeData().getDataOfDayBetweenTwoTimePerMinute("distance",date,endDate,startTime,endTime, authService.getAccessToken(deviceDto.dtoToObj(modelMapper))), ActivitiesDistance.class);
+        ActivitiesDistance activitiesDistance = modelMapper.map(api.getActivitiesTypeData().getDataOfDayBetweenTwoTimePerMinute("distance", date, endDate, startTime, endTime, authService.getAccessToken(deviceDto.dtoToObj(modelMapper))), ActivitiesDistance.class);
         activitiesDistance.setTimeStart(t1);
         activitiesDistance.setTimeEnd(t2);
         activitiesDistance.setSyncTime(syncTime);
@@ -99,7 +98,7 @@ public class ActivityServiceImpl implements ActivityService {
 
     //------------------------------------------------------------------- 1day 1min
     @Retryable(
-            value = { Exception.class },
+            value = {Exception.class},
             backoff = @Backoff(delay = 3000))
     @Override//----------------------------- steps
     public Response getStepsOfDayPerMinuteFromApi(String date, DeviceDto deviceDto) {
@@ -119,15 +118,16 @@ public class ActivityServiceImpl implements ActivityService {
 
     @Override
     public void saveStepsOfDayFromApiInDB(ActivitiesSteps activitiesSteps, DeviceDto deviceDto) {
-        System.out.println("*------------------  "+deviceDto.getId());
+        System.out.println("*------------------  " + deviceDto.getId());
         PatientDevice patientDevice = patientDeviceRepository.getByDeviceIdAndReturnedAtIsNull(deviceDto.getId());
-        System.out.println("*------------------  "+patientDevice.toString());
+        System.out.println("*------------------  " + patientDevice.toString());
         activitiesSteps.setPatientDevice(patientDevice);
         patientDevice.getActivitiesSteps().add(activitiesSteps);
         patientDeviceRepository.save(patientDevice);
     }
+
     @Retryable(
-            value = { Exception.class },
+            value = {Exception.class},
             backoff = @Backoff(delay = 3000))
     @Override//----------------------------- calories
     public Response getCaloriesOfDayPerMinuteFromApi(String date, DeviceDto deviceDto) {
@@ -161,7 +161,7 @@ public class ActivityServiceImpl implements ActivityService {
 
     //*------------------------------------------------------------------------ 1day 2times 1min
     @Retryable(
-            value = { Exception.class },
+            value = {Exception.class},
             backoff = @Backoff(delay = 3000))
     @Override
     public Response getStepsOfDayBetweenTwoTimesPerMinuteFromApi(String date, String startTime, String endTime, DeviceDto deviceDto) {
@@ -176,8 +176,9 @@ public class ActivityServiceImpl implements ActivityService {
                             messageSource.getMessage("error.null.message", null, Locale.US)));
         }
     }
+
     @Retryable(
-            value = { Exception.class },
+            value = {Exception.class},
             backoff = @Backoff(delay = 3000))
     @Override
     public Response getCaloriesOfDayBetweenTwoTimesPerMinuteFromApi(String date, String startTime, String endTime, DeviceDto deviceDto) {
@@ -192,15 +193,17 @@ public class ActivityServiceImpl implements ActivityService {
                             messageSource.getMessage("error.null.message", null, Locale.US)));
         }
     }
-//---------------------------------------------------------- not intraday data (!1min)
-@Retryable(
-        value = { Exception.class },
-        backoff = @Backoff(delay = 3000))
+
+    //---------------------------------------------------------- not intraday data (!1min)
+    @Retryable(
+            value = {Exception.class},
+            backoff = @Backoff(delay = 3000))
     @Override
     public Response getActivitiesBetween2DatesFromApi(String date1, String date2, DeviceDto deviceDto) {
         try {
             List<Activity> activities = api.getActivities().getActivities(date1, date2, authService.getAccessToken(deviceDto.dtoToObj(modelMapper)));
-            Type activitiesDto = new TypeToken<List<ActivityDto>>() {}.getType();
+            Type activitiesDto = new TypeToken<List<ActivityDto>>() {
+            }.getType();
             return new Response(modelMapper.map(saveActivitiesBetween2DatesFromApiInDB(activities, deviceDto), activitiesDto), null);
         } catch (Exception ex) {
             LOGGER.log(Level.WARNING, ex.getMessage());
@@ -216,7 +219,7 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
     @Override
-    public Response getStepsOfDayPerMinuteFromDB(String date, DeviceDto deviceDto)  {
+    public Response getStepsOfDayPerMinuteFromDB(String date, DeviceDto deviceDto) {
         return null;
     }
 
@@ -231,37 +234,76 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
     @Override
-    public Response getCaloriesOfDayBetweenTwoTimesPerMinuteFromDB(String date, String startTime, String endTime, DeviceDto deviceDto)  {
+    public Response getCaloriesOfDayBetweenTwoTimesPerMinuteFromDB(String date, String startTime, String endTime, DeviceDto deviceDto) {
         return null;
     }
 
     @Override
-    public Response getActivitiesBetween2DatesFromDB(String date1, String date2, DeviceDto deviceDto)  {
+    public Response getActivitiesBetween2DatesFromDB(String date1, String date2, DeviceDto deviceDto) {
         return null;
     }
-    @Transactional( readOnly = true )
+
+    @Transactional(readOnly = true)
     @Override
-    public Response getStepsPerVisits(String medicalFileId, List<Timestamp> dates) {
-        List<Steps> steps = new ArrayList<>();
+    public Response getStepsPerVisits(String medicalFileId, List<Date> dates) {
+        List<StepsDto> stepsDtoList = new ArrayList<>();
+        Map<String, List<StepsDto>> stepsDtoMap = new HashMap<>();
+        Type stepsDtoType = new TypeToken<List<StepsDto>>() {}.getType();
         Timestamp initDate = patientDeviceRepository.getByMedicalFileIdAndReturnedAtIsNull(medicalFileId).getInitDate();
-        if (dates.isEmpty()){
-            //TODO Delete - TimeUnit.MINUTES.toMillis(240)
-            long days = ChronoUnit.DAYS.between(initDate.toLocalDateTime().toLocalDate() , new java.sql.Timestamp(Calendar.getInstance().getTime().getTime() - TimeUnit.MINUTES.toMillis(240)).toLocalDateTime().toLocalDate());
-            System.out.println("---- days = "+days);
+        if (dates.isEmpty()) {
+            stepsDtoList = modelMapper.map(
+                    stepsRepository.getByMedicalFileIdAndTwoDates(
+                            medicalFileId,
+                            new Date(initDate.getTime()),
+                            Date.valueOf(LocalDate.now())
+                    ),
+                    stepsDtoType);
 
-
-
+            return new Response(stepsDtoList, null);
         } else {
+            //TODO Delete - TimeUnit.MINUTES.toMillis(240)
+            long days = ChronoUnit.DAYS.between(initDate.toLocalDateTime().toLocalDate(), new java.sql.Timestamp(Calendar.getInstance().getTime().getTime() - TimeUnit.MINUTES.toMillis(240)).toLocalDateTime().toLocalDate());
+            System.out.println("---- days = " + days);
 
+            for (int i = 0; i <= dates.size(); i++) {
+                if (i == 0){
+                    stepsDtoList = modelMapper.map(
+                            stepsRepository.getByMedicalFileIdAndTwoDates(
+                                    medicalFileId,
+                                    new Date(initDate.getTime()),
+                                    dates.get(i)
+                            ),
+                            stepsDtoType);
+                    stepsDtoMap.put(dates.get(i).toString(), stepsDtoList);
+                } else if (i < dates.size()){
+                    stepsDtoList = modelMapper.map(
+                            stepsRepository.getByMedicalFileIdAndTwoDates(
+                                    medicalFileId,
+                                    dates.get(i),
+                                    dates.get(i + 1)
+                            ),
+                            stepsDtoType);
+                    stepsDtoMap.put(dates.get(i).toString(), stepsDtoList);
+                } else {
+                    stepsDtoList = modelMapper.map(
+                            stepsRepository.getByMedicalFileIdAndTwoDates(
+                                    medicalFileId,
+                                    dates.get(i),
+                                    Date.valueOf(LocalDate.now())
+                            ),
+                            stepsDtoType);
+                    stepsDtoMap.put(dates.get(i).toString(), stepsDtoList);
+                }
+
+            }
+
+            return new Response(stepsDtoMap, null);
         }
-
-
-        return null;
     }
 
-    @Transactional( readOnly = true )
+    @Transactional(readOnly = true)
     @Override
-    public Response getActiveMinutesPerVisits(String medicalFileId, List<Timestamp> dates) {
+    public Response getActiveMinutesPerVisits(String medicalFileId, List<Date> dates) {
         return null;
     }
 
