@@ -1,7 +1,7 @@
 package ca.uqtr.fitbit.repository;
 
 
-import ca.uqtr.fitbit.entity.PatientDevice;
+import ca.uqtr.fitbit.entity.view.Minutes;
 import ca.uqtr.fitbit.entity.view.Steps;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -14,9 +14,9 @@ import java.util.List;
 
 @Transactional( readOnly = true )
 @Repository
-public interface StepsRepository extends CrudRepository<Steps, Integer> {
+public interface MinutesRepository extends CrudRepository<Minutes, Integer> {
 
-    @Query("select steps from Steps steps where steps.medicalFileId = :medicalFileId and steps.date between :date1 and :date2")
-    List<Steps> getByMedicalFileIdAndTwoDates(String medicalFileId, Date date1, Date date2);
+    @Query("select minutes from Minutes minutes where minutes.medicalFileId = :medicalFileId and minutes.date between :date1 and :date2")
+    List<Minutes> getByMedicalFileIdAndTwoDates(String medicalFileId, Date date1, Date date2);
 
 }

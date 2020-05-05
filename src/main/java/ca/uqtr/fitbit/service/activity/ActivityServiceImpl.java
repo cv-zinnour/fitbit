@@ -2,7 +2,6 @@ package ca.uqtr.fitbit.service.activity;
 
 
 import ca.uqtr.fitbit.api.FitbitApi;
-import ca.uqtr.fitbit.api.data.steps.Steps;
 import ca.uqtr.fitbit.dto.*;
 import ca.uqtr.fitbit.dto.Error;
 import ca.uqtr.fitbit.entity.PatientDevice;
@@ -47,9 +46,10 @@ public class ActivityServiceImpl implements ActivityService {
     private MessageSource messageSource;
     private DeviceRepository deviceRepository;
     private StepsRepository stepsRepository;
+    private MinutesRepository minutesRepository;
 
     @Autowired
-    public ActivityServiceImpl(AuthService authService, FitbitApi api, ActivityRepository activityRepository, PatientDeviceRepository patientDeviceRepository, ModelMapper modelMapper, MessageSource messageSource, DeviceRepository deviceRepository, StepsRepository stepsRepository) {
+    public ActivityServiceImpl(AuthService authService, FitbitApi api, ActivityRepository activityRepository, PatientDeviceRepository patientDeviceRepository, ModelMapper modelMapper, MessageSource messageSource, DeviceRepository deviceRepository, StepsRepository stepsRepository, MinutesRepository minutesRepository) {
         this.authService = authService;
         this.api = api;
         this.activityRepository = activityRepository;
@@ -58,6 +58,7 @@ public class ActivityServiceImpl implements ActivityService {
         this.messageSource = messageSource;
         this.deviceRepository = deviceRepository;
         this.stepsRepository = stepsRepository;
+        this.minutesRepository = minutesRepository;
     }
 
     @Retryable(
@@ -301,10 +302,63 @@ public class ActivityServiceImpl implements ActivityService {
         }
     }
 
+    //0 - sedentary; 1 - lightly active; 2 - fairly active; 3 - very active.
     @Transactional(readOnly = true)
     @Override
     public Response getActiveMinutesPerVisits(String medicalFileId, List<Date> dates) {
-        return null;
+        List<MinutesDto> minutesDtoList = new ArrayList<>();
+        Map<String, List<MinutesDto>> minutesDtoMap = new HashMap<>();
+        Type minutesDtoType = new TypeToken<List<MinutesDto>>() {}.getType();
+        Timestamp initDate = patientDeviceRepository.getByMedicalFileIdAndReturnedAtIsNull(medicalFileId).getInitDate();
+        if (dates.isEmpty()) {
+            minutesDtoList = modelMapper.map(
+                    minutesRepository.getByMedicalFileIdAndTwoDates(
+                            medicalFileId,
+                            new Date(initDate.getTime()),
+                            Date.valueOf(LocalDate.now())
+                    ),
+                    minutesDtoType);
+
+            return new Response(minutesDtoList, null);
+        } else {
+            //TODO Delete - TimeUnit.MINUTES.toMillis(240)
+            long days = ChronoUnit.DAYS.between(initDate.toLocalDateTime().toLocalDate(), new java.sql.Timestamp(Calendar.getInstance().getTime().getTime() - TimeUnit.MINUTES.toMillis(240)).toLocalDateTime().toLocalDate());
+            System.out.println("---- days = " + days);
+
+            for (int i = 0; i <= dates.size(); i++) {
+                if (i == 0){
+                    minutesDtoList = modelMapper.map(
+                            minutesRepository.getByMedicalFileIdAndTwoDates(
+                                    medicalFileId,
+                                    new Date(initDate.getTime()),
+                                    dates.get(i)
+                            ),
+                            minutesDtoType);
+                    minutesDtoMap.put(dates.get(i).toString(), minutesDtoList);
+                } else if (i < dates.size()){
+                    minutesDtoList = modelMapper.map(
+                            minutesRepository.getByMedicalFileIdAndTwoDates(
+                                    medicalFileId,
+                                    dates.get(i),
+                                    dates.get(i + 1)
+                            ),
+                            minutesDtoType);
+                    minutesDtoMap.put(dates.get(i).toString(), minutesDtoList);
+                } else {
+                    minutesDtoList = modelMapper.map(
+                            minutesRepository.getByMedicalFileIdAndTwoDates(
+                                    medicalFileId,
+                                    dates.get(i),
+                                    Date.valueOf(LocalDate.now())
+                            ),
+                            minutesDtoType);
+                    minutesDtoMap.put(dates.get(i).toString(), minutesDtoList);
+                }
+
+            }
+
+            return new Response(minutesDtoMap, null);
+        }
     }
 
 }
