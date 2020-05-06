@@ -72,7 +72,9 @@ public class ActivityController {
     @ResponseBody
     public Response getStepsPerVisits(@RequestParam String medicalFileId,
                                      @RequestBody Request request) throws IOException {
+        System.out.println(request);
         List<Date> dates = mapper.readValue(String.valueOf(request.getObject()), new TypeReference<List<Date>>(){});
+        System.out.println(dates);
         return activityService.getStepsPerVisits(medicalFileId, dates);
     }
 
