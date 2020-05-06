@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.Positive;
 import java.io.IOException;
 import java.sql.Date;
 import java.sql.Timestamp;
@@ -68,7 +69,7 @@ public class ActivityController {
         return activityService.getCaloriesOfDayBetweenTwoTimesPerMinuteFromApi(date, startTime, endTime, deviceDto);
     }
 
-    @GetMapping(value = "/activity/steps")
+    @PostMapping(value = "/activity/steps")
     @ResponseBody
     public Response getStepsPerVisits(@RequestParam String medicalFileId,
                                      @RequestBody Request request) throws IOException {
