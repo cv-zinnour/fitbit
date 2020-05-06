@@ -266,7 +266,7 @@ public class ActivityServiceImpl implements ActivityService {
             long days = ChronoUnit.DAYS.between(initDate.toLocalDateTime().toLocalDate(), new java.sql.Timestamp(Calendar.getInstance().getTime().getTime() - TimeUnit.MINUTES.toMillis(240)).toLocalDateTime().toLocalDate());
             System.out.println("---- days = " + days);
 
-            for (int i = 0; i <= dates.size(); i++) {
+            for (int i = 0; i < dates.size(); i++) {
                 if (i == 0){
                     stepsDtoList = modelMapper.map(
                             stepsRepository.getByMedicalFileIdAndTwoDates(
@@ -276,7 +276,7 @@ public class ActivityServiceImpl implements ActivityService {
                             ),
                             stepsDtoType);
                     stepsDtoMap.put(dates.get(i).toString(), stepsDtoList);
-                } else if (i < dates.size()){
+                } else {
                     stepsDtoList = modelMapper.map(
                             stepsRepository.getByMedicalFileIdAndTwoDates(
                                     medicalFileId,
@@ -285,19 +285,17 @@ public class ActivityServiceImpl implements ActivityService {
                             ),
                             stepsDtoType);
                     stepsDtoMap.put(dates.get(i).toString(), stepsDtoList);
-                } else {
-                    stepsDtoList = modelMapper.map(
-                            stepsRepository.getByMedicalFileIdAndTwoDates(
-                                    medicalFileId,
-                                    dates.get(i),
-                                    Date.valueOf(LocalDate.now())
-                            ),
-                            stepsDtoType);
-                    stepsDtoMap.put(dates.get(i).toString(), stepsDtoList);
                 }
 
             }
-
+            stepsDtoList = modelMapper.map(
+                    stepsRepository.getByMedicalFileIdAndTwoDates(
+                            medicalFileId,
+                            dates.get(dates.size()),
+                            Date.valueOf(LocalDate.now())
+                    ),
+                    stepsDtoType);
+            stepsDtoMap.put(dates.get(dates.size()).toString(), stepsDtoList);
             return new Response(stepsDtoMap, null);
         }
     }
