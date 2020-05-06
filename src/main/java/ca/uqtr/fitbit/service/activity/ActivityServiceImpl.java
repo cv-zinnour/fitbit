@@ -325,7 +325,7 @@ public class ActivityServiceImpl implements ActivityService {
             long days = ChronoUnit.DAYS.between(initDate.toLocalDateTime().toLocalDate(), new java.sql.Timestamp(Calendar.getInstance().getTime().getTime() - TimeUnit.MINUTES.toMillis(240)).toLocalDateTime().toLocalDate());
             System.out.println("---- days = " + days);
 
-            for (int i = 0; i <= dates.size(); i++) {
+            for (int i = 0; i <= dates.size()-1; i++) {
                 if (i == 0){
                     minutesDtoList = modelMapper.map(
                             minutesRepository.getByMedicalFileIdAndTwoDates(
@@ -335,7 +335,7 @@ public class ActivityServiceImpl implements ActivityService {
                             ),
                             minutesDtoType);
                     minutesDtoMap.put(dates.get(i).toString(), minutesDtoList);
-                } else if (i < dates.size()){
+                } else{
                     minutesDtoList = modelMapper.map(
                             minutesRepository.getByMedicalFileIdAndTwoDates(
                                     medicalFileId,
@@ -344,19 +344,17 @@ public class ActivityServiceImpl implements ActivityService {
                             ),
                             minutesDtoType);
                     minutesDtoMap.put(dates.get(i).toString(), minutesDtoList);
-                } else {
-                    minutesDtoList = modelMapper.map(
-                            minutesRepository.getByMedicalFileIdAndTwoDates(
-                                    medicalFileId,
-                                    dates.get(i),
-                                    Date.valueOf(LocalDate.now())
-                            ),
-                            minutesDtoType);
-                    minutesDtoMap.put(dates.get(i).toString(), minutesDtoList);
                 }
 
             }
-
+            minutesDtoList = modelMapper.map(
+                    minutesRepository.getByMedicalFileIdAndTwoDates(
+                            medicalFileId,
+                            dates.get(dates.size()-1),
+                            Date.valueOf(LocalDate.now())
+                    ),
+                    minutesDtoType);
+            minutesDtoMap.put(dates.get(dates.size()-1).toString(), minutesDtoList);
             return new Response(minutesDtoMap, null);
         }
     }
