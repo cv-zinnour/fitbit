@@ -297,6 +297,7 @@ public class ActivityServiceImpl implements ActivityService {
                     ),
                     stepsDtoType);
             stepsDtoMap.put(dates.get(dates.size()-1).toString(), stepsDtoList);
+            System.out.println("******   "+stepsDtoMap.toString());
             return new Response(stepsDtoMap, null);
         }
     }
