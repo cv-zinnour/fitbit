@@ -325,7 +325,7 @@ public class ActivityServiceImpl implements ActivityService {
             long days = ChronoUnit.DAYS.between(initDate.toLocalDateTime().toLocalDate(), new java.sql.Timestamp(Calendar.getInstance().getTime().getTime() - TimeUnit.MINUTES.toMillis(240)).toLocalDateTime().toLocalDate());
             System.out.println("---- days = " + days);
 
-            for (int i = 0; i <= dates.size()-1; i++) {
+            for (int i = 0; i < dates.size()-1; i++) {
                 if (i == 0){
                     minutesDtoList = modelMapper.map(
                             minutesRepository.getByMedicalFileIdAndTwoDates(
