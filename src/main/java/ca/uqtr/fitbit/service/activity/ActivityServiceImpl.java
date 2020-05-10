@@ -251,6 +251,10 @@ public class ActivityServiceImpl implements ActivityService {
         Map<String, List<StepsDto>> stepsDtoMap = new HashMap<>();
         Type stepsDtoType = new TypeToken<List<StepsDto>>() {}.getType();
         Timestamp initDate = patientDeviceRepository.getByMedicalFileIdAndReturnedAtIsNull(medicalFileId).getInitDate();
+        if (initDate == null )
+            return new Response(null,
+                    new Error(Integer.parseInt(messageSource.getMessage("error.null.id", null, Locale.US)),
+                            messageSource.getMessage("error.null.message", null, Locale.US)));
         if (dates.isEmpty()) {
             stepsDtoList = modelMapper.map(
                     stepsRepository.getByMedicalFileIdAndTwoDates(
@@ -310,6 +314,10 @@ public class ActivityServiceImpl implements ActivityService {
         Map<String, List<MinutesDto>> minutesDtoMap = new HashMap<>();
         Type minutesDtoType = new TypeToken<List<MinutesDto>>() {}.getType();
         Timestamp initDate = patientDeviceRepository.getByMedicalFileIdAndReturnedAtIsNull(medicalFileId).getInitDate();
+        if (initDate == null )
+            return new Response(null,
+                    new Error(Integer.parseInt(messageSource.getMessage("error.null.id", null, Locale.US)),
+                            messageSource.getMessage("error.null.message", null, Locale.US)));
         if (dates.isEmpty()) {
             minutesDtoList = modelMapper.map(
                     minutesRepository.getByMedicalFileIdAndTwoDates(
