@@ -109,7 +109,7 @@ alter function inc(integer) owner to postgres;
 --------------------------------------------------------------
 
 create view "steps_view" as
-select row_number() over (order by pd.medical_file_id) as id,
+select row_number() over (order by pd.medical_file_id) as row_num,
        "pd".medical_file_id,
        "as".date,
        sum("as".value)                                 as steps
@@ -118,7 +118,7 @@ from patient_device "pd"
 group by "pd".medical_file_id, "as".date;
 -----
 create view "minutes_view" as
-select row_number() over (order by pd.medical_file_id) as id,
+select row_number() over (order by pd.medical_file_id) as row_num,
        pd.medical_file_id,
        r.date,
        r.sedentary::INTEGER,
