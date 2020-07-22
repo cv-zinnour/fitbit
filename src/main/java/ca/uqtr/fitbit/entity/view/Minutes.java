@@ -25,7 +25,7 @@ public class Minutes implements Serializable {
     static final long serialVersionUID = 1L;
 
     @Id
-    @Column(name = "id")
+    @Column(name = "row_num")
     private int id;
     @Column(name = "medical_file_id")
     private String medicalFileId;
