@@ -45,7 +45,7 @@ public class SynchronizationEmailListener implements
         String subject = "Fitbit data synchronization";
         Email from = new Email("zinnour@uqtr.ca");
         Email to = new Email(recipientAddress);
-        String message = "Don't forget to synchronize your data. This is an email generated automatically after 5 days from your last Fitbit data synchronization, please do not reply to it.";
+        String message = "Don't forget to synchronize your data. This email is generated automatically after 5 days from your last Fitbit data synchronization, please do not reply to it.";
         Content content = new Content("text/plain", message);
         Mail mail = new Mail(from, subject, to, content);
 
