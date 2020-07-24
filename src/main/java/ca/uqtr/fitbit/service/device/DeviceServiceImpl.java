@@ -382,13 +382,12 @@ public class DeviceServiceImpl implements DeviceService {
                             new Timestamp(d1), new Timestamp(d2),
                             syncTime,
                             device);
+                    System.out.println("------------- minutes");
+                    device1.get().setLastSyncDate(new Timestamp(d2 + TimeUnit.MINUTES.toMillis(1)));
+                    deviceRepository.save(device1.get());
                 }
             }
-            if (minutes > 0 ) {
-                System.out.println("------------- minutes");
-                device1.get().setLastSyncDate(new Timestamp(d2 + TimeUnit.MINUTES.toMillis(1)));
-                deviceRepository.save(device1.get());
-            }
+
             return new Response(device, null);
         } catch (Exception ex){
             LOGGER.log( Level.ALL, ex.getMessage());
