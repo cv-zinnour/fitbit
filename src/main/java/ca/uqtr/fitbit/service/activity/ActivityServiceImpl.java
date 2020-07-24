@@ -283,6 +283,7 @@ public class ActivityServiceImpl implements ActivityService {
                             stepsDtoType);
                     stepsDtoMap.put(dates.get(i).toString(), stepsDtoList);
                 } else {
+                    System.out.println("//////// i = "+ i +"   ######### d1 = "+ dates.get(i) + "    #########  d2 = "+ dates.get(i + 1));
                     stepsDtoList = modelMapper.map(
                             stepsRepository.getByMedicalFileIdAndTwoDates(
                                     medicalFileId,
