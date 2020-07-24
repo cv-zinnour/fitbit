@@ -250,12 +250,13 @@ public class ActivityServiceImpl implements ActivityService {
         List<StepsDto> stepsDtoList = new ArrayList<>();
         Map<String, List<StepsDto>> stepsDtoMap = new HashMap<>();
         Type stepsDtoType = new TypeToken<List<StepsDto>>() {}.getType();
-        PatientDevice patientDevice = patientDeviceRepository.getByMedicalFileId(medicalFileId);
+        List<PatientDevice> patientDevice = patientDeviceRepository.getByMedicalFileId(medicalFileId);
         if (patientDevice == null )
             return new Response(null,
                     new Error(Integer.parseInt(messageSource.getMessage("error.null.id", null, Locale.US)),
                             messageSource.getMessage("error.null.message", null, Locale.US)));
-        Timestamp initDate = patientDevice.getInitDate();
+        Timestamp initDate = patientDevice.get(0).getInitDate();
+        System.out.println("*********************initDate= "+initDate);
         if (dates.isEmpty()) {
             stepsDtoList = modelMapper.map(
                     stepsRepository.getByMedicalFileIdAndTwoDates(
@@ -314,12 +315,12 @@ public class ActivityServiceImpl implements ActivityService {
         List<MinutesDto> minutesDtoList = new ArrayList<>();
         Map<String, List<MinutesDto>> minutesDtoMap = new HashMap<>();
         Type minutesDtoType = new TypeToken<List<MinutesDto>>() {}.getType();
-        PatientDevice patientDevice = patientDeviceRepository.getByMedicalFileId(medicalFileId);
+        List<PatientDevice> patientDevice = patientDeviceRepository.getByMedicalFileId(medicalFileId);
         if (patientDevice == null )
             return new Response(null,
                     new Error(Integer.parseInt(messageSource.getMessage("error.null.id", null, Locale.US)),
                             messageSource.getMessage("error.null.message", null, Locale.US)));
-        Timestamp initDate = patientDevice.getInitDate();
+        Timestamp initDate = patientDevice.get(0).getInitDate();
         if (dates.isEmpty()) {
             minutesDtoList = modelMapper.map(
                     minutesRepository.getByMedicalFileIdAndTwoDates(

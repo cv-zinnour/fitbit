@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @Repository
@@ -15,7 +16,7 @@ public interface PatientDeviceRepository extends CrudRepository<PatientDevice, U
     @Query("select pd from PatientDevice pd where pd.device.id = :deviceId and pd.returnedAt is null")
     PatientDevice getByDeviceIdAndReturnedAtIsNull(UUID deviceId);
 
-    PatientDevice getByMedicalFileId(String medicalFileId);
+    List<PatientDevice> getByMedicalFileId(String medicalFileId);
 
 
 /*
