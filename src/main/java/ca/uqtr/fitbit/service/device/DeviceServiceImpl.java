@@ -354,8 +354,9 @@ public class DeviceServiceImpl implements DeviceService {
                         syncTime,
                         device);
             }
-
+            System.out.println("j = "+j);
             for (int i = 0; i < j; i++) {
+                System.out.println("i = "+i);
                 System.out.println("d1 =   "+new Date(d1).toLocalDate() +"   d2   "+ new Date(d2).toLocalDate());
                 System.out.println("d1 =   "+ new Time(d1).toString().substring(0,5)+"   d2   "+ new Time(d2).toString().substring(0,5));
                 activityService.getDataOfDayBetweenTwoTimesPerMinuteFromApi(
