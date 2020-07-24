@@ -353,6 +353,8 @@ public class DeviceServiceImpl implements DeviceService {
                         new Timestamp(d1), new Timestamp(d2),
                         syncTime,
                         device);
+                device1.get().setLastSyncDate(new Timestamp(d2 + TimeUnit.MINUTES.toMillis(1)));
+                deviceRepository.save(device1.get());
             }
             System.out.println("j = "+j);
             for (int i = 0; i < j; i++) {
