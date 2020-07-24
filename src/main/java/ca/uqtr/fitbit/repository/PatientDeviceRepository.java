@@ -15,7 +15,7 @@ public interface PatientDeviceRepository extends CrudRepository<PatientDevice, U
     @Query("select pd from PatientDevice pd where pd.device.id = :deviceId and pd.returnedAt is null")
     PatientDevice getByDeviceIdAndReturnedAtIsNull(UUID deviceId);
 
-    PatientDevice getByMedicalFileIdAndReturnedAtIsNull(String medicalFileId);
+    PatientDevice getByMedicalFileId(String medicalFileId);
 
 
 /*
