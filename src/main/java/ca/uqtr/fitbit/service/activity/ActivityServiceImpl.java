@@ -250,7 +250,7 @@ public class ActivityServiceImpl implements ActivityService {
         List<StepsDto> stepsDtoList = new ArrayList<>();
         Map<String, List<StepsDto>> stepsDtoMap = new HashMap<>();
         Type stepsDtoType = new TypeToken<List<StepsDto>>() {}.getType();
-        PatientDevice patientDevice = patientDeviceRepository.getByMedicalFileIdAndReturnedAtIsNull(medicalFileId);
+        PatientDevice patientDevice = patientDeviceRepository.getByMedicalFileId(medicalFileId);
         if (patientDevice == null )
             return new Response(null,
                     new Error(Integer.parseInt(messageSource.getMessage("error.null.id", null, Locale.US)),
@@ -314,7 +314,7 @@ public class ActivityServiceImpl implements ActivityService {
         List<MinutesDto> minutesDtoList = new ArrayList<>();
         Map<String, List<MinutesDto>> minutesDtoMap = new HashMap<>();
         Type minutesDtoType = new TypeToken<List<MinutesDto>>() {}.getType();
-        PatientDevice patientDevice = patientDeviceRepository.getByMedicalFileIdAndReturnedAtIsNull(medicalFileId);
+        PatientDevice patientDevice = patientDeviceRepository.getByMedicalFileId(medicalFileId);
         if (patientDevice == null )
             return new Response(null,
                     new Error(Integer.parseInt(messageSource.getMessage("error.null.id", null, Locale.US)),
