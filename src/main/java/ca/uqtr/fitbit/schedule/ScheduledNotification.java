@@ -28,7 +28,7 @@ public class ScheduledNotification {
         this.modelMapper = modelMapper;
     }
 
-    @Scheduled(cron = "0 23 03 * * ?", zone = "EST")
+    @Scheduled(cron = "0 31 03 * * ?| 0 32 03 * * ?", zone = "EST")
     public void scheduleFixedRateTaskAsync() {
         Calendar cal = Calendar.getInstance();
         List<Device> devices = deviceRepository.devicesNotReturned();
