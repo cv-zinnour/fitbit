@@ -28,14 +28,16 @@ public class ScheduledNotification {
         this.modelMapper = modelMapper;
     }
 
-    @Scheduled(cron = "${cron.expression.email}", zone = "EST")
+    @Scheduled(cron = "0 03 03 * * ?", zone = "EST")
     public void scheduleFixedRateTaskAsync() {
         Calendar cal = Calendar.getInstance();
         List<Device> devices = deviceRepository.devicesNotReturned();
         if (devices != null && !devices.isEmpty()){
             for (Device device: devices) {
                 long time = cal.getTime().getTime() - (device.getLastSyncDate().getTime() + TimeUnit.DAYS.toMillis(5));
+                System.out.println("======================= time==========="+time);
                 if (time >= 0 && time < TimeUnit.DAYS.toMillis(2 ) ){
+                    System.out.println("+++++++++++++++++ pass");
                     eventPublisher.publishEvent(new OnSynchronizationEmailEvent(modelMapper.map(device, DeviceDto.class)));
                 }
             }
