@@ -28,7 +28,7 @@ public class ScheduledNotification {
         this.modelMapper = modelMapper;
     }
 
-    @Scheduled(cron = "${cron.expression.email}", zone = "GMT-5:00")
+    @Scheduled(cron = "${cron.expression.email}", zone = "EST")
     public void scheduleFixedRateTaskAsync() {
         Calendar cal = Calendar.getInstance();
         List<Device> devices = deviceRepository.devicesNotReturned();
