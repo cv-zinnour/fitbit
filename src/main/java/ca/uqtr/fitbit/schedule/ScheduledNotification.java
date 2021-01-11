@@ -5,6 +5,7 @@ import ca.uqtr.fitbit.entity.Device;
 import ca.uqtr.fitbit.event.reminder.OnSynchronizationEmailEvent;
 import ca.uqtr.fitbit.repository.DeviceRepository;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -27,7 +28,7 @@ public class ScheduledNotification {
         this.modelMapper = modelMapper;
     }
 
-    @Scheduled(fixedDelay = 43200000)
+    @Scheduled(cron = "${cron.expression.email}", zone = "GMT-5:00")
     public void scheduleFixedRateTaskAsync() {
         Calendar cal = Calendar.getInstance();
         List<Device> devices = deviceRepository.devicesNotReturned();
