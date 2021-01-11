@@ -19,7 +19,7 @@ public class main {
         long b = TimeUnit.DAYS.toMillis(5);
         long c = cal.getTime().getTime();
         long time = c - (a + b);
-
+        time -= TimeUnit.MINUTES.toMillis(240);
 
         System.out.println(a);
         System.out.println(b);
@@ -30,6 +30,7 @@ public class main {
         if (time >= 0 && time < TimeUnit.DAYS.toMillis(2 ) ){
             System.out.println(1111111111);
         }else System.out.println(00000000000);
+
     }
 
 
