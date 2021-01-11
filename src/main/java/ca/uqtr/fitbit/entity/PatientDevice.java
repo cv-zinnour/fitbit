@@ -38,8 +38,7 @@ public class PatientDevice implements Serializable {
     private int version;
     @Column(name = "init_date", nullable = false)
     private Timestamp initDate;
-    @Column(name = "return_date", nullable = false)
-    private Date returnDate;
+
     @Column(name = "professional_id", nullable = false)
     private UUID professionalId;
     @Column(name = "medical_file_id", nullable = false)
