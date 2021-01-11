@@ -16,7 +16,7 @@ public class main {
     public static void main(String[] args) throws ParseException {
         Calendar cal = Calendar.getInstance();
 
-        long a = new Date(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2020-12-21 20:58:17.667000").getTime()).getTime();
+        long a = new Date(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2021-01-05 20:58:17.667000").getTime()).getTime();
         long b = TimeUnit.DAYS.toMillis(5);
         long c = cal.getTime().getTime();
         long time = c - (a + b);
