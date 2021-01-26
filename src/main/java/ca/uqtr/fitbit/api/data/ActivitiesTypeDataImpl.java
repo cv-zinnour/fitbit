@@ -77,7 +77,7 @@ public class ActivitiesTypeDataImpl implements ActivitiesTypeData<Activities> {
                 .build();
         try {
             response = okHttpClient.newCall(request).execute();
-            System.out.println(response.body().string());
+            //System.out.println(response.body().string());
             data = this.deserialization(response.body().string(), activityType);
         }catch (Exception e) {
             e.printStackTrace();
