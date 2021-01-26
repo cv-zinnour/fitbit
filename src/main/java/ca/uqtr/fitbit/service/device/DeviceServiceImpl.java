@@ -208,12 +208,12 @@ public class DeviceServiceImpl implements DeviceService {
         System.out.println("************  "+ patientDevices.size());
             PatientDevice patientDevice = modelMapper.map(device.getPatientDevices().get(0), PatientDevice.class);
         //TODO Delete - TimeUnit.MINUTES.toMillis(240)
-            patientDevice.setInitDate(new java.sql.Timestamp(Calendar.getInstance().getTime().getTime()- TimeUnit.MINUTES.toMillis(240)));
+            patientDevice.setInitDate(new java.sql.Timestamp(Calendar.getInstance().getTime().getTime()));
             patientDevice.setDevice(device1);
             patientDevices.add(patientDevice);
             device1.setAvailable(false);
         //TODO Delete - TimeUnit.MINUTES.toMillis(240)
-        device1.setLastSyncDate(new java.sql.Timestamp(Calendar.getInstance().getTime().getTime() - TimeUnit.MINUTES.toMillis(240)));
+        device1.setLastSyncDate(new java.sql.Timestamp(Calendar.getInstance().getTime().getTime()));
         // device1.setLastSyncDate(new java.sql.Timestamp(Calendar.getInstance().getTime().getTime()));
             return new Response(modelMapper.map(deviceRepository.save(device1), DeviceDto.class), null);
     }
@@ -237,7 +237,7 @@ public class DeviceServiceImpl implements DeviceService {
     public Response updateFitbitWeight(DeviceDto device, String weight) throws IOException {
         Calendar cal = Calendar.getInstance();
         //TODO Delete - TimeUnit.MINUTES.toMillis(240)
-        long date = cal.getTime().getTime() - TimeUnit.MINUTES.toMillis(240);
+        long date = cal.getTime().getTime();
         return fitbitApi.updateWeight(
                 authService.getAccessToken(device.dtoToObj(modelMapper)),
                 weight,
@@ -333,11 +333,11 @@ public class DeviceServiceImpl implements DeviceService {
                 d1 = device1.get().getPatientDevices().get(device1.get().getPatientDevices().size() - 1).getInitDate().getTime();
 */
             //TODO Delete - TimeUnit.MINUTES.toMillis(240)
-            long minutes = TimeUnit.MILLISECONDS.toMinutes(cal.getTime().getTime() - d1 - TimeUnit.MINUTES.toMillis(240));
+            long minutes = TimeUnit.MILLISECONDS.toMinutes(cal.getTime().getTime() - d1);
 
             int j = (int) (minutes/1440);
             //TODO Delete - TimeUnit.MINUTES.toMillis(240)
-            long d2 = cal.getTime().getTime() - TimeUnit.MINUTES.toMillis(1) - TimeUnit.MINUTES.toMillis(240);
+            long d2 = cal.getTime().getTime() - TimeUnit.MINUTES.toMillis(1) ;
             if (j > 0)
                 d2 = d1 + TimeUnit.MINUTES.toMillis(1439);
 

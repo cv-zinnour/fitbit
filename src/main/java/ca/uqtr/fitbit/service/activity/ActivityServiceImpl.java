@@ -269,7 +269,7 @@ public class ActivityServiceImpl implements ActivityService {
             return new Response(stepsDtoList, null);
         } else {
             //TODO Delete - TimeUnit.MINUTES.toMillis(240)
-            long days = ChronoUnit.DAYS.between(initDate.toLocalDateTime().toLocalDate(), new java.sql.Timestamp(Calendar.getInstance().getTime().getTime() - TimeUnit.MINUTES.toMillis(240)).toLocalDateTime().toLocalDate());
+            long days = ChronoUnit.DAYS.between(initDate.toLocalDateTime().toLocalDate(), new java.sql.Timestamp(Calendar.getInstance().getTime().getTime()).toLocalDateTime().toLocalDate());
             System.out.println("---- days = " + days);
 
             for (int i = 0; i < dates.size()-1; i++) {
@@ -334,7 +334,7 @@ public class ActivityServiceImpl implements ActivityService {
             return new Response(minutesDtoList, null);
         } else {
             //TODO Delete - TimeUnit.MINUTES.toMillis(240)
-            long days = ChronoUnit.DAYS.between(initDate.toLocalDateTime().toLocalDate(), new java.sql.Timestamp(Calendar.getInstance().getTime().getTime() - TimeUnit.MINUTES.toMillis(240)).toLocalDateTime().toLocalDate());
+            long days = ChronoUnit.DAYS.between(initDate.toLocalDateTime().toLocalDate(), new java.sql.Timestamp(Calendar.getInstance().getTime().getTime()).toLocalDateTime().toLocalDate());
             System.out.println("---- days = " + days);
 
             for (int i = 0; i < dates.size()-1; i++) {
