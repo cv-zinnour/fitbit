@@ -298,14 +298,7 @@ public class ActivityServiceImpl implements ActivityService {
             System.out.println("+++++  "+dates.size());
             System.out.println("+++++ d1 = "+dates.get(dates.size()-1));
             System.out.println("+++++ d2 = "+dates.size());
-            stepsDtoList = modelMapper.map(
-                    stepsRepository.getByMedicalFileIdAndTwoDates(
-                            medicalFileId,
-                            dates.get(dates.size()-1),
-                            Date.valueOf(LocalDate.now())
-                    ),
-                    stepsDtoType);
-            stepsDtoMap.put(dates.get(dates.size()-1).toString(), stepsDtoList);
+
             System.out.println("******   "+stepsDtoMap.toString());
             return new Response(stepsDtoMap, null);
         }
