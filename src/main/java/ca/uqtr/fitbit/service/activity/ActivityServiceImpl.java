@@ -32,6 +32,7 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -257,6 +258,8 @@ public class ActivityServiceImpl implements ActivityService {
                             messageSource.getMessage("error.null.message", null, Locale.US)));
         Timestamp initDate = patientDevice.get(0).getInitDate();
         System.out.println("*********************initDate= "+initDate);
+        dates = dates.stream().distinct().collect(Collectors.toList());
+        System.out.println("*********************dates= "+dates.toString());
         if (dates.isEmpty()) {
             stepsDtoList = modelMapper.map(
                     stepsRepository.getByMedicalFileIdAndTwoDates(
