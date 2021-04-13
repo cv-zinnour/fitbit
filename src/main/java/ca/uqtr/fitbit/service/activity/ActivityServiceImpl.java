@@ -272,23 +272,23 @@ public class ActivityServiceImpl implements ActivityService {
             long days = ChronoUnit.DAYS.between(initDate.toLocalDateTime().toLocalDate(), new java.sql.Timestamp(Calendar.getInstance().getTime().getTime()).toLocalDateTime().toLocalDate());
             System.out.println("---- days = " + days);
 
-            for (int i = 0; i < dates.size()-1; i++) {
-                if (i == 0){
+            for (int i = 0; i < dates.size(); i++) {
+                if ( i == 0){
                     stepsDtoList = modelMapper.map(
                             stepsRepository.getByMedicalFileIdAndTwoDates(
                                     medicalFileId,
                                     new Date(initDate.getTime()),
                                     dates.get(i)
                             ),
-                            stepsDtoType);
+                            stepsDtoType); //TODO: delete
                     stepsDtoMap.put(dates.get(i).toString(), stepsDtoList);
                 } else {
                     //System.out.println("//////// i = "+ i +"   ######### d1 = "+ dates.get(i) + "    #########  d2 = "+ dates.get(i + 1));
                     stepsDtoList = modelMapper.map(
                             stepsRepository.getByMedicalFileIdAndTwoDates(
                                     medicalFileId,
-                                    dates.get(i),
-                                    dates.get(i + 1)
+                                    dates.get(i-1),
+                                    dates.get(i)
                             ),
                             stepsDtoType);
                     stepsDtoMap.put(dates.get(i).toString(), stepsDtoList);
@@ -296,6 +296,8 @@ public class ActivityServiceImpl implements ActivityService {
 
             }
             System.out.println("+++++  "+dates.size());
+            System.out.println("+++++ d1 = "+dates.get(dates.size()-1));
+            System.out.println("+++++ d2 = "+dates.size());
             stepsDtoList = modelMapper.map(
                     stepsRepository.getByMedicalFileIdAndTwoDates(
                             medicalFileId,
