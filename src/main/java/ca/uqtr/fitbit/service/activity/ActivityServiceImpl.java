@@ -260,7 +260,9 @@ public class ActivityServiceImpl implements ActivityService {
         System.out.println("*********************initDate= "+initDate);
         dates = dates.stream().distinct().collect(Collectors.toList());
         System.out.println("*********************dates= "+dates.toString());
-        if (dates.isEmpty()) {
+        long days = ChronoUnit.DAYS.between(initDate.toLocalDateTime().toLocalDate(), new java.sql.Timestamp(Calendar.getInstance().getTime().getTime()).toLocalDateTime().toLocalDate());
+        System.out.println("---- days = " + days);
+        if (dates.isEmpty() || days == 0) {
             stepsDtoList = modelMapper.map(
                     stepsRepository.getByMedicalFileIdAndTwoDates(
                             medicalFileId,
@@ -272,8 +274,6 @@ public class ActivityServiceImpl implements ActivityService {
             return new Response(stepsDtoList, null);
         } else {
             //TODO Delete - TimeUnit.MINUTES.toMillis(240)
-            long days = ChronoUnit.DAYS.between(initDate.toLocalDateTime().toLocalDate(), new java.sql.Timestamp(Calendar.getInstance().getTime().getTime()).toLocalDateTime().toLocalDate());
-            System.out.println("---- days = " + days);
 
             for (int i = 0; i < dates.size(); i++) {
                 if ( i == 0){
@@ -322,7 +322,9 @@ public class ActivityServiceImpl implements ActivityService {
                             messageSource.getMessage("error.null.message", null, Locale.US)));
         Timestamp initDate = patientDevice.get(0).getInitDate();
         dates = dates.stream().distinct().collect(Collectors.toList());
-        if (dates.isEmpty()) {
+        long days = ChronoUnit.DAYS.between(initDate.toLocalDateTime().toLocalDate(), new java.sql.Timestamp(Calendar.getInstance().getTime().getTime()).toLocalDateTime().toLocalDate());
+        System.out.println("---- days = " + days);
+        if (dates.isEmpty() || days == 0) {
             minutesDtoList = modelMapper.map(
                     minutesRepository.getByMedicalFileIdAndTwoDates(
                             medicalFileId,
@@ -334,8 +336,6 @@ public class ActivityServiceImpl implements ActivityService {
             return new Response(minutesDtoList, null);
         } else {
             //TODO Delete - TimeUnit.MINUTES.toMillis(240)
-            long days = ChronoUnit.DAYS.between(initDate.toLocalDateTime().toLocalDate(), new java.sql.Timestamp(Calendar.getInstance().getTime().getTime()).toLocalDateTime().toLocalDate());
-            System.out.println("---- days = " + days);
 
             for (int i = 0; i < dates.size(); i++) {
                 if (i == 0){
