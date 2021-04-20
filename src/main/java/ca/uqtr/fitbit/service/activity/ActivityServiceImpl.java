@@ -273,12 +273,12 @@ public class ActivityServiceImpl implements ActivityService {
                 Date.valueOf(initDate.toLocalDateTime().toLocalDate())
         )));
         if (dates.isEmpty() || days == 0) {
-            stepsDtoList = modelMapper.map(
-                    new ArrayList<Steps>().add(stepsRepository.getByMedicalFileIdAndOneDate(
-                            medicalFileId,
-                            Date.valueOf(initDate.toLocalDateTime().toLocalDate())
-                    )),
-                    new TypeToken<ArrayList<StepsDto>>() {}.getType());
+            List<Steps> stepsList = new ArrayList<>();
+            stepsList.add(stepsRepository.getByMedicalFileIdAndOneDate(
+                    medicalFileId,
+                    Date.valueOf(initDate.toLocalDateTime().toLocalDate())
+            ));
+            stepsDtoList = modelMapper.map(stepsList, stepsDtoType);
 
             return new Response(stepsDtoList, null);
         } else {
@@ -334,12 +334,12 @@ public class ActivityServiceImpl implements ActivityService {
         long days = ChronoUnit.DAYS.between(initDate.toLocalDateTime().toLocalDate(), new java.sql.Timestamp(Calendar.getInstance().getTime().getTime()).toLocalDateTime().toLocalDate());
         System.out.println("---- days = " + days);
         if (dates.isEmpty() || days == 0) {
-            minutesDtoList = modelMapper.map(
-                    new ArrayList<Minutes>().add(minutesRepository.getByMedicalFileIdAndOneDate(
-                            medicalFileId,
-                            Date.valueOf(initDate.toLocalDateTime().toLocalDate())
-                    )),
-                    new TypeToken<ArrayList<MinutesDto>>() {}.getType());
+            List<Minutes> minutesList = new ArrayList<>();
+            minutesList.add(minutesRepository.getByMedicalFileIdAndOneDate(
+                    medicalFileId,
+                    Date.valueOf(initDate.toLocalDateTime().toLocalDate())
+            ));
+            minutesDtoList = modelMapper.map(minutesList, minutesDtoType);
 
             return new Response(minutesDtoList, null);
         } else {
