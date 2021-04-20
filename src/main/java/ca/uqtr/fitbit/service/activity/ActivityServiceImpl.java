@@ -9,6 +9,8 @@ import ca.uqtr.fitbit.entity.fitbit.ActivitiesCalories;
 import ca.uqtr.fitbit.entity.fitbit.ActivitiesDistance;
 import ca.uqtr.fitbit.entity.fitbit.ActivitiesSteps;
 import ca.uqtr.fitbit.entity.fitbit.Activity;
+import ca.uqtr.fitbit.entity.view.Minutes;
+import ca.uqtr.fitbit.entity.view.Steps;
 import ca.uqtr.fitbit.repository.*;
 import ca.uqtr.fitbit.service.auth.AuthService;
 import javassist.bytecode.stackmap.TypeData;
@@ -263,12 +265,12 @@ public class ActivityServiceImpl implements ActivityService {
         long days = ChronoUnit.DAYS.between(initDate.toLocalDateTime().toLocalDate(), new java.sql.Timestamp(Calendar.getInstance().getTime().getTime()).toLocalDateTime().toLocalDate());
         System.out.println("---- days = " + days);
         if (dates.isEmpty() || days == 0) {
-            stepsDtoList.add(modelMapper.map(
-                    stepsRepository.getByMedicalFileIdAndOneDate(
+            stepsDtoList = modelMapper.map(
+                    new ArrayList<Steps>().add(stepsRepository.getByMedicalFileIdAndOneDate(
                             medicalFileId,
                             new Date(initDate.getTime())
-                    ),
-                    stepsDtoType));
+                    )),
+                    stepsDtoType);
 
             return new Response(stepsDtoList, null);
         } else {
@@ -324,12 +326,12 @@ public class ActivityServiceImpl implements ActivityService {
         long days = ChronoUnit.DAYS.between(initDate.toLocalDateTime().toLocalDate(), new java.sql.Timestamp(Calendar.getInstance().getTime().getTime()).toLocalDateTime().toLocalDate());
         System.out.println("---- days = " + days);
         if (dates.isEmpty() || days == 0) {
-            minutesDtoList.add(modelMapper.map(
-                    minutesRepository.getByMedicalFileIdAndOneDate(
+            minutesDtoList = modelMapper.map(
+                    new ArrayList<Minutes>().add(minutesRepository.getByMedicalFileIdAndOneDate(
                             medicalFileId,
                             new Date(initDate.getTime())
-                    ),
-                    minutesDtoType));
+                    )),
+                    minutesDtoType);
 
             return new Response(minutesDtoList, null);
         } else {
