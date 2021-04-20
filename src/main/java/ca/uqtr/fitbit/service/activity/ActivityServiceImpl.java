@@ -263,13 +263,12 @@ public class ActivityServiceImpl implements ActivityService {
         long days = ChronoUnit.DAYS.between(initDate.toLocalDateTime().toLocalDate(), new java.sql.Timestamp(Calendar.getInstance().getTime().getTime()).toLocalDateTime().toLocalDate());
         System.out.println("---- days = " + days);
         if (dates.isEmpty() || days == 0) {
-            stepsDtoList = modelMapper.map(
-                    stepsRepository.getByMedicalFileIdAndTwoDates(
+            stepsDtoList.add(modelMapper.map(
+                    stepsRepository.getByMedicalFileIdAndOneDate(
                             medicalFileId,
-                            new Date(initDate.getTime()),
-                            Date.valueOf(LocalDate.now())
+                            new Date(initDate.getTime())
                     ),
-                    stepsDtoType);
+                    stepsDtoType));
 
             return new Response(stepsDtoList, null);
         } else {
@@ -325,13 +324,12 @@ public class ActivityServiceImpl implements ActivityService {
         long days = ChronoUnit.DAYS.between(initDate.toLocalDateTime().toLocalDate(), new java.sql.Timestamp(Calendar.getInstance().getTime().getTime()).toLocalDateTime().toLocalDate());
         System.out.println("---- days = " + days);
         if (dates.isEmpty() || days == 0) {
-            minutesDtoList = modelMapper.map(
-                    minutesRepository.getByMedicalFileIdAndTwoDates(
+            minutesDtoList.add(modelMapper.map(
+                    minutesRepository.getByMedicalFileIdAndOneDate(
                             medicalFileId,
-                            new Date(initDate.getTime()),
-                            Date.valueOf(LocalDate.now())
+                            new Date(initDate.getTime())
                     ),
-                    minutesDtoType);
+                    minutesDtoType));
 
             return new Response(minutesDtoList, null);
         } else {
