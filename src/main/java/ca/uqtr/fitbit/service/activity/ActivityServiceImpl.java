@@ -278,7 +278,7 @@ public class ActivityServiceImpl implements ActivityService {
                             medicalFileId,
                             Date.valueOf(initDate.toLocalDateTime().toLocalDate())
                     )),
-                    stepsDtoType);
+                    new TypeToken<ArrayList<StepsDto>>() {}.getType());
 
             return new Response(stepsDtoList, null);
         } else {
@@ -339,7 +339,7 @@ public class ActivityServiceImpl implements ActivityService {
                             medicalFileId,
                             Date.valueOf(initDate.toLocalDateTime().toLocalDate())
                     )),
-                    minutesDtoType);
+                    new TypeToken<ArrayList<MinutesDto>>() {}.getType());
 
             return new Response(minutesDtoList, null);
         } else {
