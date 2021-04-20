@@ -199,23 +199,22 @@ public class DeviceServiceImpl implements DeviceService {
     @Transactional
     @Override
     public Response assignDevice(DeviceDto device) {
-            Device device1 = deviceRepository.getDeviceById(device.getId());
-            if (device1 == null)
-                return new Response(null,
-                        new Error(Integer.parseInt(messageSource.getMessage("error.null.id", null, Locale.US)),
-                                messageSource.getMessage("error.null.message", null, Locale.US)));
-            List<PatientDevice> patientDevices = device1.getPatientDevices();
+        Device device1 = deviceRepository.getDeviceById(device.getId());
+        if (device1 == null)
+            return new Response(null,
+                    new Error(Integer.parseInt(messageSource.getMessage("error.null.id", null, Locale.US)),
+                            messageSource.getMessage("error.null.message", null, Locale.US)));
+        List<PatientDevice> patientDevices = device1.getPatientDevices();
         System.out.println("************  "+ patientDevices.size());
-            PatientDevice patientDevice = modelMapper.map(device.getPatientDevices().get(0), PatientDevice.class);
+        PatientDevice patientDevice = modelMapper.map(device.getPatientDevices().get(0), PatientDevice.class);
         //TODO Delete - TimeUnit.MINUTES.toMillis(240)
-            patientDevice.setInitDate(new java.sql.Timestamp(Calendar.getInstance().getTime().getTime()));
-            patientDevice.setDevice(device1);
-            patientDevices.add(patientDevice);
-            device1.setAvailable(false);
+        patientDevice.setInitDate(new java.sql.Timestamp(Calendar.getInstance().getTime().getTime()));
+        patientDevice.setDevice(device1);
+        patientDevices.add(patientDevice);
+        device1.setAvailable(false);
         //TODO Delete - TimeUnit.MINUTES.toMillis(240)
         device1.setLastSyncDate(new java.sql.Timestamp(Calendar.getInstance().getTime().getTime()));
-        // device1.setLastSyncDate(new java.sql.Timestamp(Calendar.getInstance().getTime().getTime()));
-            return new Response(modelMapper.map(deviceRepository.save(device1), DeviceDto.class), null);
+        return new Response(modelMapper.map(deviceRepository.save(device1), DeviceDto.class), null);
     }
 
     @Retryable(
@@ -324,7 +323,7 @@ public class DeviceServiceImpl implements DeviceService {
                                 messageSource.getMessage("error.null.message", null, Locale.US)));
 
             }
-            Timestamp syncTime = new Timestamp(cal.getTime().getTime() - TimeUnit.MINUTES.toMillis(240));
+            Timestamp syncTime = new Timestamp(cal.getTime().getTime());
             long d1 = device1.get().getLastSyncDate().getTime();
 /*
             if (device1.get().getLastSyncDate() == null)
