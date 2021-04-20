@@ -279,8 +279,8 @@ public class ActivityServiceImpl implements ActivityService {
                     Date.valueOf(initDate.toLocalDateTime().toLocalDate())
             ));
             stepsDtoList = modelMapper.map(stepsList, stepsDtoType);
-
-            return new Response(stepsDtoList, null);
+            stepsDtoMap.put(Date.valueOf(initDate.toLocalDateTime().toLocalDate()).toString(), stepsDtoList);
+            return new Response(stepsDtoMap, null);
         } else {
             //TODO Delete - TimeUnit.MINUTES.toMillis(240)
 
@@ -340,8 +340,9 @@ public class ActivityServiceImpl implements ActivityService {
                     Date.valueOf(initDate.toLocalDateTime().toLocalDate())
             ));
             minutesDtoList = modelMapper.map(minutesList, minutesDtoType);
+            minutesDtoMap.put(Date.valueOf(initDate.toLocalDateTime().toLocalDate()).toString(), minutesDtoList);
 
-            return new Response(minutesDtoList, null);
+            return new Response(minutesDtoMap, null);
         } else {
             //TODO Delete - TimeUnit.MINUTES.toMillis(240)
 
