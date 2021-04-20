@@ -14,6 +14,7 @@ import ca.uqtr.fitbit.entity.view.Steps;
 import ca.uqtr.fitbit.repository.*;
 import ca.uqtr.fitbit.service.auth.AuthService;
 import javassist.bytecode.stackmap.TypeData;
+import lombok.SneakyThrows;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,7 @@ import java.lang.reflect.Type;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
@@ -247,6 +249,7 @@ public class ActivityServiceImpl implements ActivityService {
         return null;
     }
 
+    @SneakyThrows
     @Transactional(readOnly = true)
     @Override
     public Response getStepsPerVisits(String medicalFileId, List<Date> dates) {
@@ -264,15 +267,12 @@ public class ActivityServiceImpl implements ActivityService {
         System.out.println("*********************dates= "+dates.toString());
         long days = ChronoUnit.DAYS.between(initDate.toLocalDateTime().toLocalDate(), new java.sql.Timestamp(Calendar.getInstance().getTime().getTime()).toLocalDateTime().toLocalDate());
         System.out.println("---- days = " + days);
-        System.out.println(stepsRepository.getByMedicalFileIdAndOneDate(
-                medicalFileId,
-                new Date(initDate.getTime())
-        ).toString());
+        System.out.println(Date.valueOf(initDate.toLocalDateTime().toLocalDate()));
         if (dates.isEmpty() || days == 0) {
             stepsDtoList = modelMapper.map(
                     new ArrayList<Steps>().add(stepsRepository.getByMedicalFileIdAndOneDate(
                             medicalFileId,
-                            new Date(initDate.getTime())
+                            Date.valueOf(initDate.toLocalDateTime().toLocalDate())
                     )),
                     stepsDtoType);
 
@@ -333,7 +333,7 @@ public class ActivityServiceImpl implements ActivityService {
             minutesDtoList = modelMapper.map(
                     new ArrayList<Minutes>().add(minutesRepository.getByMedicalFileIdAndOneDate(
                             medicalFileId,
-                            new Date(initDate.getTime())
+                            Date.valueOf(initDate.toLocalDateTime().toLocalDate())
                     )),
                     minutesDtoType);
 
