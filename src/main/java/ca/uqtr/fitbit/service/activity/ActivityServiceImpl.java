@@ -264,6 +264,10 @@ public class ActivityServiceImpl implements ActivityService {
         System.out.println("*********************dates= "+dates.toString());
         long days = ChronoUnit.DAYS.between(initDate.toLocalDateTime().toLocalDate(), new java.sql.Timestamp(Calendar.getInstance().getTime().getTime()).toLocalDateTime().toLocalDate());
         System.out.println("---- days = " + days);
+        System.out.println(stepsRepository.getByMedicalFileIdAndOneDate(
+                medicalFileId,
+                new Date(initDate.getTime())
+        ).toString());
         if (dates.isEmpty() || days == 0) {
             stepsDtoList = modelMapper.map(
                     new ArrayList<Steps>().add(stepsRepository.getByMedicalFileIdAndOneDate(
