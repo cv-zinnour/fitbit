@@ -6,11 +6,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.modelmapper.ModelMapper;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 @Data
 @AllArgsConstructor
-public class Message {
+public class Message implements Serializable {
     @JsonProperty("time")
     private Timestamp time;
     @JsonProperty("subscriptionId")
