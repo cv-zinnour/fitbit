@@ -23,8 +23,10 @@ public class FitbitAPIListener {
     }
 
     @RabbitListener(queues = "fitbit-queue")
-    public void receiveMessage(Message payload) {
-        log.info("Received message : {}", payload.toString());
+    public void receiveMessage(String payload) {
+        log.info("Received payload : {}", payload);
+        Message message = mapper.convertValue(payload, Message.class);
+        log.info("Received message : {}", message.toString());
     }
 
 
