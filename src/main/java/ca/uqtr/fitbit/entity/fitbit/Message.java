@@ -11,7 +11,7 @@ import java.sql.Timestamp;
 
 @Data
 @AllArgsConstructor
-public class Message implements Serializable {
+public class Message {
     @JsonProperty("time")
     private Timestamp time;
     @JsonProperty("subscriptionId")
