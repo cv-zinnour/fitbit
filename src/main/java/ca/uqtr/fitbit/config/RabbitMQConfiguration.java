@@ -30,6 +30,7 @@ public class RabbitMQConfiguration {
     private String DLQRoutingKey;
 
 
+
     @Bean
     DirectExchange exchange() {
         return new DirectExchange(exchange);
