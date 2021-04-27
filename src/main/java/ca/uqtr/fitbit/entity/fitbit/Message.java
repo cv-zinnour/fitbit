@@ -39,5 +39,11 @@ public class Message  implements Serializable {
         this.subscriptionId = subscriptionId;
     }
 
-
+    @Override
+    public String toString() {
+        return "Message{" +
+                "time=" + time +
+                ", subscriptionId='" + subscriptionId + '\'' +
+                '}';
+    }
 }
