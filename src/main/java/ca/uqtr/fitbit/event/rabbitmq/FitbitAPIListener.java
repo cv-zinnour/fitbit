@@ -46,9 +46,9 @@ public class FitbitAPIListener {
     }
 
     @RabbitListener(queues = deadLetterQueue)
-    public void processFailedMessages(Message message) {
+    public void processFailedMessages(org.springframework.amqp.core.Message message) {
         log.info("Received failed message: {}", message.toString());
-        rabbitTemplate.convertAndSend(exchange, routingkey, message);
+        rabbitTemplate.convertAndSend(exchange, message.getMessageProperties().getReceivedRoutingKey(), message);
     }
 
 }
