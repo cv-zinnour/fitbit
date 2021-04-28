@@ -30,11 +30,8 @@ import java.lang.reflect.Type;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -99,7 +96,6 @@ public class ActivityServiceImpl implements ActivityService {
         activitiesCalories.setTimeEnd(t2);
         activitiesCalories.setSyncTime(syncTime);
         if (activitiesSteps.getValue() == 0 || activitiesCalories.getValue() == 0){
-            System.out.println("+++++++++  FitbitAPIException");
             throw new FitbitAPIException();
         }
         else {
