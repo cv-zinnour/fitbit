@@ -39,8 +39,8 @@ public class FitbitAPIListener {
 
     @RabbitListener(queues = queue)
     public void receiveMessage(Message message) {
-        deviceService.getDataFromAPIToDB(new DeviceDto(message.getSubscriptionId()));
         log.info("Received message : {}", message.toString());
+        deviceService.getDataFromAPIToDB(new DeviceDto(message.getSubscriptionId()));
     }
 
     @RabbitListener(queues = deadLetterQueue)

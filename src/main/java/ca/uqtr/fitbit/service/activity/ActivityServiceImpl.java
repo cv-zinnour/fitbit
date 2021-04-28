@@ -76,7 +76,7 @@ public class ActivityServiceImpl implements ActivityService {
         ActivitiesCalories activitiesCalories = modelMapper.map(api.getActivitiesTypeData().getDataOfDayPerMinute("calories", date, authService.getAccessToken(deviceDto.dtoToObj(modelMapper))), ActivitiesCalories.class);
         //ActivitiesDistance activitiesDistance = modelMapper.map(api.getActivitiesTypeData().getDataOfDayPerMinute("distance", date, authService.getAccessToken(deviceDto.dtoToObj(modelMapper))), ActivitiesDistance.class);
         if (activitiesSteps.getValue() == 0 || activitiesCalories.getValue() == 0)
-            throw new FitbitAPIException("Fitbit API call error.");
+            throw new FitbitAPIException();
         else {
             saveStepsOfDayFromApiInDB(activitiesSteps, deviceDto);
             saveCaloriesOfDayFromApiInDB(activitiesCalories, deviceDto);
@@ -98,8 +98,10 @@ public class ActivityServiceImpl implements ActivityService {
         activitiesCalories.setTimeStart(t1);
         activitiesCalories.setTimeEnd(t2);
         activitiesCalories.setSyncTime(syncTime);
-        if (activitiesSteps.getValue() == 0 || activitiesCalories.getValue() == 0)
-            throw new FitbitAPIException("Fitbit API call error.");
+        if (activitiesSteps.getValue() == 0 || activitiesCalories.getValue() == 0){
+            System.out.println("+++++++++  FitbitAPIException");
+            throw new FitbitAPIException();
+        }
         else {
             saveStepsOfDayFromApiInDB(activitiesSteps, deviceDto);
             saveCaloriesOfDayFromApiInDB(activitiesCalories, deviceDto);
