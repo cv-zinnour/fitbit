@@ -1,6 +1,7 @@
 package ca.uqtr.fitbit.service.activity;
 
 
+import ca.uqtr.fitbit.FitbitAPIException;
 import ca.uqtr.fitbit.dto.DeviceDto;
 import ca.uqtr.fitbit.dto.Response;
 import ca.uqtr.fitbit.entity.fitbit.ActivitiesCalories;
@@ -16,8 +17,8 @@ import java.util.List;
 
 public interface ActivityService{
 
-    void getDataOfDayPerMinuteFromApi(String date, DeviceDto deviceDto) throws IOException, ParseException;
-    void getDataOfDayBetweenTwoTimesPerMinuteFromApi(String date, String endDate, String startTime, String endTime, Timestamp t1, Timestamp t2, Timestamp syncTime, DeviceDto deviceDto) throws IOException, ParseException;
+    void getDataOfDayPerMinuteFromApi(String date, DeviceDto deviceDto) throws IOException, ParseException, FitbitAPIException;
+    void getDataOfDayBetweenTwoTimesPerMinuteFromApi(String date, String endDate, String startTime, String endTime, Timestamp t1, Timestamp t2, Timestamp syncTime, DeviceDto deviceDto) throws FitbitAPIException, IOException, ParseException;
 
 
     Response getStepsOfDayPerMinuteFromApi(String date, DeviceDto deviceDto) ;

@@ -1,6 +1,7 @@
 package ca.uqtr.fitbit.service.activity;
 
 
+import ca.uqtr.fitbit.FitbitAPIException;
 import ca.uqtr.fitbit.api.FitbitApi;
 import ca.uqtr.fitbit.dto.*;
 import ca.uqtr.fitbit.dto.Error;
@@ -70,31 +71,39 @@ public class ActivityServiceImpl implements ActivityService {
             value = {Exception.class},
             backoff = @Backoff(delay = 3000))
     @Override
-    public void getDataOfDayPerMinuteFromApi(String date, DeviceDto deviceDto) throws IOException, ParseException {
+    public void getDataOfDayPerMinuteFromApi(String date, DeviceDto deviceDto) throws IOException, ParseException, FitbitAPIException {
         ActivitiesSteps activitiesSteps = modelMapper.map(api.getActivitiesTypeData().getDataOfDayPerMinute("steps", date, authService.getAccessToken(deviceDto.dtoToObj(modelMapper))), ActivitiesSteps.class);
         ActivitiesCalories activitiesCalories = modelMapper.map(api.getActivitiesTypeData().getDataOfDayPerMinute("calories", date, authService.getAccessToken(deviceDto.dtoToObj(modelMapper))), ActivitiesCalories.class);
-        ActivitiesDistance activitiesDistance = modelMapper.map(api.getActivitiesTypeData().getDataOfDayPerMinute("distance", date, authService.getAccessToken(deviceDto.dtoToObj(modelMapper))), ActivitiesDistance.class);
-        this.saveStepsOfDayFromApiInDB(activitiesSteps, deviceDto);
-        this.saveCaloriesOfDayFromApiInDB(activitiesCalories, deviceDto);
-        this.saveDistanceOfDayFromApiInDB(activitiesDistance, deviceDto);
+        //ActivitiesDistance activitiesDistance = modelMapper.map(api.getActivitiesTypeData().getDataOfDayPerMinute("distance", date, authService.getAccessToken(deviceDto.dtoToObj(modelMapper))), ActivitiesDistance.class);
+        if (activitiesSteps.getValue() == 0 || activitiesCalories.getValue() == 0)
+            throw new FitbitAPIException("Fitbit API call error.");
+        else {
+            saveStepsOfDayFromApiInDB(activitiesSteps, deviceDto);
+            saveCaloriesOfDayFromApiInDB(activitiesCalories, deviceDto);
+        }
+        //this.saveDistanceOfDayFromApiInDB(activitiesDistance, deviceDto);
     }
 
     @Retryable(
             value = {Exception.class},
             backoff = @Backoff(delay = 3000))
     @Override
-    public void getDataOfDayBetweenTwoTimesPerMinuteFromApi(String date, String endDate, String startTime, String endTime, Timestamp t1, Timestamp t2, Timestamp syncTime, DeviceDto deviceDto) throws IOException, ParseException {
+    public void getDataOfDayBetweenTwoTimesPerMinuteFromApi(String date, String endDate, String startTime, String endTime, Timestamp t1, Timestamp t2, Timestamp syncTime, DeviceDto deviceDto) throws IOException, ParseException, FitbitAPIException {
         ActivitiesSteps activitiesSteps = modelMapper.map(api.getActivitiesTypeData().getDataOfDayBetweenTwoTimePerMinute("steps", date, endDate, startTime, endTime, authService.getAccessToken(deviceDto.dtoToObj(modelMapper))), ActivitiesSteps.class);
         System.out.println("+++++++++  " + activitiesSteps.toString());
         activitiesSteps.setTimeStart(t1);
         activitiesSteps.setTimeEnd(t2);
         activitiesSteps.setSyncTime(syncTime);
-        saveStepsOfDayFromApiInDB(activitiesSteps, deviceDto);
         ActivitiesCalories activitiesCalories = modelMapper.map(api.getActivitiesTypeData().getDataOfDayBetweenTwoTimePerMinute("calories", date, endDate, startTime, endTime, authService.getAccessToken(deviceDto.dtoToObj(modelMapper))), ActivitiesCalories.class);
         activitiesCalories.setTimeStart(t1);
         activitiesCalories.setTimeEnd(t2);
         activitiesCalories.setSyncTime(syncTime);
-        saveCaloriesOfDayFromApiInDB(activitiesCalories, deviceDto);
+        if (activitiesSteps.getValue() == 0 || activitiesCalories.getValue() == 0)
+            throw new FitbitAPIException("Fitbit API call error.");
+        else {
+            saveStepsOfDayFromApiInDB(activitiesSteps, deviceDto);
+            saveCaloriesOfDayFromApiInDB(activitiesCalories, deviceDto);
+        }
         /*ActivitiesDistance activitiesDistance = modelMapper.map(api.getActivitiesTypeData().getDataOfDayBetweenTwoTimePerMinute("distance", date, endDate, startTime, endTime, authService.getAccessToken(deviceDto.dtoToObj(modelMapper))), ActivitiesDistance.class);
         activitiesDistance.setTimeStart(t1);
         activitiesDistance.setTimeEnd(t2);
