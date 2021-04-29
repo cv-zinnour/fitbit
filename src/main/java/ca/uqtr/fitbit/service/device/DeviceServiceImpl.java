@@ -33,6 +33,10 @@ import java.lang.reflect.Type;
 import java.sql.Date;
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
@@ -324,72 +328,24 @@ public class DeviceServiceImpl implements DeviceService {
 
             }
             Timestamp syncTime = new Timestamp(cal.getTime().getTime());
-            long d1 = device1.get().getLastSyncDate().getTime();
-/*
-            if (device1.get().getLastSyncDate() == null)
-                d1 = device1.get().getLastSyncDate().getTime();
-            else
-                d1 = device1.get().getPatientDevices().get(device1.get().getPatientDevices().size() - 1).getInitDate().getTime();
-*/
-            //TODO Delete - TimeUnit.MINUTES.toMillis(240)
-            long minutes = TimeUnit.MILLISECONDS.toMinutes(cal.getTime().getTime() - d1);
+            long d = device1.get().getLastSyncDate().getTime();
+            List<Timestamp> datesList = this.datesListBetweenTwoDate(new Timestamp(d), syncTime);
 
-            int j = (int) (minutes/1440);
-            //TODO Delete - TimeUnit.MINUTES.toMillis(240)
-            long d2 = cal.getTime().getTime() - TimeUnit.MINUTES.toMillis(1) ;
-            if (j > 0)
-                d2 = d1 + TimeUnit.MINUTES.toMillis(1439);
+            for (int i = 0; i < datesList.size()-1; i++) {
+                Timestamp d1 = datesList.get(i);
+                Timestamp d2 = datesList.get(i+1);
 
-            System.out.println("//////////////////////// minutes= "+minutes);
-            if (minutes > 0 && minutes < 1440) {
-                System.out.println("d1 =   "+new Date(d1 ).toLocalDate() +"   d2   "+ new Date(d2 ).toLocalDate());
-                System.out.println("d1 =   "+ new Time(d1).toString().substring(0,5)+"   d2   "+ new Time(d2).toString().substring(0,5));
                 activityService.getDataOfDayBetweenTwoTimesPerMinuteFromApi(
-                        new Date(d1 ).toLocalDate().toString(),
-                        new Date(d2 ).toLocalDate().toString(),
-                        new Time(d1).toString().substring(0,5),
-                        new Time(d2).toString().substring(0,5),
-                        new Timestamp(d1), new Timestamp(d2),
+                        d1.toLocalDateTime().toLocalDate().toString(),
+                        d2.toLocalDateTime().toLocalDate().toString(),
+                        Time.valueOf(d1.toLocalDateTime().toLocalTime()).toString().substring(0,5),
+                        Time.valueOf(d2.toLocalDateTime().toLocalTime()).toString().substring(0,5),
+                        d1, d2,
                         syncTime,
                         device);
-                device1.get().setLastSyncDate(new Timestamp(d2 + TimeUnit.MINUTES.toMillis(1)));
+                device1.get().setLastSyncDate(Timestamp.valueOf(d1.toLocalDateTime().toLocalDate().atStartOfDay().plus(Duration.of(1, ChronoUnit.MINUTES))));
                 deviceRepository.save(device1.get());
             }
-            System.out.println("j = "+j);
-            for (int i = 0; i < j; i++) {
-                System.out.println("i = "+i);
-                System.out.println("d1 =   "+new Date(d1).toLocalDate() +"   d2   "+ new Date(d2).toLocalDate());
-                System.out.println("d1 =   "+ new Time(d1).toString().substring(0,5)+"   d2   "+ new Time(d2).toString().substring(0,5));
-                activityService.getDataOfDayBetweenTwoTimesPerMinuteFromApi(
-                        new Date(d1).toLocalDate().toString(),
-                        new Date(d2).toLocalDate().toString(),
-                        new Time(d1).toString().substring(0,5),
-                        new Time(d2).toString().substring(0,5),
-                        new Timestamp(d1), new Timestamp(d2),
-                        syncTime,
-                        device);
-                minutes -= 1440;
-                d1 = d2 + TimeUnit.MINUTES.toMillis(1);
-                if (minutes >= 1440){
-                    d2 = d1 + TimeUnit.MINUTES.toMillis(1439);
-                }else {
-                    d2 = d1 + TimeUnit.MINUTES.toMillis(minutes);
-                    System.out.println("d1 =   "+new Date(d1 ).toLocalDate() +"   d2   "+ new Date(d2 ).toLocalDate());
-                    System.out.println("d1 =   "+ new Time(d1).toString().substring(0,5)+"   d2   "+ new Time(d2).toString().substring(0,5));
-                    activityService.getDataOfDayBetweenTwoTimesPerMinuteFromApi(
-                            new Date(d1 ).toLocalDate().toString(),
-                            new Date(d2 ).toLocalDate().toString(),
-                            new Time(d1).toString().substring(0,5),
-                            new Time(d2).toString().substring(0,5),
-                            new Timestamp(d1), new Timestamp(d2),
-                            syncTime,
-                            device);
-                    System.out.println("------------- minutes");
-                    device1.get().setLastSyncDate(new Timestamp(d2 + TimeUnit.MINUTES.toMillis(1)));
-                    deviceRepository.save(device1.get());
-                }
-            }
-
             return new Response(device, null);
         } catch (Exception ex){
             LOGGER.log( Level.ALL, ex.getMessage());
@@ -410,4 +366,23 @@ public class DeviceServiceImpl implements DeviceService {
         return new Response(encodedId, null);
     }
 
+
+    public List<Timestamp> datesListBetweenTwoDate(Timestamp s, Timestamp e){
+        LocalDate start = s.toLocalDateTime().toLocalDate();
+        LocalDate end = e.toLocalDateTime().toLocalDate();
+        List<LocalDate> totalDates = new ArrayList<>();
+        while (!start.isAfter(end)) {
+            totalDates.add(start);
+            start = start.plusDays(1);
+        }
+        totalDates.remove(0);
+        List<Timestamp> d = new ArrayList<>();
+        d.add(s);
+        for (LocalDate totalDate : totalDates) {
+            d.add(Timestamp.valueOf(totalDate.atStartOfDay().minus(Duration.of(1, ChronoUnit.MINUTES))));
+        }
+        d.add(e);
+        System.out.println("Dates list : "+e);
+        return d;
+    }
 }
