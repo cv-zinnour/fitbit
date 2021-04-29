@@ -367,8 +367,8 @@ public class ActivityServiceImpl implements ActivityService {
                     minutesDtoList = modelMapper.map(
                             minutesRepository.getByMedicalFileIdAndTwoDates(
                                     medicalFileId,
-                                    dates.get(i),
-                                    dates.get(i - 1)
+                                    dates.get(i- 1),
+                                    dates.get(i )
                             ),
                             minutesDtoType);
                     minutesDtoMap.put(dates.get(i).toString(), minutesDtoList);
