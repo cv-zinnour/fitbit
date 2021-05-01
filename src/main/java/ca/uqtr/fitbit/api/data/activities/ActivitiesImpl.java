@@ -38,7 +38,7 @@ public class ActivitiesImpl implements Activities {
                 .build();
         System.out.println("+++++++++++++"+okHttpClient.newCall(request).execute());
         try (Response response = okHttpClient.newCall(request).execute()) {
-            //System.out.println(response.body().string());
+            System.out.println(response.body().string());
             return response.body().string();
         }
     }
