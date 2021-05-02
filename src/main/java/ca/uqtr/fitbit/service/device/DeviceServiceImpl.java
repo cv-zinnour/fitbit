@@ -9,7 +9,6 @@ import ca.uqtr.fitbit.entity.FitbitSubscription;
 import ca.uqtr.fitbit.entity.PatientDevice;
 import ca.uqtr.fitbit.entity.fitbit.Auth;
 import ca.uqtr.fitbit.repository.DeviceRepository;
-import ca.uqtr.fitbit.repository.StepsRepository;
 import ca.uqtr.fitbit.service.activity.ActivityService;
 import ca.uqtr.fitbit.service.auth.AuthService;
 import javassist.bytecode.stackmap.TypeData;
@@ -26,19 +25,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.sql.Date;
 import java.sql.Time;
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -321,18 +316,19 @@ public class DeviceServiceImpl implements DeviceService {
         Calendar cal = Calendar.getInstance();
         try{
             Optional<Device> device1 = deviceRepository.findById(device.getId());
-            if (!device1.isPresent()){
+            if (device1.isEmpty()){
                 return new Response(null,
                         new Error(Integer.parseInt(messageSource.getMessage("error.null.id", null, Locale.US)),
                                 messageSource.getMessage("error.null.message", null, Locale.US)));
             }
             Timestamp syncTime = new Timestamp(cal.getTime().getTime());
             long lastSyncDate = device1.get().getLastSyncDate().getTime();
-            List<Timestamp> datesList = this.datesListBetweenTwoDate(new Timestamp(lastSyncDate), syncTime);
+            List<TwoDates> datesList = this.datesListBetweenTwoDate(new Timestamp(lastSyncDate), syncTime);
             LOGGER.info("datesList: "+ datesList.toString());
+
             for (int i = 0; i < datesList.size()-1; i++) {
-                Timestamp d1 = datesList.get(i);
-                Timestamp d2 = datesList.get(i+1);
+                Timestamp d1 = datesList.get(i).getDate1();
+                Timestamp d2 = datesList.get(i).getDate2();
 
                 activityService.getDataOfDayBetweenTwoTimesPerMinuteFromApi(
                         d1.toLocalDateTime().toLocalDate().toString(),
@@ -366,7 +362,7 @@ public class DeviceServiceImpl implements DeviceService {
     }
 
 
-    public List<Timestamp> datesListBetweenTwoDate(Timestamp s, Timestamp e){
+    public List<TwoDates> datesListBetweenTwoDate(Timestamp s, Timestamp e){
         LocalDate start = s.toLocalDateTime().toLocalDate();
         LocalDate end = e.toLocalDateTime().toLocalDate();
         List<LocalDate> totalDates = new ArrayList<>();
@@ -375,13 +371,56 @@ public class DeviceServiceImpl implements DeviceService {
             start = start.plusDays(1);
         }
         totalDates.remove(0);
-        List<Timestamp> d = new ArrayList<>();
-        d.add(s);
-        for (LocalDate totalDate : totalDates) {
-            d.add(Timestamp.valueOf(totalDate.atStartOfDay().minus(Duration.of(1, ChronoUnit.MINUTES))));
+        List<TwoDates> dd = new ArrayList<>();
+
+        for (int i = 0; i < totalDates.size(); i++) {
+            TwoDates td = new TwoDates();
+
+            if (i == 0){
+                td.setDate1(s);
+                td.setDate2(Timestamp.valueOf(totalDates.get(i).atStartOfDay().minus(Duration.of(1, ChronoUnit.MINUTES))));
+                dd.add(td);
+            }
+            else if(i == totalDates.size()-1){
+                td.setDate1(Timestamp.valueOf(totalDates.get(i).atStartOfDay().plus(Duration.of(0, ChronoUnit.MINUTES))));
+                td.setDate2(e);
+                dd.add(td);
+            } else {
+                td.setDate1(Timestamp.valueOf(totalDates.get(i-1).atStartOfDay().plus(Duration.of(0, ChronoUnit.MINUTES))));
+                td.setDate2(Timestamp.valueOf(totalDates.get(i).atStartOfDay().minus(Duration.of(1, ChronoUnit.MINUTES))));
+                dd.add(td);
+            }
         }
-        d.add(e);
-        System.out.println("Dates list : "+e);
-        return d;
+
+        return dd;
     }
+    public class TwoDates{
+        private Timestamp date1;
+        private Timestamp date2;
+
+        public void setDate1(Timestamp date1) {
+            this.date1 = date1;
+        }
+
+        public void setDate2(Timestamp date2) {
+            this.date2 = date2;
+        }
+
+        public Timestamp getDate1() {
+            return date1;
+        }
+
+        public Timestamp getDate2() {
+            return date2;
+        }
+
+        @Override
+        public String toString() {
+            return "TwoDates{" +
+                    "date1=" + date1 +
+                    ", date2=" + date2 +
+                    '}';
+        }
+    }
+
 }
