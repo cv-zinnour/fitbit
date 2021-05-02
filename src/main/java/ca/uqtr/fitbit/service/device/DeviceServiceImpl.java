@@ -34,6 +34,7 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -338,7 +339,7 @@ public class DeviceServiceImpl implements DeviceService {
                         d1, d2,
                         syncTime,
                         device);
-                device1.get().setLastSyncDate(Timestamp.valueOf(d1.toLocalDateTime().toLocalDate().atStartOfDay().plus(Duration.of(1, ChronoUnit.MINUTES))));
+                device1.get().setLastSyncDate(new Timestamp(d2.getTime() + TimeUnit.MINUTES.toMillis(1)));
                 deviceRepository.save(device1.get());
             }
             return new Response(device, null);
