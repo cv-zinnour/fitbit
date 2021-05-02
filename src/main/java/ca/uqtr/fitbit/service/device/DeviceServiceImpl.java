@@ -379,19 +379,17 @@ public class DeviceServiceImpl implements DeviceService {
 
             if (i == 0){
                 td.setDate1(s);
-                td.setDate2(Timestamp.valueOf(totalDates.get(i).atStartOfDay().minus(Duration.of(1, ChronoUnit.MINUTES))));
-                dd.add(td);
             } else {
                 td.setDate1(Timestamp.valueOf(totalDates.get(i-1).atStartOfDay().plus(Duration.of(0, ChronoUnit.MINUTES))));
-                td.setDate2(Timestamp.valueOf(totalDates.get(i).atStartOfDay().minus(Duration.of(1, ChronoUnit.MINUTES))));
-                dd.add(td);
             }
+            td.setDate2(Timestamp.valueOf(totalDates.get(i).atStartOfDay().minus(Duration.of(1, ChronoUnit.MINUTES))));
+            dd.add(td);
         }
-        dd.add(new TwoDates(Timestamp.valueOf(totalDates.get(totalDates.size()-1).atStartOfDay().plus(Duration.of(0, ChronoUnit.MINUTES))), e));
+        dd.add(new TwoDates(Timestamp.valueOf(totalDates.get(totalDates.size() - 1).atStartOfDay().plus(Duration.of(0, ChronoUnit.MINUTES))), e));
         return dd;
 
     }
-    public class TwoDates{
+    public static class TwoDates{
         private Timestamp date1;
         private Timestamp date2;
 
