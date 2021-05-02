@@ -38,6 +38,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static java.time.temporal.ChronoUnit.DAYS;
+
 
 @Service
 @Transactional
@@ -324,7 +326,11 @@ public class DeviceServiceImpl implements DeviceService {
             }
             Timestamp syncTime = new Timestamp(cal.getTime().getTime());
             long lastSyncDate = device1.get().getLastSyncDate().getTime();
-            List<TwoDates> datesList = this.datesListBetweenTwoDate(new Timestamp(lastSyncDate), syncTime);
+            List<TwoDates> datesList = new ArrayList<>();
+            if (DAYS.between(new Timestamp(lastSyncDate).toLocalDateTime().toLocalDate(), syncTime.toLocalDateTime().toLocalDate()) > 1)
+                datesList = this.datesListBetweenTwoDate(new Timestamp(lastSyncDate), syncTime);
+            else
+                datesList.add(new TwoDates(new Timestamp(lastSyncDate), syncTime));
             LOGGER.info("datesList: "+ datesList.toString());
 
             for (int i = 0; i < datesList.size(); i++) {
