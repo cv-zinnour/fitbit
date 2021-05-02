@@ -1,5 +1,6 @@
 package ca.uqtr.fitbit.service.device;
 
+import ca.uqtr.fitbit.Main;
 import ca.uqtr.fitbit.api.FitbitApi;
 import ca.uqtr.fitbit.dto.DeviceDto;
 import ca.uqtr.fitbit.dto.Error;
@@ -326,7 +327,7 @@ public class DeviceServiceImpl implements DeviceService {
             List<TwoDates> datesList = this.datesListBetweenTwoDate(new Timestamp(lastSyncDate), syncTime);
             LOGGER.info("datesList: "+ datesList.toString());
 
-            for (int i = 0; i < datesList.size()-1; i++) {
+            for (int i = 0; i < datesList.size(); i++) {
                 Timestamp d1 = datesList.get(i).getDate1();
                 Timestamp d2 = datesList.get(i).getDate2();
 
@@ -380,23 +381,27 @@ public class DeviceServiceImpl implements DeviceService {
                 td.setDate1(s);
                 td.setDate2(Timestamp.valueOf(totalDates.get(i).atStartOfDay().minus(Duration.of(1, ChronoUnit.MINUTES))));
                 dd.add(td);
-            }
-            else if(i == totalDates.size()-1){
-                td.setDate1(Timestamp.valueOf(totalDates.get(i).atStartOfDay().plus(Duration.of(0, ChronoUnit.MINUTES))));
-                td.setDate2(e);
-                dd.add(td);
             } else {
                 td.setDate1(Timestamp.valueOf(totalDates.get(i-1).atStartOfDay().plus(Duration.of(0, ChronoUnit.MINUTES))));
                 td.setDate2(Timestamp.valueOf(totalDates.get(i).atStartOfDay().minus(Duration.of(1, ChronoUnit.MINUTES))));
                 dd.add(td);
             }
         }
-
+        dd.add(new TwoDates(Timestamp.valueOf(totalDates.get(totalDates.size()-1).atStartOfDay().plus(Duration.of(0, ChronoUnit.MINUTES))), e));
         return dd;
+
     }
     public class TwoDates{
         private Timestamp date1;
         private Timestamp date2;
+
+        public TwoDates() {
+        }
+
+        public TwoDates(Timestamp date1, Timestamp date2) {
+            this.date1 = date1;
+            this.date2 = date2;
+        }
 
         public void setDate1(Timestamp date1) {
             this.date1 = date1;
