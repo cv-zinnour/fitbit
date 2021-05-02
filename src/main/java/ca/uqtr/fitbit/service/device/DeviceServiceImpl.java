@@ -1,6 +1,5 @@
 package ca.uqtr.fitbit.service.device;
 
-import ca.uqtr.fitbit.Main;
 import ca.uqtr.fitbit.api.FitbitApi;
 import ca.uqtr.fitbit.dto.DeviceDto;
 import ca.uqtr.fitbit.dto.Error;
