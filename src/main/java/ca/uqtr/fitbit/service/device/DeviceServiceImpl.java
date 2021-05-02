@@ -325,12 +325,11 @@ public class DeviceServiceImpl implements DeviceService {
                 return new Response(null,
                         new Error(Integer.parseInt(messageSource.getMessage("error.null.id", null, Locale.US)),
                                 messageSource.getMessage("error.null.message", null, Locale.US)));
-
             }
             Timestamp syncTime = new Timestamp(cal.getTime().getTime());
-            long d = device1.get().getLastSyncDate().getTime();
-            List<Timestamp> datesList = this.datesListBetweenTwoDate(new Timestamp(d), syncTime);
-
+            long lastSyncDate = device1.get().getLastSyncDate().getTime();
+            List<Timestamp> datesList = this.datesListBetweenTwoDate(new Timestamp(lastSyncDate), syncTime);
+            LOGGER.info("datesList: "+ datesList.toString());
             for (int i = 0; i < datesList.size()-1; i++) {
                 Timestamp d1 = datesList.get(i);
                 Timestamp d2 = datesList.get(i+1);

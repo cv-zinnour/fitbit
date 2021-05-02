@@ -95,13 +95,8 @@ public class ActivityServiceImpl implements ActivityService {
         activitiesCalories.setTimeStart(t1);
         activitiesCalories.setTimeEnd(t2);
         activitiesCalories.setSyncTime(syncTime);
-        if (activitiesSteps.getValue() == 0 || activitiesCalories.getValue() == 0){
-            throw new FitbitAPIException();
-        }
-        else {
-            saveStepsOfDayFromApiInDB(activitiesSteps, deviceDto);
-            saveCaloriesOfDayFromApiInDB(activitiesCalories, deviceDto);
-        }
+        saveStepsOfDayFromApiInDB(activitiesSteps, deviceDto);
+        saveCaloriesOfDayFromApiInDB(activitiesCalories, deviceDto);
         /*ActivitiesDistance activitiesDistance = modelMapper.map(api.getActivitiesTypeData().getDataOfDayBetweenTwoTimePerMinute("distance", date, endDate, startTime, endTime, authService.getAccessToken(deviceDto.dtoToObj(modelMapper))), ActivitiesDistance.class);
         activitiesDistance.setTimeStart(t1);
         activitiesDistance.setTimeEnd(t2);

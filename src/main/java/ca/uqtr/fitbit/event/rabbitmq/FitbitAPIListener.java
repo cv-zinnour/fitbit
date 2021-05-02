@@ -40,9 +40,8 @@ public class FitbitAPIListener {
     @RabbitListener(queues = queue)
     public void receiveMessage(Message message) throws FitbitAPIException {
         log.info("Received message : {}", message.toString());
-        Response response = deviceService.getDataFromAPIToDB(new DeviceDto(message.getSubscriptionId()));
-        if (response.getObject() == null)
-            throw new FitbitAPIException();
+        deviceService.getDataFromAPIToDB(new DeviceDto(message.getSubscriptionId()));
+
     }
 
     @RabbitListener(queues = deadLetterQueue)
