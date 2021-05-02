@@ -338,7 +338,7 @@ public class DeviceServiceImpl implements DeviceService {
                         d1, d2,
                         syncTime,
                         device);
-                device1.get().setLastSyncDate(Timestamp.valueOf(d1.toLocalDateTime().toLocalDate().atStartOfDay().plus(Duration.of(1, ChronoUnit.MINUTES))));
+                device1.get().setLastSyncDate(Timestamp.valueOf(d2.toLocalDateTime().toLocalDate().atStartOfDay().plus(Duration.of(1, ChronoUnit.MINUTES))));
                 deviceRepository.save(device1.get());
             }
             return new Response(device, null);
