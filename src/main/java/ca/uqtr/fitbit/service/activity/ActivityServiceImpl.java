@@ -276,13 +276,17 @@ public class ActivityServiceImpl implements ActivityService {
         )));
         if (dates.isEmpty() || days == 0) {
             List<Steps> stepsList = new ArrayList<>();
-            stepsList.add(stepsRepository.getByMedicalFileIdAndOneDate(
+            Steps step = stepsRepository.getByMedicalFileIdAndOneDate(
                     medicalFileId,
                     Date.valueOf(initDate.toLocalDateTime().toLocalDate())
-            ));
+            );
+            stepsList.add(step);
             stepsDtoList = modelMapper.map(stepsList, stepsDtoType);
             stepsDtoMap.put(Date.valueOf(initDate.toLocalDateTime().toLocalDate()).toString(), stepsDtoList);
-            return new Response(stepsDtoMap, null);
+            if (step == null)
+                return new Response(null, null);
+            else
+                return new Response(stepsDtoMap, null);
         } else {
             //TODO Delete - TimeUnit.MINUTES.toMillis(240)
 
