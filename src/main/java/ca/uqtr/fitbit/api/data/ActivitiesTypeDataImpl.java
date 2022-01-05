@@ -77,7 +77,6 @@ public class ActivitiesTypeDataImpl implements ActivitiesTypeData<Activities> {
                 .build();
         try {
             response = okHttpClient.newCall(request).execute();
-            System.out.println(response.body().string());
             data = this.deserialization(response.body().string(), activityType);
         }catch (Exception e) {
             e.printStackTrace();
@@ -93,6 +92,7 @@ public class ActivitiesTypeDataImpl implements ActivitiesTypeData<Activities> {
     @Override
     public Serialization deserialization(String json, String activityType) {
         JSONObject jsonObject = new JSONObject(json);
+        System.out.println(jsonObject);
         JSONArray activities_type = jsonObject.getJSONArray("activities-"+activityType);
         String dateTime = activities_type.getJSONObject(0).getString("dateTime");
         double value;
