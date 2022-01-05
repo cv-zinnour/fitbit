@@ -337,14 +337,18 @@ public class ActivityServiceImpl implements ActivityService {
         System.out.println("---- days = " + days);
         if (dates.isEmpty() || days == 0) {
             List<Minutes> minutesList = new ArrayList<>();
-            minutesList.add(minutesRepository.getByMedicalFileIdAndOneDate(
+            Minutes min = minutesRepository.getByMedicalFileIdAndOneDate(
                     medicalFileId,
                     Date.valueOf(initDate.toLocalDateTime().toLocalDate())
-            ));
+            );
+            minutesList.add(min);
             minutesDtoList = modelMapper.map(minutesList, minutesDtoType);
             minutesDtoMap.put(Date.valueOf(initDate.toLocalDateTime().toLocalDate()).toString(), minutesDtoList);
 
-            return new Response(minutesDtoMap, null);
+            if (min == null)
+                return new Response(null, null);
+            else
+                return new Response(minutesDtoMap, null);
         } else {
             //TODO Delete - TimeUnit.MINUTES.toMillis(240)
 
