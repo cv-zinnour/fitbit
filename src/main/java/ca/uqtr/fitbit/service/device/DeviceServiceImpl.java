@@ -337,6 +337,12 @@ public class DeviceServiceImpl implements DeviceService {
                 Timestamp d1 = datesList.get(i).getDate1();
                 Timestamp d2 = datesList.get(i).getDate2();
 
+                System.out.println("************************" + d1);
+                System.out.println("************************" + d2);
+                System.out.println("************************" + d1.getTime());
+                System.out.println("************************" + d2.getTime());
+                System.out.println("************************" + (d1.getTime() - d2.getTime()));
+                System.out.println("************************" + Integer.parseInt(Time.valueOf(d2.toLocalDateTime().toLocalTime()).toString().substring(3,5)));
                 activityService.getDataOfDayBetweenTwoTimesPerMinuteFromApi(
                         d1.toLocalDateTime().toLocalDate().toString(),
                         d2.toLocalDateTime().toLocalDate().toString(),
