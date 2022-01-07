@@ -18,6 +18,10 @@ public interface PatientDeviceRepository extends CrudRepository<PatientDevice, U
 
     List<PatientDevice> getByMedicalFileId(String medicalFileId);
 
+    @Query("select min( pd.initDate ) from PatientDevice pd where pd.medicalFileId = :medicalFileId")
+    Timestamp getByInitDate(String medicalFileId);
+
+
 
 /*
     @Query("select sum(steps.value) from PatientDevice pd left join pd.activitiesSteps steps where pd.id = steps.patientDevice.id and pd.medicalFileId = :medicalFileId and steps.dateTime between :date1 and :date2 group by steps.dateTime")

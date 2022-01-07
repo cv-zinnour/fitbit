@@ -286,7 +286,7 @@ public class ActivityServiceImpl implements ActivityService {
             if (step == null)
                 return new Response(null, null);
             else
-                return new Response(stepsDtoMap, null);
+                return new Response(new ActivitiesStepsDto(stepsDtoMap, Date.valueOf(initDate.toLocalDateTime().toLocalDate()).toString()), null);
         } else {
             //TODO Delete - TimeUnit.MINUTES.toMillis(240)
 
@@ -319,7 +319,7 @@ public class ActivityServiceImpl implements ActivityService {
             System.out.println("+++++ d2 = "+dates.size());
 
             System.out.println("******   "+stepsDtoMap.toString());
-            return new Response(stepsDtoMap, null);
+            return new Response(new ActivitiesStepsDto(stepsDtoMap, Date.valueOf(initDate.toLocalDateTime().toLocalDate()).toString()), null);
         }
     }
 
@@ -352,7 +352,7 @@ public class ActivityServiceImpl implements ActivityService {
             if (min == null)
                 return new Response(null, null);
             else
-                return new Response(minutesDtoMap, null);
+                return new Response(new ActivitiesMinutesDto(minutesDtoMap, Date.valueOf(initDate.toLocalDateTime().toLocalDate()).toString()), null);
         } else {
             //TODO Delete - TimeUnit.MINUTES.toMillis(240)
 
@@ -378,7 +378,7 @@ public class ActivityServiceImpl implements ActivityService {
                 }
 
             }
-            return new Response(minutesDtoMap, null);
+            return new Response(new ActivitiesMinutesDto(minutesDtoMap, Date.valueOf(initDate.toLocalDateTime().toLocalDate()).toString()), null);
         }
     }
 

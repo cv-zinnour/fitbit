@@ -69,7 +69,7 @@ public class ActivityController {
         return activityService.getCaloriesOfDayBetweenTwoTimesPerMinuteFromApi(date, startTime, endTime, deviceDto);
     }
 
-    @PostMapping(value = "/activity/steps")
+    @GetMapping(value = "/activity/steps")
     @ResponseBody
     public Response getStepsPerVisits(@RequestParam String medicalFileId,
                                      @RequestBody Request request) throws IOException {
@@ -78,7 +78,7 @@ public class ActivityController {
         return activityService.getStepsPerVisits(medicalFileId, dates);
     }
 
-    @PostMapping(value = "/activity/activeminutes")
+    @GetMapping(value = "/activity/activeminutes")
     @ResponseBody
     public Response getActiveMinutesPerVisits(@RequestParam String medicalFileId,
                                        @RequestBody Request request) throws IOException {
