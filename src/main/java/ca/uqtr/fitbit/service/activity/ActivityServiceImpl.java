@@ -258,12 +258,11 @@ public class ActivityServiceImpl implements ActivityService {
         List<StepsDto> stepsDtoList = new ArrayList<>();
         Map<String, List<StepsDto>> stepsDtoMap = new HashMap<>();
         Type stepsDtoType = new TypeToken<List<StepsDto>>() {}.getType();
-        List<PatientDevice> patientDevice = patientDeviceRepository.getByMedicalFileId(medicalFileId);
-        if (patientDevice == null )
+        Timestamp initDate = patientDeviceRepository.getByInitDate(medicalFileId);
+        if (initDate == null )
             return new Response(null,
                     new Error(Integer.parseInt(messageSource.getMessage("error.null.id", null, Locale.US)),
                             messageSource.getMessage("error.null.message", null, Locale.US)));
-        Timestamp initDate = patientDevice.get(0).getInitDate();
         System.out.println("*********************initDate= "+initDate);
         dates = dates.stream().distinct().collect(Collectors.toList());
         System.out.println("*********************dates= "+dates.toString());
@@ -330,12 +329,11 @@ public class ActivityServiceImpl implements ActivityService {
         List<MinutesDto> minutesDtoList = new ArrayList<>();
         Map<String, List<MinutesDto>> minutesDtoMap = new HashMap<>();
         Type minutesDtoType = new TypeToken<List<MinutesDto>>() {}.getType();
-        List<PatientDevice> patientDevice = patientDeviceRepository.getByMedicalFileId(medicalFileId);
-        if (patientDevice == null )
+        Timestamp initDate = patientDeviceRepository.getByInitDate(medicalFileId);
+        if (initDate == null )
             return new Response(null,
                     new Error(Integer.parseInt(messageSource.getMessage("error.null.id", null, Locale.US)),
                             messageSource.getMessage("error.null.message", null, Locale.US)));
-        Timestamp initDate = patientDevice.get(0).getInitDate();
         dates = dates.stream().distinct().collect(Collectors.toList());
         long days = ChronoUnit.DAYS.between(initDate.toLocalDateTime().toLocalDate(), new java.sql.Timestamp(Calendar.getInstance().getTime().getTime()).toLocalDateTime().toLocalDate());
         System.out.println("---- days = " + days);
