@@ -10,8 +10,6 @@ import java.util.List;
 import java.util.Map;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class ActivitiesMinutesDto implements Serializable {
 
     private static final long serialVersionUID = 1L;
