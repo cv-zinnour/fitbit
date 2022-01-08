@@ -20,4 +20,6 @@ public interface MinutesRepository extends CrudRepository<Minutes, Integer> {
     List<Minutes> getByMedicalFileIdAndTwoDates(String medicalFileId, Date date1, Date date2);
     @Query("select minutes from Minutes minutes where minutes.medicalFileId = :medicalFileId and minutes.date = :date")
     Minutes getByMedicalFileIdAndOneDate(String medicalFileId, Date date);
+    List<Minutes> getMinutesByMedicalFileId(String medicalFileId);
+
 }

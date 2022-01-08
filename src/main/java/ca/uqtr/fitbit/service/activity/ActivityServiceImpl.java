@@ -380,4 +380,31 @@ public class ActivityServiceImpl implements ActivityService {
         }
     }
 
+
+    @SneakyThrows
+    @Transactional(readOnly = true)
+    @Override
+    public Response getSteps(String medicalFileId) {
+        List<Steps> stepsList = stepsRepository.getStepsByMedicalFileId(medicalFileId);
+        if (stepsList == null )
+            return new Response(null,
+                    new Error(Integer.parseInt(messageSource.getMessage("error.null.id", null, Locale.US)),
+                            messageSource.getMessage("error.null.message", null, Locale.US)));
+        else
+            return new Response(stepsList, null);
+    }
+
+    //0 - sedentary; 1 - lightly active; 2 - fairly active; 3 - very active.
+    @Transactional(readOnly = true)
+    @Override
+    public Response getActiveMinutes(String medicalFileId) {
+        List<Minutes> minutesList = minutesRepository.getMinutesByMedicalFileId(medicalFileId);
+        if (minutesList == null )
+            return new Response(null,
+                    new Error(Integer.parseInt(messageSource.getMessage("error.null.id", null, Locale.US)),
+                            messageSource.getMessage("error.null.message", null, Locale.US)));
+        else
+            return new Response(minutesList, null);
+    }
+
 }

@@ -44,5 +44,8 @@ public interface ActivityService{
     Response getStepsPerVisits(String medicalFileId, List<Date> dates);
     Response getActiveMinutesPerVisits(String medicalFileId, List<Date> dates);
 
+    Response getSteps(String medicalFileId);
+    Response getActiveMinutes(String medicalFileId);
+
 }
 

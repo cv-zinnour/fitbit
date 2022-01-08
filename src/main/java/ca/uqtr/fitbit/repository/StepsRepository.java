@@ -22,4 +22,6 @@ public interface StepsRepository extends CrudRepository<Steps, Integer> {
     @Query("select steps from Steps steps where steps.medicalFileId = :medicalFileId and steps.date = :date")
     Steps getByMedicalFileIdAndOneDate(String medicalFileId, Date date);
 
+    List<Steps> getStepsByMedicalFileId(String medicalFileId);
+
 }
