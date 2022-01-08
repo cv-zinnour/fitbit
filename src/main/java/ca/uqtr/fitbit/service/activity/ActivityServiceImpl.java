@@ -251,7 +251,7 @@ public class ActivityServiceImpl implements ActivityService {
         return null;
     }
 
-    @SneakyThrows
+ /*   @SneakyThrows
     @Transactional(readOnly = true)
     @Override
     public Response getStepsPerVisits(String medicalFileId, List<Date> dates) {
@@ -378,7 +378,7 @@ public class ActivityServiceImpl implements ActivityService {
             }
             return new Response(new ActivitiesMinutesDto(minutesDtoMap, Date.valueOf(initDate.toLocalDateTime().toLocalDate()).toString()), null);
         }
-    }
+    }*/
 
 
     @SneakyThrows
@@ -386,12 +386,13 @@ public class ActivityServiceImpl implements ActivityService {
     @Override
     public Response getSteps(String medicalFileId) {
         List<Steps> stepsList = stepsRepository.getStepsByMedicalFileId(medicalFileId);
+        Timestamp initDate = patientDeviceRepository.getByInitDate(medicalFileId);
         if (stepsList == null )
             return new Response(null,
                     new Error(Integer.parseInt(messageSource.getMessage("error.null.id", null, Locale.US)),
                             messageSource.getMessage("error.null.message", null, Locale.US)));
         else
-            return new Response(stepsList, null);
+            return new Response(new ActivitiesStepsDto(stepsList, Date.valueOf(initDate.toLocalDateTime().toLocalDate()).toString()), null);
     }
 
     //0 - sedentary; 1 - lightly active; 2 - fairly active; 3 - very active.
@@ -399,12 +400,14 @@ public class ActivityServiceImpl implements ActivityService {
     @Override
     public Response getActiveMinutes(String medicalFileId) {
         List<Minutes> minutesList = minutesRepository.getMinutesByMedicalFileId(medicalFileId);
+        Timestamp initDate = patientDeviceRepository.getByInitDate(medicalFileId);
+
         if (minutesList == null )
             return new Response(null,
                     new Error(Integer.parseInt(messageSource.getMessage("error.null.id", null, Locale.US)),
                             messageSource.getMessage("error.null.message", null, Locale.US)));
         else
-            return new Response(minutesList, null);
+            return new Response(new ActivitiesMinutesDto(minutesList, Date.valueOf(initDate.toLocalDateTime().toLocalDate()).toString()), null);
     }
 
 }
