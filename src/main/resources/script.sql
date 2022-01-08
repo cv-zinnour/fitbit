@@ -118,22 +118,24 @@ from patient_device "pd"
 group by "pd".medical_file_id, "as".date;
 -----
 create view "minutes_view" as
-select row_number() over (order by pd.medical_file_id) as row_num,
-       pd.medical_file_id,
-       r.date,
-       r.sedentary::INTEGER,
-       r.lightly_active::INTEGER,
-       r.fairly_active::INTEGER,
-       r.very_active::INTEGER
-from (select e.patient_device_id,
-             e.date,
-             count(e.level::INTEGER) filter ( where e.level = '0' ) as sedentary,
-             count(e.level::INTEGER) filter ( where e.level = '1' ) as lightly_active,
-             count(e.level::INTEGER) filter ( where e.level = '2' ) as fairly_active,
-             count(e.level::INTEGER) filter ( where e.level = '3' ) as very_active
-      from (select ac.date, jsonb_array_elements(ac.dataset) ->> 'level' as level, ac.patient_device_id
-            from activities_calories ac
-            group by ac.date, ac.dataset, ac.patient_device_id) as e
-      group by e.date, e.patient_device_id) as r
-         left join patient_device as pd on r.patient_device_id = pd.id;
+select row_number() over (order by o.medical_file_id) as row_num, o.medical_file_id, o.date, sum(o.sedentary) as sedentary, sum(o.lightly_active) as lightly_active, sum(o.fairly_active) as fairly_active, sum(o.very_active) as very_active
+from (select row_number() over (order by pd.medical_file_id) as row_num,
+             pd.medical_file_id,
+             r.date,
+             r.sedentary::INTEGER,
+             r.lightly_active::INTEGER,
+             r.fairly_active::INTEGER,
+             r.very_active::INTEGER
+      from (select e.patient_device_id,
+                   e.date,
+                   count(e.level::INTEGER) filter ( where e.level = '0' ) as sedentary,
+                   count(e.level::INTEGER) filter ( where e.level = '1' ) as lightly_active,
+                   count(e.level::INTEGER) filter ( where e.level = '2' ) as fairly_active,
+                   count(e.level::INTEGER) filter ( where e.level = '3' ) as very_active
+            from (select ac.date, jsonb_array_elements(ac.dataset) ->> 'level' as level, ac.patient_device_id
+                  from activities_calories ac
+                  group by ac.date, ac.dataset, ac.patient_device_id) as e
+            group by e.date, e.patient_device_id) as r
+               left join patient_device as pd on r.patient_device_id = pd.id) as o
+group by o.medical_file_id, o.date
 -- 0 - sedentary; 1 - lightly active; 2 - fairly active; 3 - very active.
