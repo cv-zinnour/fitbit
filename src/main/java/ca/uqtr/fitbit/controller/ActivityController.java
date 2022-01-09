@@ -88,13 +88,13 @@ public class ActivityController {
     }*/
 
 
-    @PostMapping(value = "/activity/steps")
+    @GetMapping(value = "/activity/steps")
     @ResponseBody
     public Response getSteps(@RequestParam String medicalFileId) throws IOException {
         return activityService.getSteps(medicalFileId);
     }
 
-    @PostMapping(value = "/activity/activeminutes")
+    @GetMapping(value = "/activity/activeminutes")
     @ResponseBody
     public Response getActiveMinutes(@RequestParam String medicalFileId) throws IOException {
         return activityService.getActiveMinutes(medicalFileId);
