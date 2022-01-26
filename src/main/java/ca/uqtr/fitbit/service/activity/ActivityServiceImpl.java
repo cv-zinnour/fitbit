@@ -387,7 +387,7 @@ public class ActivityServiceImpl implements ActivityService {
     public Response getSteps(String medicalFileId) {
         List<Steps> stepsList = stepsRepository.getStepsByMedicalFileId(medicalFileId);
         Timestamp initDate = patientDeviceRepository.getByInitDate(medicalFileId);
-        if (stepsList == null )
+        if (stepsList == null || initDate == null)
             return new Response(null,
                     new Error(Integer.parseInt(messageSource.getMessage("error.null.id", null, Locale.US)),
                             messageSource.getMessage("error.null.message", null, Locale.US)));
@@ -402,7 +402,7 @@ public class ActivityServiceImpl implements ActivityService {
         List<Minutes> minutesList = minutesRepository.getMinutesByMedicalFileId(medicalFileId);
         Timestamp initDate = patientDeviceRepository.getByInitDate(medicalFileId);
 
-        if (minutesList == null )
+        if (minutesList == null || initDate == null)
             return new Response(null,
                     new Error(Integer.parseInt(messageSource.getMessage("error.null.id", null, Locale.US)),
                             messageSource.getMessage("error.null.message", null, Locale.US)));
