@@ -379,7 +379,7 @@ public class DeviceServiceImpl implements DeviceService {
     public Response getPatientDevice(String medicalFileId) {
         try{
             Type patientDeviceDtoList = new TypeToken<List<PatientDeviceDto>>() {}.getType();
-            List<PatientDevice> patientDevices = patientDeviceRepository.getPatientDevicesByMedicalFileId(medicalFileId);
+            List<PatientDevice> patientDevices = patientDeviceRepository.getByMedicalFileId(medicalFileId);
             return new Response(modelMapper.map(patientDevices, patientDeviceDtoList), null);
         } catch (Exception ex){
             LOGGER.log( Level.SEVERE, "Exception = ", ex);

@@ -23,7 +23,6 @@ import java.util.UUID;
 public class PatientDeviceDto {
     private int id;
     private Date initDate;
-    private Date returnDate;
     private String professionalId;
     private String medicalFileId;
     private String patientEmail;
