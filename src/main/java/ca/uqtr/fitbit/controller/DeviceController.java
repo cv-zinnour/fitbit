@@ -259,6 +259,10 @@ public class DeviceController {
         return fitbitApi.allSubscriptions(authService.getAccessToken(device.dtoToObj(modelMapper)), "activities");
     }
 
-
+    @GetMapping(value = "/device/patient")
+    @ResponseBody
+    public Response getPatientDevice(@RequestParam String medicalFileId){
+        return deviceService.getPatientDevice(medicalFileId);
+    }
 
 }

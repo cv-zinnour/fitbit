@@ -3,12 +3,14 @@ package ca.uqtr.fitbit.service.device;
 import ca.uqtr.fitbit.api.FitbitApi;
 import ca.uqtr.fitbit.dto.DeviceDto;
 import ca.uqtr.fitbit.dto.Error;
+import ca.uqtr.fitbit.dto.PatientDeviceDto;
 import ca.uqtr.fitbit.dto.Response;
 import ca.uqtr.fitbit.entity.Device;
 import ca.uqtr.fitbit.entity.FitbitSubscription;
 import ca.uqtr.fitbit.entity.PatientDevice;
 import ca.uqtr.fitbit.entity.fitbit.Auth;
 import ca.uqtr.fitbit.repository.DeviceRepository;
+import ca.uqtr.fitbit.repository.PatientDeviceRepository;
 import ca.uqtr.fitbit.service.activity.ActivityService;
 import ca.uqtr.fitbit.service.auth.AuthService;
 import javassist.bytecode.stackmap.TypeData;
@@ -49,6 +51,7 @@ public class DeviceServiceImpl implements DeviceService {
 
     private MessageSource messageSource;
     private DeviceRepository deviceRepository;
+    private PatientDeviceRepository patientDeviceRepository;
     private ModelMapper modelMapper;
     private AuthService authService;
     private FitbitApi fitbitApi;
@@ -370,6 +373,20 @@ public class DeviceServiceImpl implements DeviceService {
                     new Error(Integer.parseInt(messageSource.getMessage("error.null.id", null, Locale.US)),
                             messageSource.getMessage("error.null.message", null, Locale.US)));
         return new Response(encodedId, null);
+    }
+
+    @Override
+    public Response getPatientDevice(String medicalFileId) {
+        try{
+            Type patientDeviceDtoList = new TypeToken<List<PatientDeviceDto>>() {}.getType();
+            List<PatientDevice> patientDevices = patientDeviceRepository.getPatientDevicesByMedicalFileId(medicalFileId);
+            return new Response(modelMapper.map(patientDevices, patientDeviceDtoList), null);
+        } catch (Exception ex){
+            LOGGER.log( Level.ALL, ex.getMessage());
+            return new Response(null,
+                    new Error(Integer.parseInt(messageSource.getMessage("error.null.id", null, Locale.US)),
+                            messageSource.getMessage("error.null.message", null, Locale.US)));
+        }
     }
 
 
