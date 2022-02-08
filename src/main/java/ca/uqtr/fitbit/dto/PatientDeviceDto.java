@@ -21,9 +21,12 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PatientDeviceDto {
+    private int id;
     private Date initDate;
+    private Date returnDate;
     private String professionalId;
     private String medicalFileId;
+    private String patientEmail;
     private Date returnedAt;
     //private List<DeviceDto> devices = new ArrayList<>();
 
