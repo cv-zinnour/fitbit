@@ -61,8 +61,9 @@ public class DeviceServiceImpl implements DeviceService {
     public static final String SHA3_256 = "SHA3-256";
 
     @Autowired
-    public DeviceServiceImpl(DeviceRepository deviceRepository, ModelMapper modelMapper, MessageSource messageSource, AuthService authService, FitbitApi fitbitApi, ActivityService activityService) {
+    public DeviceServiceImpl(DeviceRepository deviceRepository, PatientDeviceRepository patientDeviceRepository, ModelMapper modelMapper, MessageSource messageSource, AuthService authService, FitbitApi fitbitApi, ActivityService activityService) {
         this.deviceRepository = deviceRepository;
+        this.patientDeviceRepository = patientDeviceRepository;
         this.modelMapper = modelMapper;
         this.messageSource = messageSource;
         this.authService = authService;
