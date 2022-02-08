@@ -21,6 +21,7 @@ public interface PatientDeviceRepository extends CrudRepository<PatientDevice, U
     @Query("select min( pd.initDate ) from PatientDevice pd where pd.medicalFileId = :medicalFileId")
     Timestamp getByInitDate(String medicalFileId);
 
+    @Query("select pd from PatientDevice pd where pd.medicalFileId = :medicalFileId")
     List<PatientDevice> getPatientDevicesByMedicalFileId(String medicalFileId);
 
 
