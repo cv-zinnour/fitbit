@@ -382,7 +382,7 @@ public class DeviceServiceImpl implements DeviceService {
             List<PatientDevice> patientDevices = patientDeviceRepository.getPatientDevicesByMedicalFileId(medicalFileId);
             return new Response(modelMapper.map(patientDevices, patientDeviceDtoList), null);
         } catch (Exception ex){
-            LOGGER.log( Level.ALL, ex.getMessage());
+            LOGGER.log( Level.SEVERE, "Exception = ", ex);
             return new Response(null,
                     new Error(Integer.parseInt(messageSource.getMessage("error.null.id", null, Locale.US)),
                             messageSource.getMessage("error.null.message", null, Locale.US)));
