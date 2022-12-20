@@ -3,7 +3,6 @@ package ca.uqtr.fitbit.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.bouncycastle.i18n.filter.UntrustedUrlInput;
 
 import javax.persistence.Column;
 import java.io.Serializable;

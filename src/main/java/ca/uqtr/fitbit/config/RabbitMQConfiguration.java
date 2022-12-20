@@ -65,19 +65,4 @@ public class RabbitMQConfiguration {
         return new Jackson2JsonMessageConverter();
     }
 
-    @Bean
-    public ConnectionFactory connectionFactory() {
-        CachingConnectionFactory connectionFactory = new CachingConnectionFactory("fish.rmq.cloudamqp.com");
-        connectionFactory.setUsername("bklaoghl");
-        connectionFactory.setPassword("PPdAiJgyoVKYPdNdIdOvMt8F8F7l2B9K");
-        connectionFactory.setVirtualHost("bklaoghl");
-        return connectionFactory;
-    }
-
-    @Bean
-    public RabbitTemplate rabbitTemplate() {
-        final RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory());
-        rabbitTemplate.setMessageConverter(jsonMessageConverter());
-        return rabbitTemplate;
-    }
 }
