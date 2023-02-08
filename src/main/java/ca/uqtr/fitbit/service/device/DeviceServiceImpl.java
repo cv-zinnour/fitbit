@@ -260,6 +260,7 @@ public class DeviceServiceImpl implements DeviceService {
                         new Error(Integer.parseInt(messageSource.getMessage("error.null.id", null, Locale.US)),
                                 messageSource.getMessage("error.null.message", null, Locale.US)));
             device2.setAvailable(true);
+            this.getDataFromAPIToDB(modelMapper.map(device2, DeviceDto.class));
             device2.getPatientDevices().get(0).setReturnedAt(new java.sql.Timestamp(Calendar.getInstance().getTime().getTime()));
             return new Response(modelMapper.map(deviceRepository.save(device2), DeviceDto.class), null);
         } catch (Exception ex){
@@ -341,8 +342,8 @@ public class DeviceServiceImpl implements DeviceService {
                 Timestamp d1 = datesList.get(i).getDate1();
                 Timestamp d2 = datesList.get(i).getDate2();
 
-                System.out.println("************************" + String.valueOf((d1.getTime() + 180000) - d2.getTime()));
-                if ((d1.getTime() + 180000) - d2.getTime() <= 0){
+                System.out.println("************************" + String.valueOf(d1.getTime() - d2.getTime()));
+                if (d1.getTime()  - d2.getTime() <= 0){
                     activityService.getDataOfDayBetweenTwoTimesPerMinuteFromApi(
                             d1.toLocalDateTime().toLocalDate().toString(),
                             d2.toLocalDateTime().toLocalDate().toString(),

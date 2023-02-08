@@ -4,6 +4,7 @@ package ca.uqtr.fitbit.config;
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
+import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
@@ -63,6 +64,30 @@ public class RabbitMQConfiguration {
     @Bean
     public Jackson2JsonMessageConverter jsonMessageConverter() {
         return new Jackson2JsonMessageConverter();
+    }
+
+
+    @Bean
+    public ConnectionFactory connectionFactory() {
+        //CachingConnectionFactory connectionFactory = new CachingConnectionFactory("b-6b2f3e20-0a87-48cc-bcea-9eabd0c63114.mq.ca-central-1.amazonaws.com");
+        CachingConnectionFactory connectionFactory = new CachingConnectionFactory("ip-172-31-66-146.ca-central-1.compute.internal");
+        connectionFactory.setUsername("admin");
+        connectionFactory.setPassword("pod-isante2022");
+        connectionFactory.setPort(5672);
+        return connectionFactory;
+    }
+
+
+    @Bean
+    public RabbitTemplate rabbitTemplate() {
+        final RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory());
+        rabbitTemplate.setMessageConverter(jsonMessageConverter());
+        return rabbitTemplate;
+    }
+
+    @Bean
+    public AmqpAdmin rabbitAdmin() {
+        return new RabbitAdmin(connectionFactory());
     }
 
 }
