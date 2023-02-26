@@ -336,7 +336,7 @@ public class DeviceServiceImpl implements DeviceService {
                 datesList = this.datesListBetweenTwoDate(new Timestamp(lastSyncDate), syncTime);
             else
                 datesList.add(new TwoDates(new Timestamp(lastSyncDate), syncTime));
-            LOGGER.info("datesList: "+ datesList.toString());
+            //LOGGER.info("datesList: "+ datesList.toString());
 
             for (int i = 0; i < datesList.size(); i++) {
                 Timestamp d1 = datesList.get(i).getDate1();
