@@ -24,11 +24,15 @@ public interface DeviceService {
     Response updateFitbitWeight(DeviceDto device, String weight) throws IOException;
     Response getBackDevice(DeviceDto device);
 
+    Response syncDevice(DeviceDto device);
+
     Response addSubscription(DeviceDto deviceDto) throws IOException;
 
     Response allSubscriptions(DeviceDto device) throws IOException;
 
+
     Response removeSubscription(DeviceDto device) throws IOException;
+
 
     Flux<DeviceDto> getDevicesNotReturned();
 

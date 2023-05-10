@@ -1,6 +1,7 @@
 package ca.uqtr.fitbit.dto;
 
 import ca.uqtr.fitbit.entity.Device;
+import ca.uqtr.fitbit.entity.FitbitSubscription;
 import ca.uqtr.fitbit.entity.PatientDevice;
 import ca.uqtr.fitbit.entity.fitbit.Auth;
 import lombok.AllArgsConstructor;
@@ -29,7 +30,7 @@ public class DeviceDto {
     private String institutionCode;
     private Auth auth;
     private List<PatientDeviceDto> patientDevices = new ArrayList<>();
-
+    private FitbitSubscriptionDto fitbitSubscription;
     public DeviceDto(String id) {
         this.id = id;
     }

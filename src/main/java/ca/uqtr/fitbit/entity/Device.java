@@ -42,12 +42,14 @@ public class Device extends BaseEntity {
     @JsonManagedReference
     @OneToOne(mappedBy="device", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Auth auth;
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinColumn(name = "device_id")
     private List<PatientDevice> patientDevices;
-    @ToString.Exclude
+    /*@ToString.Exclude
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "device_id")
-    private List<FitbitSubscription> fitbitSubscriptions;
-
+    private List<FitbitSubscription> fitbitSubscriptions;*/
+    @JsonManagedReference
+    @OneToOne(mappedBy="device", cascade = CascadeType.ALL, orphanRemoval = true)
+    private FitbitSubscription fitbitSubscription;
 }

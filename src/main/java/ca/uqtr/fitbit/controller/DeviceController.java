@@ -29,10 +29,12 @@ import java.util.UUID;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Logger;
 
 @RestController
 @RequestMapping
 public class DeviceController {
+    private static final Logger LOGGER = Logger.getLogger( DeviceController.class.getName() );
 
     private final DeviceService deviceService;
     @Value("${fitbit.subscription.verification-code}")
@@ -61,7 +63,6 @@ public class DeviceController {
         DeviceDto deviceDto = mapper.convertValue(request.getObject(), DeviceDto.class);
         deviceDto.setAdminId(JwtTokenUtil.getId(token));
         deviceDto.setInstitutionCode(JwtTokenUtil.getInstitutionCode(token));
-        System.out.println(deviceDto.toString());
         return deviceService.createDevice(deviceDto);
     }
 
@@ -79,9 +80,9 @@ public class DeviceController {
     public boolean deleteDevice(@RequestBody Request request) throws IOException {
         System.out.println(request.toString());
         DeviceDto deviceDto = mapper.convertValue(request.getObject(), DeviceDto.class);
-        /*Response response1 = deviceService.removeSubscription(deviceDto);
+        Response response1 = deviceService.removeSubscription(deviceDto);
         if(response1 == null)
-            return false;*/
+            return false;
 
         deviceService.deleteDevice(deviceDto);
         return true;
@@ -113,7 +114,6 @@ public class DeviceController {
         DeviceDto deviceDto = new DeviceDto(deviceId);
         deviceDto.setAdminId(JwtTokenUtil.getId(token));
         Response response = deviceService.authorizeDevice(deviceDto, code);
-        System.out.println(response.toString());
         return response;
     }
 
@@ -198,6 +198,15 @@ public class DeviceController {
         DeviceDto deviceDto = mapper.convertValue(request.getObject(), DeviceDto.class);
         deviceDto.setAdminId(JwtTokenUtil.getId(token));
         return deviceService.getBackDevice(deviceDto);
+    }
+
+    @PostMapping(value = "/device/sync")
+    @ResponseBody
+    public Response syncDevice(@RequestBody Request request, HttpServletRequest HttpRequest) {
+        String token = HttpRequest.getHeader("Authorization").replace("bearer ", "");
+        DeviceDto deviceDto = mapper.convertValue(request.getObject(), DeviceDto.class);
+        deviceDto.setAdminId(JwtTokenUtil.getId(token));
+        return deviceService.syncDevice(deviceDto);
     }
 
     @PostMapping("/subscription/all")

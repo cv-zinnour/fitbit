@@ -1,5 +1,6 @@
 package ca.uqtr.fitbit.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -17,7 +18,7 @@ import java.util.UUID;
 public class FitbitSubscription implements Serializable {
 
     static final long serialVersionUID = 1L;
-
+    @Column(name = "id", nullable = false)
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private int id;
@@ -36,6 +37,10 @@ public class FitbitSubscription implements Serializable {
     private String subscriptionId;
     @Column(name = "date")
     private Date date;
+    @JsonBackReference
+    @OneToOne
+    @JoinColumn(name = "device_id")
+    private Device device;
 
     public FitbitSubscription(String subscriptionId) {
         this.subscriptionId = subscriptionId;

@@ -4,10 +4,12 @@ import org.junit.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class FitbitApplicationTests {
+public class FitbitApplicationTests {
+    public FitbitApplicationTests() {
+    }
 
     @Test
-    void contextLoads() {
+    public void contextLoads() {
     }
 
 }

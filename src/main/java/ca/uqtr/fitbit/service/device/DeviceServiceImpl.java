@@ -13,7 +13,6 @@ import ca.uqtr.fitbit.repository.DeviceRepository;
 import ca.uqtr.fitbit.repository.PatientDeviceRepository;
 import ca.uqtr.fitbit.service.activity.ActivityService;
 import ca.uqtr.fitbit.service.auth.AuthService;
-import javassist.bytecode.stackmap.TypeData;
 import lombok.SneakyThrows;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.modelmapper.ModelMapper;
@@ -46,7 +45,7 @@ import static java.time.temporal.ChronoUnit.DAYS;
 @Service
 @Transactional
 public class DeviceServiceImpl implements DeviceService {
-    private static final Logger LOGGER = Logger.getLogger( TypeData.ClassName.class.getName() );
+    private static final Logger LOGGER = Logger.getLogger( DeviceServiceImpl.class.getName() );
     private final static String COLLECTION_PATH = "activities";
 
     private MessageSource messageSource;
@@ -123,7 +122,7 @@ public class DeviceServiceImpl implements DeviceService {
             Type deviceDtoList = new TypeToken<List<DeviceDto>>() {}.getType();
             return new Response(modelMapper.map(deviceRepository.findAllByAdminId(device.getAdminId()), deviceDtoList), null);
         } catch (Exception ex){
-            LOGGER.log( Level.ALL, ex.getMessage());
+            LOGGER.log(Level.WARNING, ex.getMessage(), ex);
             return new Response(null,
                     new Error(Integer.parseInt(messageSource.getMessage("error.null.id", null, Locale.US)),
                             messageSource.getMessage("error.null.message", null, Locale.US)));
@@ -144,6 +143,8 @@ public class DeviceServiceImpl implements DeviceService {
                         new Error(Integer.parseInt(messageSource.getMessage("error.null.id", null, Locale.US)),
                                 messageSource.getMessage("error.null.message", null, Locale.US)));
             device1.get().setAuthorized(true);
+            LOGGER.info("9 -------- "+ device1.toString());
+
             addSubscription(device);
             return new Response(modelMapper.map(device1, DeviceDto.class), null);
         } catch (Exception ex){
@@ -271,6 +272,26 @@ public class DeviceServiceImpl implements DeviceService {
         }
     }
 
+    @Transactional
+    @Override
+    public Response syncDevice(DeviceDto device) {
+        try{
+            Device device2 = deviceRepository.getDeviceWith_LastPatientDevice_FetchTypeEAGER(device.getId());
+            if (device2 == null)
+                return new Response(null,
+                        new Error(Integer.parseInt(messageSource.getMessage("error.null.id", null, Locale.US)),
+                                messageSource.getMessage("error.null.message", null, Locale.US)));
+            this.getDataFromAPIToDB(modelMapper.map(device2, DeviceDto.class));
+            device2.setLastSyncDate(new java.sql.Timestamp(Calendar.getInstance().getTime().getTime()));
+            return new Response(modelMapper.map(deviceRepository.save(device2), DeviceDto.class), null);
+        } catch (Exception ex){
+            LOGGER.log( Level.ALL, ex.getMessage());
+            return new Response(null,
+                    new Error(Integer.parseInt(messageSource.getMessage("error.null.id", null, Locale.US)),
+                            messageSource.getMessage("error.null.message", null, Locale.US)));
+        }
+    }
+
     @Retryable(
             value = { Exception.class },
             backoff = @Backoff(delay = 3000))
@@ -278,6 +299,7 @@ public class DeviceServiceImpl implements DeviceService {
     public Response addSubscription(DeviceDto device) throws IOException {
 
         Response response = fitbitApi.addSubscription(new FitbitSubscription(device.getId().toString()), authService.getAccessToken(device.dtoToObj(modelMapper)), COLLECTION_PATH);
+
         if (response.getObject() == null)
             return response;
         Optional<Device> device1 = deviceRepository.findById(device.getId());
@@ -285,7 +307,9 @@ public class DeviceServiceImpl implements DeviceService {
             return new Response(null,
                     new Error(Integer.parseInt(messageSource.getMessage("error.null.id", null, Locale.US)),
                             messageSource.getMessage("error.null.message", null, Locale.US)));
-        device1.get().getFitbitSubscriptions().add((FitbitSubscription) response.getObject());
+        FitbitSubscription fs = (FitbitSubscription) response.getObject();
+        fs.setDevice(device1.get());
+        device1.get().setFitbitSubscription((FitbitSubscription) response.getObject());
         return new Response(modelMapper.map(deviceRepository.save(device1.get()), DeviceDto.class), null);
     }
 
@@ -298,19 +322,22 @@ public class DeviceServiceImpl implements DeviceService {
         return fitbitApi.allSubscriptions(authService.getAccessToken(device.dtoToObj(modelMapper)), COLLECTION_PATH);
     }
 
+
     @Retryable(
             value = { Exception.class },
             backoff = @Backoff(delay = 3000))
     @Transactional( readOnly = true )
     @Override
     public Response removeSubscription(DeviceDto device) throws IOException {
-        Device device1 = deviceRepository.getDeviceWith_LastFitbitSubscription_FetchTypeEAGER(device.getId());
+        Device device1 = deviceRepository.getDeviceById(device.getId());
+
         if (device1 == null)
             return new Response(null,
                     new Error(Integer.parseInt(messageSource.getMessage("error.null.id", null, Locale.US)),
                             messageSource.getMessage("error.null.message", null, Locale.US)));
-        return fitbitApi.removeSubscription(device1.getFitbitSubscriptions().get(0), authService.getAccessToken( device.dtoToObj(modelMapper)), COLLECTION_PATH);
+        return fitbitApi.removeSubscription(device1.getFitbitSubscription(), authService.getAccessToken( device.dtoToObj(modelMapper)), COLLECTION_PATH);
     }
+
 
     @Override
     public Flux<DeviceDto> getDevicesNotReturned() {

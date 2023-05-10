@@ -1,6 +1,5 @@
 package ca.uqtr.fitbit.config;
 
-import javassist.bytecode.stackmap.TypeData;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,7 +15,7 @@ import java.util.logging.Logger;
 /*
 @Configuration
 public class SchedulerConfig implements SchedulingConfigurer {
-    private static final Logger LOGGER = Logger.getLogger( TypeData.ClassName.class.getName() );
+    private static final Logger LOGGER = Logger.getLogger( SchedulerConfig.class.getName() );
 
     @Value("${scheduler.thread.pool.size}")
     private int POOL_SIZE;

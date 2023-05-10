@@ -8,7 +8,6 @@ import ca.uqtr.fitbit.api.data.steps.Steps;
 import ca.uqtr.fitbit.dto.Error;
 import ca.uqtr.fitbit.entity.FitbitSubscription;
 import ca.uqtr.fitbit.entity.fitbit.Auth;
-import javassist.bytecode.stackmap.TypeData;
 import okhttp3.*;
 import okio.Buffer;
 import org.json.JSONArray;
@@ -31,7 +30,7 @@ import java.util.logging.Logger;
 
 @Component
 public class FitbitApiImpl implements FitbitApi {
-    private static final Logger LOGGER = Logger.getLogger( TypeData.ClassName.class.getName() );
+    private static final Logger LOGGER = Logger.getLogger( FitbitApiImpl.class.getName() );
 
     private static final String clientId = "22DBSJ";
     private static final String secretId = "f5c5a80085a01ef93a7711d199a2cfbc";
@@ -97,10 +96,8 @@ public class FitbitApiImpl implements FitbitApi {
                 if (jsonObject.getBoolean("active")){
                     return false;
                 }
-                return true;
-            }else{
-                return true;
             }
+            return true;
         }
     }
 
@@ -176,13 +173,14 @@ public class FitbitApiImpl implements FitbitApi {
     public ca.uqtr.fitbit.dto.Response addSubscription(FitbitSubscription fitbitSubscription, String accessToken, String collectionPath) throws IOException {
         FitbitSubscription fitbitSubscriptionObj = new FitbitSubscription();
         RequestBody body = RequestBody.create(MediaType.get("application/json; charset=utf-8"), "");
+        LOGGER.info("10 ********** "+ fitbitSubscription.getSubscriptionId());
         Request request = new Request.Builder()
                 .url("https://api.fitbit.com/1/user/-/"+collectionPath+"/apiSubscriptions/"+fitbitSubscription.getSubscriptionId()+".json")
                 .post(body)
                 .header("Authorization", "Bearer "+accessToken)
                 .build();
         try (Response response = okHttpClient.newCall(request).execute()) {
-            // System.out.println("---------------  "+response.body().string());
+            //System.out.println("---------------  "+response.body().string());
             ResponseBody responseBody = response.body();
             if (responseBody == null)
                 return new ca.uqtr.fitbit.dto.Response(null,
@@ -219,6 +217,8 @@ public class FitbitApiImpl implements FitbitApi {
                 .header("Authorization", "Bearer "+accessToken)
                 .build();
         try (Response response = okHttpClient.newCall(request).execute()) {
+            //System.out.println("---------------  "+response.body().string());
+
             int statusCode = response.code();
             return new ca.uqtr.fitbit.dto.Response(statusCode, null);
         } catch (Exception ex){
@@ -226,7 +226,6 @@ public class FitbitApiImpl implements FitbitApi {
             return new ca.uqtr.fitbit.dto.Response(null,
                     new Error(Integer.parseInt(messageSource.getMessage("error.subscription.remove.id", null, Locale.US)),
                             messageSource.getMessage("error.subscription.remove.message", null, Locale.US)));
-
         }
     }
 
@@ -238,6 +237,8 @@ public class FitbitApiImpl implements FitbitApi {
                 .header("Authorization", "Bearer "+accessToken)
                 .build();
         try (Response response = okHttpClient.newCall(request).execute()) {
+            //System.out.println("---------------  "+response.body().string());
+
             return new ca.uqtr.fitbit.dto.Response(response.body().string(), null);
         } catch (Exception ex){
             LOGGER.log( Level.WARNING, ex.getMessage());

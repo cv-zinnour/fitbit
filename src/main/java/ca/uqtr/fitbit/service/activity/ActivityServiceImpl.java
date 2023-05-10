@@ -14,7 +14,6 @@ import ca.uqtr.fitbit.entity.view.Minutes;
 import ca.uqtr.fitbit.entity.view.Steps;
 import ca.uqtr.fitbit.repository.*;
 import ca.uqtr.fitbit.service.auth.AuthService;
-import javassist.bytecode.stackmap.TypeData;
 import lombok.SneakyThrows;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -39,7 +38,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class ActivityServiceImpl implements ActivityService {
-    private static final Logger LOGGER = Logger.getLogger(TypeData.ClassName.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(ActivityServiceImpl.class.getName());
 
     private AuthService authService;
     private FitbitApi api;
