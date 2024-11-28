@@ -34,6 +34,6 @@ out/
 config/
 !config/Config.java
 
-resources/
+src/main/resources/
 !resources/messages_en_US.propertiesa
 !resources/script.sql
