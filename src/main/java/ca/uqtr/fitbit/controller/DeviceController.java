@@ -2,8 +2,6 @@ package ca.uqtr.fitbit.controller;
 
 import ca.uqtr.fitbit.api.FitbitApi;
 import ca.uqtr.fitbit.dto.DeviceDto;
-import ca.uqtr.fitbit.dto.Error;
-import ca.uqtr.fitbit.dto.ProfileDto;
 import ca.uqtr.fitbit.dto.Request;
 import ca.uqtr.fitbit.dto.Response;
 import ca.uqtr.fitbit.entity.FitbitSubscription;
@@ -29,12 +27,10 @@ import java.util.UUID;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Logger;
 
 @RestController
 @RequestMapping
 public class DeviceController {
-    private static final Logger LOGGER = Logger.getLogger( DeviceController.class.getName() );
 
     private final DeviceService deviceService;
     @Value("${fitbit.subscription.verification-code}")
@@ -126,7 +122,6 @@ public class DeviceController {
         Response response = deviceService.unauthorizeDevice(deviceDto);
         System.out.println(response.toString());
         return response;
-
     }
 
     @GetMapping(value = "/device/all/available")

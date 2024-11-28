@@ -13,6 +13,7 @@ import okio.Buffer;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
 
@@ -30,10 +31,13 @@ import java.util.logging.Logger;
 
 @Component
 public class FitbitApiImpl implements FitbitApi {
+
     private static final Logger LOGGER = Logger.getLogger( FitbitApiImpl.class.getName() );
 
-    private static final String clientId = "22DBSJ";
-    private static final String secretId = "f5c5a80085a01ef93a7711d199a2cfbc";
+    @Value("${clientId}")
+    private String clientId;
+    @Value("${secretId}")
+    private String secretId;
     private static final String TOKENS_URL = "https://api.fitbit.com/oauth2/token";
     private OkHttpClient okHttpClient;
     private Activities activities;
@@ -61,7 +65,7 @@ public class FitbitApiImpl implements FitbitApi {
         String AuthorizationCodeBase64 = Base64.getEncoder().encodeToString(code.getBytes());
 
         RequestBody body = RequestBody.create(MediaType.get("application/x-www-form-urlencoded; charset=utf-8"),
-                "client_id=22DBSJ&grant_type=authorization_code&redirect_uri=https%3A%2F%2Fwww.podisante.ca%2Fdevice&code="+authorizationCode);
+                "client_id="+clientId+"&grant_type=authorization_code&redirect_uri=https%3A%2F%2Fwww.podisante.ca%2Fdevice&code="+authorizationCode);
         Request request = new Request.Builder()
                 .url(TOKENS_URL)
                 .post(body)
@@ -170,7 +174,7 @@ public class FitbitApiImpl implements FitbitApi {
     }
 
     @Override
-    public ca.uqtr.fitbit.dto.Response addSubscription(FitbitSubscription fitbitSubscription, String accessToken, String collectionPath) throws IOException {
+    public ca.uqtr.fitbit.dto.Response addSubscription(FitbitSubscription fitbitSubscription, String accessToken, String collectionPath)  {
         FitbitSubscription fitbitSubscriptionObj = new FitbitSubscription();
         RequestBody body = RequestBody.create(MediaType.get("application/json; charset=utf-8"), "");
         LOGGER.info("10 ********** "+ fitbitSubscription.getSubscriptionId());

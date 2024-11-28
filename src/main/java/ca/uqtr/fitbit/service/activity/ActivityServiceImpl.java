@@ -63,6 +63,7 @@ public class ActivityServiceImpl implements ActivityService {
         this.minutesRepository = minutesRepository;
     }
 
+
     @Retryable(
             value = {Exception.class},
             backoff = @Backoff(delay = 3000))
